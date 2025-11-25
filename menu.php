@@ -35,6 +35,7 @@ $usuarioLogado = isset($_SESSION["usuario"]) ? $_SESSION["usuario"] : null;
     <div class="menu-links">
         <a href="index.php" class="<?= ($currentPage == 'index.php') ? 'active' : ''; ?>">Início</a>
         <a href="#sobre-nos" class="<?= ($currentPage == 'index.php') ? 'active' : ''; ?>">Sobre Nós</a>
+        <a href="edicao3(1).php" class="<?= ($currentPage == 'edicao3(1).php') ? 'active' : ''; ?>">Edição 3</a>
 
         <div class="dropdown">
             <a href="#" >Edições ▾</a>

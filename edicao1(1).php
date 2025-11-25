@@ -59,28 +59,20 @@
             </div>
             
             <div class="descricao-evento">
-                <h2>Sobre a 1ª Edição</h2>
+              <h2>Sobre</h2>
 
                 <p>
-                    No passado fim de semana (19 a 21 de abril), ocorreu a Game Jam 2024 - AEAAV, 
-                    sob o lema "Game Jam for Fun", nas instalações do Agrupamento de Escolas de Albergaria-a-Velha.
-                    Durante 48 horas, 10 equipas, compostas por 30 alunos, dedicaram-se ao desafio de criar, desenhar, 
-                    programar, desenvolver e prototipar um videojogo sobre o tema “As alterações climáticas”. O evento 
-                    destacou-se pela colaboração e o espírito de entreajuda entre os participantes e equipas.
+                    A Game Jam 2024 – AEAAV realizou-se entre 19 e 21 de abril no Agrupamento de Escolas de Albergaria-a-Velha, 
+                    reunindo 10 equipas e 30 alunos no desenvolvimento de videojogos sobre o tema “As alterações climáticas”. 
+                    Durante 48 horas, os participantes dedicaram-se à criação, design e programação dos seus projetos, num 
+                    ambiente marcado pela cooperação e entreajuda.
                 </p>
 
                 <p>
-                    Os participantes trouxeram o essencial para uma jornada intensa, enquanto a organização, liderada pelos 
-                    docentes de Informática e alunos de TGPSI, foi exemplar, garantindo infraestrutura tecnológica, logística,
-                    alimentação e apoio técnico. Outros grupos da escola contribuíram de forma harmoniosa e voluntária para o 
-                    sucesso da iniciativa.
-                </p>
-
-                <p>
-                    O evento iniciou-se com a receção na sexta-feira, seguida de palestras, e, posteriormente, foi revelado o tema
-                    da competição. As equipas mergulharam no processo criativo, explorando design, narrativa e programação, e trabalharam 
-                    arduamente até domingo à tarde, quando submeteram os seus jogos numa plataforma específica. Às 16h, os produtos finais 
-                    foram apresentados, com a presença de familiares, amigos e um júri independente.
+                   A iniciativa foi organizada pelos docentes de Informática, com o apoio dos alunos de TGPSI, que garantiram 
+                   todas as condições tecnológicas, logísticas e de apoio técnico. Outros grupos da escola contribuíram igualmente
+                   de forma voluntária para o bom funcionamento do evento. No domingo, as equipas apresentaram os seus jogos perante 
+                   familiares, convidados e um júri independente.
                 </p>
                 
                 <p>

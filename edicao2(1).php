@@ -59,29 +59,19 @@
             </div>
             
             <div class="descricao-evento">
-                <h2>Sobre a 2ª Edição</h2>
+                <h2>Sobre</h2>
 
                 <p>
-                    Entre os dias 23 e 25 de maio, decorreu a segunda edição da Game Jam for Fun, organizada pelo 
-                     os alunos do curso Técnico de Gestão e Programação de Sistemas
-                     Informáticos (TGPSI). O evento reuniu 14 equipas de várias escolas do distrito, desafiadas a criar 
-                     um jogo original em apenas 48 horas.
+                    A segunda edição da Game Jam for Fun decorreu entre 23 e 25 de maio, contando com a participação de 
+                    14 equipas de várias escolas do distrito, desafiadas a desenvolver um jogo em 48 horas. A sessão de
+                    abertura incluiu intervenções de várias personalidades da área da educação e tecnologia, destacando-se 
+                    a palestra do engenheiro Manu.
                 </p>
 
                 <p>
-                    A sessão de abertura contou com a presença de várias personalidades ligadas à educação e à tecnologia.
-                     Destaque para o engenheiro Manu, que deu uma palestra inspiradora sobre como começar uma carreira em 
-                     desenvolvimento de jogos.
-                </p>
-
-                <p>
-                    O tema revelado para esta edição foi “DESLIGA-TE”, incentivando à reflexão sobre o uso excessivo da 
-                    tecnologia e redes sociais. As equipas demonstraram criatividade, foco e espírito de equipa durante todo o evento.
-                </p>
-
-                <p>
-                   No domingo, os jogos foram avaliados por um painel de jurados de excelência, com representantes do ensino superior, 
-                   empresas e organizações ligadas à informática e educação.
+                   O tema escolhido, “DESLIGA-TE”, promoveu a reflexão sobre o uso excessivo da tecnologia e das redes sociais.
+                   Os jogos apresentados foram avaliados por um júri especializado, composto por representantes do ensino superior,
+                   empresas e entidades do setor.
                 </p>
                 
                 <p>
