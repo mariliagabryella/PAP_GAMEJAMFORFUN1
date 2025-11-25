@@ -1,0 +1,466 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap'); 
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif; /* Define a fonte padrão do site */
+    background-image: url("img/back.jpg"); /* Imagem de fundo */ 
+    background-size: cover; /* Ajusta a imagem para cobrir todo o fundo */ 
+    background-position: center; /* Centraliza a imagem */ 
+    background-repeat: no-repeat; /* Não repetir a imagem */
+     background-attachment: fixed; 
+    width: 100%; /* Define uma largura específica */
+    height: 100px; /* Ajuste a altura para o tamanho desejado */
+}
+
+
+.conteudo {
+    color: black;
+    font-size: 10px;
+    margin-top: 100px;
+    margin-left: 50px;
+  }
+  .logo {
+    position: relative; /* Evita que crie fundo inesperado */
+    height: 80px;
+    width: auto;
+    top:10px;
+  }/* Espaço entre a logo e os elementos do menu */
+  
+  
+  .menu {
+    position: fixed;
+  top: 0; /* Mantém o menu no topo */
+  width: 100%;
+  background-color: #09122ca8;
+  z-index: 1000; /* Garante que o menu esteja acima dos outros elementos */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  height: 60px;/*Garante que o menu esteja acima dos outros elementos */
+  }
+  
+  .menu-icon {
+    display: none; /* Ícone oculto em telas grandes */
+    font-size: 30px;
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+    margin-left: 300px;
+    margin-top: 10px;
+  }
+  
+  .menu-links {
+    display: flex;
+    margin-top: -50px;
+    margin-right: 60px;
+  }
+  
+  
+  
+  .menu-links a.active::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background-color: #BE3144;
+  }
+  .menu-links a {
+    color: whitesmoke;
+    text-decoration: none;
+    margin: 0 15px;
+    font-size: 18px;
+    text-align: center;
+    top: 30px;
+  
+    font-family: "Barlow", sans-serif;
+    position: relative; /* Necessário para posicionar a barra */
+    padding-bottom: 5px; /* Dá espaço para a barra */ /* Dá espaço para a barra */
+  
+  }
+  
+  /* Define a posição fixa dos ícones na lateral */
+  .social-icons {
+    position: fixed;
+    right: 10px; /* Agora os ícones estão do lado direito */
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  /* Estiliza os ícones */
+  .social-icons a {
+    text-decoration: none;
+    font-size: 28px; /* Aumenta o tamanho do ícone */
+    color: white;
+    background-color: #09122c;
+    padding: 15px;
+    border-radius: 50%;
+    text-align: center;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+  }
+  
+  /* Efeito ao passar o mouse */
+  .social-icons a:hover {
+    background-color: #BE3144;
+  }
+  .form-container {
+    width: 80%;
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 23px;
+    background-color: #09122c9d;
+    color: rgb(255, 255, 255);
+    border-radius: 10px;
+    font-family:  "Barlow", sans-serif;
+}
+
+.form-container h1{
+  font-family: "Silkscreen",sans-serif;
+  color: #BE3144;
+  text-shadow: 1px 1px black;
+}
+
+/* 📝 Estilização dos campos */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-top: 10px;
+    font-size: 18px;
+  
+    
+    
+}
+.pat{
+  margin-top:20px;
+  color:rgb(255, 255, 255);
+}
+
+input, select, textarea {
+    padding: 10px;
+    margin-top: 6px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    color:#BE3144;
+    display: flex;
+    width: 550px;
+    
+}
+
+/* 🔹 Botão de envio */
+button {
+    margin-top: 20px;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #BE3144;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: "Silkscreen",sans-serif;
+}
+
+button:hover {
+    background-color: #09122c;
+}
+/* 🎭 Estilo do menu suspenso */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* 📌 Ajuste do submenu */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #be31447f;
+  min-width: 140px;
+  margin-top: 30px;
+  padding: 10px;
+  border-radius: 3px;
+  text-align: left;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  z-index: 1000; /* Garante que fique acima de outros elementos */
+}
+
+/* 📌 Melhora a visibilidade dos links */
+.dropdown-content a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 8px;
+  font-size: 16px;
+  text-align: left;
+  
+  top: 10px;
+}
+
+/* ✨ Exibe o submenu ao passar o mouse */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+
+/* 🔹 Ícones de login/logout */
+.login-container {
+  position: absolute;
+    right: 20px;
+    top: 10px;
+}
+
+/* 🔹 Estilo para Login e Logout */
+.login-container a {
+  position: absolute;
+  right: 20px;
+  top: 12px;
+  color: whitesmoke;
+  text-decoration: none;
+  left: 10px;
+  margin: 0 15px;
+  font-size: 18px;
+  text-align: right;
+  font-family: "barlow", sans-serif;
+  position: relative; /* Necessário para posicionar a barra */
+  padding-bottom: 5px; /* Dá espaço para a barra */
+    
+}
+
+.login-container a.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: #be3144;
+}
+
+/* 🔹 Estilo do footer */
+.footer {
+  background-color: #09122c;
+  color: white;
+  padding: 40px 20px;
+  text-align: center;
+  font-family: "Barlow", sans-serif;
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap; /* Permite empilhamento em telas menores */
+  justify-content: center;
+  gap: 20px; /* Espaçamento entre as colunas */
+  margin-bottom: 20px;
+}
+
+.footer-menu,
+.footer-contacts {
+  flex: 1 1 300px; /* Ajusta largura mínima */
+  max-width: 300px;
+  text-align: left;
+}
+
+.footer-menu h4,
+.footer-contacts h4 {
+  font-size: 1rem;
+  color: #be3144;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.footer-menu ul,
+.footer-contacts ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-menu li,
+.footer-contacts li {
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+}
+
+.footer-menu li a,
+.footer-contacts li a {
+  text-decoration: none;
+  color: whitesmoke;
+  transition: color 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.footer-menu li a:hover,
+.footer-contacts li a:hover {
+  color: #be3144; /* Realce ao passar o mouse */
+}
+
+.footer-credit {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 20px;
+}
+
+/* Estilo geral para o h1 com traços */
+.divider {
+  font-size: 2rem; /* Tamanho padrão */
+  text-align: center;
+  letter-spacing: 5px; /* Espaçamento entre os traços */
+  color: #be3144; /* Cor dos traços */
+  margin: 20px 0; /* Espaçamento em volta */
+}
+
+/* Regras responsivas */
+@media (max-width: 768px) {
+  .divider {
+      font-size: 1.5rem; /* Reduz o tamanho dos traços */
+      letter-spacing: 3px; /* Ajusta o espaçamento */
+  }
+
+  .footer-container {
+      display: flex;
+      align-items:center;
+  }
+
+  .footer-menu,
+  .footer-contacts {
+      text-align: justify; /* Centraliza em dispositivos menores */
+  }
+  .desktop-only {
+    display: none; /* Oculta o login no menu fixo em telas pequenas */
+}
+  .login-container {
+    position: static;
+    text-align: center;
+    margin-top: -10px;
+    right: 70px;
+  }
+
+  .menu-links {
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+  }
+
+  .login-container {
+    position: absolute;
+    top: 15px;
+    display: flex;
+    gap: 10px;
+    z-index: 999;
+  }
+
+
+  .menu-links {
+      flex-direction: column; /* Empilha os itens do menu */
+  }
+
+  .dropdown {
+      position: relative;
+      width: 100%;
+  }
+
+  .dropdown-content {
+      position: static;
+      display: none;
+      width: 100%; /* Ajusta a largura */
+      text-align: center; /* Centraliza os links */
+  }
+
+  .dropdown:hover .dropdown-content {
+      display: block; /* Garante que o submenu apareça ao clicar */
+  }
+    .form-container {
+        width: 90%;
+    }
+
+    label {
+        font-size: 16px;
+
+    }
+
+    
+   
+
+    input, select, textarea, button {
+        font-size: 14px;
+        width: 300px;
+    }
+
+    body { 
+      background-image: url("img/back.jpg"); /* Imagem de fundo */ /* Imagem diferente para dispositivos móveis */
+     }
+     .menu-icon {
+      display: block;
+      position: relative;
+      z-index: 1; /* Para que o menu também fique sobre o fundo */
+    }
+    .logo {
+      left: 10px; /* Ajuste para telas menores */
+      height: 60px;
+    }
+    .social-icons a {
+      font-size: 24px;
+      padding: 12px;
+      width: 45px;
+      height: 45px;
+    }
+  
+    .menu-container {
+     
+      width: 100%; /* Ocupa toda a largura */
+      height: 20px; /* Altura ajustável */
+      position: absolute; /* Para ficar abaixo da logo e das barras */
+      top: 0; /* Alinhado no topo */
+      left: 0; /* Começa do lado esquerdo */
+      z-index: -1; /* Mantém o fundo atrás dos elementos */
+    }
+  
+    .menu-links {
+      display: none; /* Oculta os links do menu inicialmente */
+      flex-direction: column;
+      background-color: rgba(16, 14, 51, 0.041);
+      -webkit-backdrop-filter: blur(5px);
+      backdrop-filter: blur(5px);
+      position: absolute;
+      top:110px;
+      height: 400px;
+      width: 100%;
+      left: 1px;
+      border-radius: 5px;
+    }
+  
+    .menu-links a {
+      display: block;
+      padding: 10px;
+      border-bottom: 2px solid transparent;
+      text-align: left;
+    }
+}
+
+.container {
+  min-height: 100vh; /* Garante que o conteúdo ocupe toda a tela */
+  display: flex;
+  flex-direction: column;
+}
+
+
+  

@@ -1,0 +1,964 @@
+@import url("https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: white;
+  font-family: Arial, sans-serif;
+}
+
+
+
+/* Define o vídeo como fundo */
+.video-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 700px; /* Ajusta a altura conforme solicitado */
+  object-fit: cover; /* Garante que o vídeo cubra toda a área */
+  z-index: -1; /* Mantém o vídeo atrás do conteúdo */
+}
+
+.video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 700px;
+  background: rgba(0, 0, 0, 0.6); /* Fundo escuro com transparência */
+  z-index: -1; /* Mantém a camada atrás do texto */
+}
+
+/* 💡 Estiliza o texto glitch */
+.video-text {
+  position: absolute;
+  top: 350px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  font-family: "Barlow", sans-serif;
+  color: white;
+  z-index: 1;
+  text-align: center;
+  font-size: 2rem;
+  margin-top: 10px;
+}
+
+
+  
+
+.video-text .logo-container {
+  text-align: center;
+  margin-top: 20px; /* Espaçamento entre o texto e a logo */
+}
+
+.video-text .logo-container img {
+  width: 400px; /* Define o tamanho da logo */
+  height: auto;
+  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5)); /* Sombra elegante */
+}
+
+/* 🔹 Container para os botões */
+ .video-text .button-container {
+  display: flex; /* Mantém os botões lado a lado */
+    justify-content: center; /* Centraliza os botões horizontalmente */
+    gap: 20px; /* Espaço entre os botões */
+    margin-top: 40px; /* Espaço acima do container */
+    position: relative; /* Garante que o container esteja posicionado corretamente */
+    z-index: 2; /* Mantém os botões acima de outros elementos */
+  flex-wrap: wrap; /* Permite que os botões quebrem para a próxima linha em telas menores */
+}
+
+/* 🔹 Estilo dos botões */
+.button {
+  
+padding: 12px 20px; /* Tamanho dos botões */
+font-size: 16px; /* Tamanho do texto */
+background-color: #BE3144; /* Vermelho principal */
+color: white; /* Cor do texto */
+text-decoration: none;
+border: none;
+border-radius: 5px; /* Bordas arredondadas */
+cursor: pointer;
+
+text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease; /* Transição suave */
+  position: relative;
+  overflow: hidden; /* Garante que o efeito fique dentro do botão */
+ font-family:  "Silkscreen", sans-serif;
+}
+
+
+
+/* 🔹 Efeito de borda neon ao clicar */
+.button:hover {
+  background-color: #09122c;
+  box-shadow: 
+      0 0 10px #ff0000, /* Brilho */
+      0 0 20px #0400ff, /* Tons laranja/vermelho */
+      0 0 40px #0800ff; /* Expansão do brilho */
+  outline: 1px solid #09122c; /* Cria borda neon */
+  outline-offset: 0px; /* Evita espaçamento extra */
+}
+
+
+
+/* 🔥 Efeito de glitch */
+.stack {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.stack span {
+  font-weight: bold;
+  grid-row-start: 1;
+  grid-column-start: 1;
+  font-size: 4rem;
+  color: #dd1a34;
+
+  text-shadow:2px 2px#09122c;
+  font-family: "Silkscreen", sans-serif;
+  --stack-height: calc(100% / var(--stacks) - 1px);
+  --inverse-index: calc(calc(var(--stacks) - 1) - var(--index));
+  --clip-top: calc(var(--stack-height) * var(--index));
+  --clip-bottom: calc(var(--stack-height) * var(--inverse-index));
+  clip-path: inset(var(--clip-top) 0 var(--clip-bottom) 0);
+  animation: stack 340ms cubic-bezier(0.46, 0.29, 0, 1.24) 1 backwards
+      calc(var(--index) * 120ms),
+    glitch 2s ease infinite 2s alternate-reverse;
+}
+
+.stack span:nth-child(odd) {
+  --glitch-translate: 8px;
+}
+.stack span:nth-child(even) {
+  --glitch-translate: -8px;
+}
+
+@keyframes stack {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%);
+    text-shadow: -2px 3px 0 #be3144, 2px -3px 0 #09122c; /* Cores ajustadas ao seu estilo */
+  }
+  60% {
+    opacity: 0.5;
+    transform: translateX(50%);
+  }
+  80% {
+    transform: none;
+    opacity: 1;
+    text-shadow: 2px -3px 0 #be3144, -2px 3px 0 #09122c;
+  }
+  100% {
+    text-shadow: none;
+  }
+}
+
+@keyframes glitch {
+  0% {
+    text-shadow: -2px 3px 0 #be3144, 2px -3px 0 #09122c;
+    transform: translate(var(--glitch-translate));
+  }
+  2% {
+    text-shadow: 2px -3px 0 #be3144, -2px 3px 0 #09122c;
+  }
+  4%,
+  100% {
+    text-shadow:2px 2px#09122c;
+    transform: none;
+  }
+}
+
+/* Ajusta o conteúdo para não se sobrepor ao menu */
+.conteudo {
+  position: relative;
+  z-index: 1;
+  margin-top: 520px; /* Adiciona espaço para evitar sobreposição */
+
+  color: black;
+  font-size: 10px;
+  margin-top: 100px;
+  margin-left: 50px;
+}
+
+.logo {
+  position: relative; /* Evita que crie fundo inesperado */
+  height: 80px;
+  width: auto;
+  top: 10px;
+}
+
+.menu {
+  position: fixed;
+  top: 0; /* Mantém o menu no topo */
+  width: 100%;
+  background-color: #09122ca8;
+  z-index: 1000; /* Garante que o menu esteja acima dos outros elementos */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  height: 60px;
+}
+
+.menu-icon {
+  display: none; /* Ícone oculto em telas grandes */
+  font-size: 30px;
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  right: 10px;
+  margin-top: 10px;
+}
+
+.menu-links {
+  display: flex;
+  margin-top: -50px;
+  margin-right: 60px;
+}
+
+.menu-links a.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: #be3144;
+}
+.menu-links a {
+  color: white;
+  text-decoration: none;
+  margin: 0 15px;
+  font-size: 18px;
+  text-align: center;
+  top: 30px;
+
+  font-family: "Barlow", sans-serif;
+  position: relative; /* Necessário para posicionar a barra */
+  padding-bottom: 5px; /* Dá espaço para a barra */
+}
+
+/* Define a posição fixa dos ícones na lateral */
+.social-icons {
+  position: fixed;
+  right: 10px; /* Agora os ícones estão do lado direito */
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 2; /* Mantém os ícones acima do overlay */
+}
+
+/* Estiliza os ícones */
+.social-icons a {
+  text-decoration: none;
+  font-size: 28px; /* Aumenta o tamanho do ícone */
+  color: white;
+  background-color: #09122c;
+  padding: 15px;
+  border-radius: 50%;
+  text-align: center;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s;
+}
+
+/* Efeito ao passar o mouse */
+.social-icons a:hover {
+  background-color: #be3144;
+}
+
+/* 🎭 Estilo do menu suspenso */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* 📌 Ajuste do submenu */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #be31447f;
+  min-width: 140px;
+  margin-top: 30px;
+  padding: 10px;
+  border-radius: 3px;
+  text-align: left;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  z-index: 1000; /* Garante que fique acima de outros elementos */
+}
+
+/* 📌 Melhora a visibilidade dos links */
+.dropdown-content a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 8px;
+  font-size: 16px;
+  text-align: left;
+
+  top: 10px;
+}
+
+/* ✨ Exibe o submenu ao passar o mouse */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* 🌟 Seção abaixo do vídeo */
+.gamejam-section {
+
+  padding: 50px 20px;
+  text-align: center;
+  margin-top: 60px; /* Ajusta para aparecer após o vídeo */
+  position: relative;
+}
+
+/* 🏆 Estilização do título */
+.gamejam-title {
+  font-size: 30px;
+  color: #BE3144;
+  text-shadow:1px 1px #09122c;
+
+  margin-bottom: 20px;
+  font-family: "Silkscreen", sans-serif;
+}
+
+/* 📦 Container das caixas */
+.container-boxes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 50px;
+  margin-bottom: 80px;
+}
+
+/* 🎨 Estilo das caixas */
+.box {
+  width: 300px;
+  background: #09122cea;
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  color: white;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: left;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  font-family: "Barlow", sans-serif;
+  height: 300px;
+}
+
+.box p {
+  margin-top: 10px;
+  font-family: "Barlow", sans-serif;
+  font-size: 15px;
+}
+
+.box h3 {
+  color:#BE3144;
+  text-shadow: 1px 1px #09122c;
+}
+/* 🔹 Ícones de login/logout */
+.login-container {
+  position: absolute;
+  right: 20px;
+  top: 10px;
+}
+
+/* 🔹 Estilo para Login e Logout */
+.login-container a {
+  position: absolute;
+  right: 20px;
+  top: 12px;
+  color: white;
+  text-decoration: none;
+  left: 10px;
+  margin: 0 15px;
+  font-size: 18px;
+  text-align: right;
+  font-family: "Barlow", sans-serif;
+  position: relative; /* Necessário para posicionar a barra */
+  padding-bottom: 5px; /* Dá espaço para a barra */
+}
+
+.login-container a.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: #be3144;
+}
+
+/* 🔹 Estilo da seção "Sobre Nós" */
+.sobre-nos .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 80%;
+  margin: auto;
+  flex-wrap: wrap;
+  padding: 50px 0;
+  margin-top: 700px;
+  gap: 20px;
+}
+
+/* 🔹 Carrossel de imagens */
+.carrossel {
+  flex: 1;
+    position: relative;
+    max-width: 600px;
+    margin: auto;
+    overflow: hidden;
+}
+
+.slides img {
+    width: 100%;
+    display: none; /* escondemos todos */
+}
+
+.slides img.active {
+    display: block; /* só o ativo aparece */
+}
+
+
+/* 🔹 Texto "Sobre Nós" */
+.descricao {
+  width: 55%;
+  text-align: right;
+  text-align: justify;
+  padding: 20px;
+  font-family: "Barlow", sans-serif;
+  font-weight: 2px bold;
+}
+
+.descricao h2 {
+  font-size: 30px;
+  color: #BE3144;
+  margin-bottom: 10px;
+  font-family: "Silkscreen", sans-serif;
+  
+  text-shadow:1px 1px #09122c;
+}
+
+.descricao p {
+  font-size: 20px;
+  line-height: 1.6;
+}
+
+/* 🔹 Botões */
+button {
+  padding: 12px 20px;
+  font-size: 16px;
+  background-color: #be3144;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background-color: #09122c;
+}
+
+/* 🔹 Seção de localização */
+.localizacao {
+  padding: 50px 0;
+  background-color: #bc2035; /* Fundo vermelho */
+  margin-top: 100px;
+}
+
+/* 🔹 Layout flexível */
+.localizacao .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 80%;
+  margin: auto;
+  flex-wrap: wrap; /* Permite ajuste responsivo */
+}
+
+/* 🔹 Texto à esquerda */
+.descrica {
+  width: 45%;
+  color: white;
+  text-align: left;
+ 
+  text-align: justify;
+
+  font-family:  "Barlow", sans-serif;
+  font-size: 20px;
+
+}
+
+.descrica h2 {
+  font-size: 30px;
+  color:  #09122c;
+  text-shadow:1px 1px #636363;
+  margin-bottom: 10px;
+  font-family: "Silkscreen", sans-serif;
+}
+
+/* 🔹 Mapa à direita */
+.mapa-container {
+  width: 50%;
+  padding: 20px;
+  background:#09122c; /* Fundo vermelho mais claro para destacar */
+  border-radius: 10px;
+}
+
+.mapa iframe {
+  border-radius: 10px;
+}
+
+.botao-visitar {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 12px 20px;
+  font-size: 16px;
+  background-color: rgb(231, 230, 230);
+  color: #BE3144;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.botao-visitar:hover {
+  background-color: #09122c;
+  color: white;
+}
+
+.patrocinadores {
+  margin-top: -60px;
+  text-align: center;
+  padding: 50px 0;
+  
+  margin-bottom: 80px;
+}
+
+.patrocinadores .container {
+  max-width: 80%;
+  margin: auto;
+}
+
+.patrocinadores h1 {
+  font-size: 30px;
+  color: #BE3144;
+  margin-bottom: 30px;
+  font-family: "Silkscreen", sans-serif;
+  text-shadow:1px 1px #09122c;
+
+
+}
+
+/* Tornando a logo maior */
+.logo-patrocinador a img {
+    width: 800px; /* Ajuste conforme necessário */
+    height: auto; /* Mantém proporções corretas */
+    transition: transform 0.3s ease;
+}
+
+.logos {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap; /* Responsividade */
+}
+
+.logos a img {
+  width: 200px; /* Define tamanho fixo */
+  height: auto;
+  transition: transform 0.3s ease;
+
+}
+
+.logos a img:hover {
+  transform: scale(1.1); /* Efeito de destaque ao passar o mouse */
+}
+
+.agradecimento {
+  font-size: 20px;
+  color: #09122c;
+  margin-top: 30px;
+  font-family: "Barlow",sans-serif;
+}
+
+
+
+/* 🔹 Estilo do footer */
+.footer {
+  background-color: #09122c;
+  color: white;
+  padding: 40px 20px;
+  text-align: center;
+  font-family: "Barlow", sans-serif;
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap; /* Permite empilhamento em telas menores */
+  justify-content: center;
+  gap: 20px; /* Espaçamento entre as colunas */
+  margin-bottom: 20px;
+}
+
+.footer-menu,
+.footer-contacts {
+  flex: 1 1 300px; /* Ajusta largura mínima */
+  max-width: 300px;
+  text-align: left;
+}
+
+.footer-menu h4,
+.footer-contacts h4 {
+  font-size: 1rem;
+  color: #be3144;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.footer-menu ul,
+.footer-contacts ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-menu li,
+.footer-contacts li {
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+}
+
+.footer-menu li a,
+.footer-contacts li a {
+  text-decoration: none;
+  color: whitesmoke;
+  transition: color 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.footer-menu li a:hover,
+.footer-contacts li a:hover {
+  color: #be3144; /* Realce ao passar o mouse */
+}
+
+.footer-credit {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 20px;
+}
+
+/* 🔹 Responsivo */
+@media (max-width: 768px) {
+
+  .video-text .logo-container img {
+    width: 300px;
+  }
+
+  
+  .footer-container {
+      display: flex;
+      align-items:center;
+  }
+
+  .footer-menu,
+  .footer-contacts {
+      text-align: justify; /* Centraliza em dispositivos menores */
+  }
+
+#text{
+    font-size: 0.44em;
+}
+
+.button-container {
+    flex-direction:inherit; /* Botões empilhados verticalmente */
+    align-items: center; /* Centraliza os botões */
+    gap: 10px; /* Ajusta o espaçamento para dispositivos menores */
+}
+
+.button {
+    width: 50%; /* Botões mais largos em telas pequenas */
+    font-size: 14px; /* Texto menor */
+    padding: 10px 15px; /* Ajusta o tamanho */
+}
+
+.patrocinadores h1 {
+  flex-direction: column;
+}
+
+  .logos {
+      flex-direction: column;
+      align-items: center;
+  }
+
+  .logos a img {
+      width: 120px; /* Reduz tamanho das logos em dispositivos móveis */
+  }
+  
+  .logo-patrocinador img {
+    width: 120px;
+  }
+
+  .localizacao .container {
+      flex-direction: column;
+      text-align: center;
+  }
+
+  .descrica{
+      width: 100%;
+      text-align: left;
+
+  }
+
+  .mapa-container {
+      width: 100%;
+      margin-top: 20px;
+  }
+  .sobre-nos .container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .carrossel {
+    width: 100%;
+  }
+
+  .descricao {
+    width: 100%;
+    text-align: justify;
+  }
+
+  .descricao h2 {
+    font-size: 40px;
+    margin-bottom: 30px;
+    margin-top: 30px;
+  }
+  .desktop-only {
+    display: none; /* Oculta o login no menu fixo em telas pequenas */
+  }
+  .login-container {
+    position: static;
+    text-align: center;
+    margin-top: -10px;
+    right: 70px;
+  }
+
+  .menu-links {
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+  }
+
+  .login-container {
+    position: absolute;
+    top: 15px;
+    display: flex;
+    gap: 10px;
+    z-index: 999;
+  }
+
+  .box {
+    width: 90%;
+  }
+
+  .gamejam-section {
+    margin-top: 0px; /* Ajusta altura em telas menores */
+  }
+
+  .menu-links {
+    flex-direction: column; /* Empilha os itens do menu */
+  }
+
+  .dropdown {
+    position: relative;
+    width: 100%;
+  }
+
+  .dropdown-content {
+    position: static;
+    display: none;
+    width: 100%; /* Ajusta a largura */
+    text-align: center; /* Centraliza os links */
+  }
+
+  .dropdown:hover .dropdown-content {
+    display: block; /* Garante que o submenu apareça ao clicar */
+  }
+
+  .video-text {
+    width: 80%;
+    font-size: 18px;
+   
+
+  }
+  .video-overlay {
+    height: 700px; /* Ajusta altura para telas menores */
+  }
+
+  .video-bg {
+    height: 700px; /* Reduz altura do vídeo para telas menores */
+  }
+
+  .stack span {
+    font-size: 2.5rem;
+  }
+
+  .conteudo {
+    margin-top: 420px; /* Ajusta o espaço abaixo do vídeo */
+  }
+  .menu-icon {
+    display: block;
+    position: relative;
+    z-index: 1; /* Para que o menu também fique sobre o fundo */
+  }
+  .logo {
+    left: 10px; /* Ajuste para telas menores */
+    height: 60px;
+  }
+  .social-icons a {
+    font-size: 24px;
+    padding: 12px;
+    width: 45px;
+    height: 45px;
+  }
+
+  .menu-container {
+    width: 100%; /* Ocupa toda a largura */
+    height: 20px; /* Altura ajustável */
+    position: absolute; /* Para ficar abaixo da logo e das barras */
+    top: 0; /* Alinhado no topo */
+    left: 0; /* Começa do lado esquerdo */
+    z-index: -1; /* Mantém o fundo atrás dos elementos */
+  }
+
+  .menu-links {
+    display: none; /* Oculta os links do menu inicialmente */
+    flex-direction: column;
+    background-color: rgba(16, 14, 51, 0.041);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    position: absolute;
+    top: 110px;
+    height: 400px;
+    width: 100%;
+    left: 1px;
+    border-radius: 5px;
+  }
+
+  .menu-links a {
+    display: block;
+    padding: 10px;
+    border-bottom: 2px solid transparent;
+    text-align: left;
+  }
+
+    .video-text .logo-container img {
+    width: 300px;
+  }
+
+  .footer-container {
+    display: flex;
+    align-items: center;
+  }
+
+  .footer-menu,
+  .footer-contacts {
+    text-align: justify; /* Centraliza em dispositivos menores */
+  }
+
+  #text {
+    font-size: 14px; /* Tamanho de fonte mais legível em vez de 0.44em */
+  }
+
+  .button-container {
+    flex-direction: row; /* Mantém os botões na horizontal quando possível */
+    flex-wrap: wrap; /* Permite quebra de linha quando necessário */
+    justify-content: center; /* Centraliza os botões */
+    gap: 10px; /* Ajusta o espaçamento para dispositivos menores */
+    width: 100%; /* Ocupa toda a largura disponível */
+  }
+
+  .button {
+    width: auto; /* Largura automática baseada no conteúdo */
+    min-width: 100px; /* Largura mínima para garantir clicabilidade */
+    font-size: 14px; /* Texto menor mas legível */
+    padding: 10px 15px; /* Ajusta o tamanho */
+    margin-bottom: 10px; /* Espaço entre botões quando quebram linha */
+  }
+}
+
+
+@media (max-width: 480px) {
+
+  .video-text{
+    margin-top: 40px;
+    top: 250px;
+  }
+
+  .stack span {
+    font-size: 2rem; /* Reduz ainda mais o tamanho do título */
+  }
+
+  .video-text .logo-container img {
+    width: 250px; /* Reduz o tamanho da logo */
+  }
+
+  .button-container {
+    margin-top: 20px; /* Reduz o espaço acima dos botões */
+    gap: 8px; /* Reduz ainda mais o espaço entre botões */
+  }
+
+  .button {
+    font-size: 12px; /* Reduz ainda mais o tamanho da fonte, mas mantém legível */
+    padding: 8px 12px; /* Reduz o padding */
+    min-width: 90px; /* Reduz a largura mínima */
+  }
+
+  .right {
+    font-size: 1.5rem; /* Reduz o tamanho do texto */
+  }
+}
+
+
+/* 🔹 Estilo dos botões */
+.button {
+  padding: 12px 20px; /* Tamanho dos botões */
+  font-size: 16px; /* Tamanho do texto */
+  background-color: #be3144; /* Vermelho principal */
+  color: white; /* Cor do texto */
+  text-decoration: none;
+  border: none;
+  border-radius: 5px; /* Bordas arredondadas */
+  cursor: pointer;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease; /* Transição suave */
+  position: relative;
+  overflow: hidden; /* Garante que o efeito fique dentro do botão */
+  font-family: "Silkscreen", sans-serif;
+  min-width: 120px; /* Garante uma largura mínima para os botões */
+  display: inline-block; /* Melhor comportamento para links */
+}
+
+

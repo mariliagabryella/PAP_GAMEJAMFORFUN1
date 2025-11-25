@@ -1,0 +1,196 @@
+/* Estilização do formulário de login */
+@import url("https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap");
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Verdana", sans-serif;
+    overflow: hidden; /* Evita rolagem desnecessária */
+}
+
+/* 🔹 Canvas para as bolinhas interativas */
+#interactive-bg {
+    position: fixed; /* Mantém o canvas fixo */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1; /* Agora, à frente do vídeo */
+    pointer-events: none; /* Permite interação apenas com elementos abaixo */
+}
+
+/* 🔹 Botão externo para voltar ao index */
+.back-button-container {
+    margin-bottom: 20px; /* Espaço acima do formulário */
+    text-align: center;
+    position: relative;
+    z-index: 2; /* À frente de tudo */
+    font-family: "barlow",sans-serif;
+}
+
+.back-button {
+    padding: 12px 20px;
+    font-size: 16px;
+    background-color: #BE3144; /* Vermelho principal */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: #09122c; /* Azul no hover */
+}
+
+/* 🔹 Estilização do vídeo de fundo */
+.video-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    object-fit: cover; /* O vídeo cobre toda a tela */
+    z-index: 0; /* Vídeo no fundo */
+}
+
+/* 🔹 Overlay para destacar o formulário */
+.video-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6); /* Fundo escuro com transparência */
+    z-index: 0; /* Mesma camada do vídeo */
+}
+/* 🔹 Estilização do vídeo de fundo */
+.video-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    object-fit: cover; /* O vídeo cobre toda a tela */
+    z-index: -1; /* Mantém o vídeo no fundo */
+}
+
+/* 🔹 Overlay para destacar o formulário */
+.video-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6); /* Fundo escuro com transparência */
+    z-index: 0; /* Mantém a camada atrás do formulário */
+}
+
+/* 🔹 Centralizando o formulário */
+.login-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Centraliza na tela inteira */
+    position: relative;
+    z-index: 1;
+}
+form h2{
+    text-align: left;
+    font-family: "Silkscreen",sans-serif;
+    margin-bottom: 30px;
+    margin-top: 10px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.3s ease;
+    color: white;
+    
+}
+
+form h2:hover {
+    color: #BE3144; /* Azul no hover */
+}
+
+
+/* 🔹 Estilização do formulário */
+form {
+    background: #091948;
+    color: rgb(255, 255, 255);
+    padding: 50px;
+    border-radius: 10px;
+    width: 400px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    font-family: "barlow", sans-serif;
+    text-align: left;
+    height: 400px;
+}
+
+/* 🔹 Estilos dos labels */
+form label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 16px;
+   
+}
+
+/* 🔹 Campos de entrada */
+form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* 🔹 Botão de login */
+form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #BE3144;
+    color: #09122c;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+ 
+    font-family: "Silkscreen",sans-serif;
+}
+
+form button:hover {
+    background-color: #09122c;
+    color:#BE3144;
+}
+
+/* 🔹 Link para criar conta */
+p {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+p a {
+    color: #BE3144;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+p a:hover {
+    text-decoration: underline;
+}
+
+/* 🌍 Responsividade */
+@media (max-width: 768px) {
+    form {
+        width: 60%;
+        padding: 15px;
+        height: 54%;
+    }
+}
