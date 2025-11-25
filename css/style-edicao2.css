@@ -1,4 +1,4 @@
-/* Estilo geral da seção */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 body {
   margin: 0;
@@ -7,7 +7,7 @@ body {
   background: linear-gradient(135deg, #ff0022b6, #0b07ff27, #ff00003b, #5100ff62);
   background-size: 400% 400%; /* Para animação suave */
   animation: gradientAnimation 10s ease infinite;
-  font-family: Arial, sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 /* 🔹 Animação do gradiente */
@@ -91,7 +91,7 @@ body {
 
 .data-evento p {
   font-size: 1.5rem;
-  font-family: "Barlow", sans-serif;
+  font-family: "Poppins", sans-serif;
   font-weight: 600;
   color: white;
   margin: 0;
@@ -128,7 +128,7 @@ body {
 }
 
 .info-card h3 {
-  font-family: "Barlow", sans-serif;
+  font-family: "Poppins", sans-serif;
   font-weight: 700;
   font-size: 1.5rem;
   color: #09122c;
@@ -136,7 +136,7 @@ body {
 }
 
 .info-card p {
-  font-family: "Barlow", sans-serif;
+  font-family: "Poppins", sans-serif;
   color: #333;
   font-size: 1rem;
 }
@@ -152,7 +152,7 @@ body {
 }
 
 .descricao-evento h2 {
-  font-family: "Silkscreen", sans-serif;
+  font-family: "poppins", sans-serif;
   font-size: 2rem;
   color: #be3144;
   margin-bottom: 20px;
@@ -160,7 +160,7 @@ body {
 }
 
 .descricao-evento p {
-  font-family: "Barlow", sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 1.1rem;
   line-height: 1.6;
   margin-bottom: 15px;
@@ -223,7 +223,7 @@ body {
   text-align: center;
   padding: 10px 0;
   border-radius: 5px;
-  font-family: "Barlow", sans-serif;
+  font-family: "Poppins", sans-serif;
   font-weight: 700;
   font-size: 1.1rem;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
@@ -245,7 +245,7 @@ body {
 }
 
 .timeline-content h4 {
-  font-family: "Barlow", sans-serif;
+  font-family: "Poppins", sans-serif;
   font-weight: 700;
   color: #be3144;
   margin-bottom: 5px;
@@ -253,7 +253,7 @@ body {
 }
 
 .timeline-content p {
-  font-family: "Barlow", sans-serif;
+  font-family: "Poppins", sans-serif;
   color: #333;
   margin-bottom: 15px;
   font-size: 0.95rem;
@@ -305,7 +305,7 @@ body {
   font-size: 20px;
   color: #09122c;
   margin-top: 30px;
-  font-family: "Barlow",sans-serif;
+  font-family: "Poppins",sans-serif;
 }
 
 /* Responsividade */
