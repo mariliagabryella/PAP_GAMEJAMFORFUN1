@@ -35,14 +35,14 @@ $usuarioLogado = isset($_SESSION["usuario"]) ? $_SESSION["usuario"] : null;
     <div class="menu-links">
         <a href="index.php" class="<?= ($currentPage == 'index.php') ? 'active' : ''; ?>">Início</a>
         <a href="#sobre-nos" class="<?= ($currentPage == 'index.php') ? 'active' : ''; ?>">Sobre Nós</a>
-        <a href="edicao3(1).php" class="<?= ($currentPage == 'edicao3(1).php') ? 'active' : ''; ?>">Edição 3</a>
-
+        
         <div class="dropdown">
             <a href="#" >Edições ▾</a>
             <div class="dropdown-content">
                 <a href="edicao1(1).php" class="<?= ($currentPage == 'edicao1(1).php') ? 'active' : ''; ?>">Edição 1</a>
                 <a href="edicao2(1).php" class="<?= ($currentPage == 'edicao2(1).php') ? 'active' : ''; ?>">Edição 2</a>
-              
+              <a href="edicao3(1).php" class="<?= ($currentPage == 'edicao3(1).php') ? 'active' : ''; ?>">Edição 3</a>
+
             </div>
         </div>
         <a href="inscrição.php" class="<?= ($currentPage == 'inscrição.php') ? 'active' : ''; ?>">Inscrição</a>
