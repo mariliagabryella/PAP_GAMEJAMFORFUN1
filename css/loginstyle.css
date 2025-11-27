@@ -13,6 +13,144 @@ body {
     font-family: "Verdana", sans-serif;
     overflow: hidden; /* Evita rolagem desnecessária */
 }
+.conteudo {
+  position: relative;
+  z-index: 1;
+  margin-top: 520px; /* Adiciona espaço para evitar sobreposição */
+
+  color: black;
+  font-size: 10px;
+  margin-top: 100px;
+  margin-left: 50px;
+}
+
+.logo {
+  position: relative; /* Evita que crie fundo inesperado */
+  height: 80px;
+  width: auto;
+  top: 10px;
+}
+
+.menu {
+  position: fixed;
+  top: 0; /* Mantém o menu no topo */
+  width: 100%;
+  background-color: #09122ca8;
+  z-index: 1000; /* Garante que o menu esteja acima dos outros elementos */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  height: 60px;
+}
+
+.menu-icon {
+  display: none; /* Ícone oculto em telas grandes */
+  font-size: 30px;
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  right: 10px;
+  margin-top: 10px;
+}
+
+.menu-links {
+  display: flex;
+  margin-top: -50px;
+  margin-right: 60px;
+}
+
+.menu-links a.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: #be3144;
+}
+.menu-links a {
+  color: whitesmoke;
+  text-decoration: none;
+  margin: 0 15px;
+  font-size: 18px;
+  text-align: center;
+  top: 30px;
+
+  font-family: "Barlow", sans-serif;
+  position: relative; /* Necessário para posicionar a barra */
+  padding-bottom: 5px; /* Dá espaço para a barra */
+}
+
+/* Define a posição fixa dos ícones na lateral */
+.social-icons {
+  position: fixed;
+  right: 10px; /* Agora os ícones estão do lado direito */
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 2; /* Mantém os ícones acima do overlay */
+}
+
+/* Estiliza os ícones */
+.social-icons a {
+  text-decoration: none;
+  font-size: 28px; /* Aumenta o tamanho do ícone */
+  color: white;
+  background-color: #09122c;
+  padding: 15px;
+  border-radius: 50%;
+  text-align: center;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s;
+}
+
+/* Efeito ao passar o mouse */
+.social-icons a:hover {
+  background-color: #be3144;
+}
+
+/* 🎭 Estilo do menu suspenso */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* 📌 Ajuste do submenu */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #be31447f;
+  min-width: 140px;
+  margin-top: 30px;
+  padding: 10px;
+  border-radius: 3px;
+  text-align: left;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  z-index: 1000; /* Garante que fique acima de outros elementos */
+}
+
+/* 📌 Melhora a visibilidade dos links */
+.dropdown-content a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 8px;
+  font-size: 16px;
+  text-align: left;
+
+  top: 10px;
+}
+
+/* ✨ Exibe o submenu ao passar o mouse */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
 
 /* 🔹 Canvas para as bolinhas interativas */
 #interactive-bg {
@@ -25,30 +163,9 @@ body {
     pointer-events: none; /* Permite interação apenas com elementos abaixo */
 }
 
-/* 🔹 Botão externo para voltar ao index */
-.back-button-container {
-    margin-bottom: 20px; /* Espaço acima do formulário */
-    text-align: center;
-    position: relative;
-    z-index: 2; /* À frente de tudo */
-    font-family: "barlow",sans-serif;
-}
 
-.back-button {
-    padding: 12px 20px;
-    font-size: 16px;
-    background-color: #BE3144; /* Vermelho principal */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    text-decoration: none;
-    transition: background 0.3s ease;
-}
 
-.back-button:hover {
-    background-color: #09122c; /* Azul no hover */
-}
+
 
 /* 🔹 Estilização do vídeo de fundo */
 .video-bg {

@@ -222,39 +222,8 @@ button:hover {
 }
 
 
-/* 🔹 Ícones de login/logout */
-.login-container {
-  position: absolute;
-    right: 20px;
-    top: 10px;
-}
 
-/* 🔹 Estilo para Login e Logout */
-.login-container a {
-  position: absolute;
-  right: 20px;
-  top: 12px;
-  color: whitesmoke;
-  text-decoration: none;
-  left: 10px;
-  margin: 0 15px;
-  font-size: 18px;
-  text-align: right;
-  font-family: "barlow", sans-serif;
-  position: relative; /* Necessário para posicionar a barra */
-  padding-bottom: 5px; /* Dá espaço para a barra */
-    
-}
 
-.login-container a.active::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 3px;
-  background-color: #be3144;
-}
 
 /* 🔹 Estilo do footer */
 .footer {
@@ -347,12 +316,6 @@ button:hover {
   .desktop-only {
     display: none; /* Oculta o login no menu fixo em telas pequenas */
 }
-  .login-container {
-    position: static;
-    text-align: center;
-    margin-top: -10px;
-    right: 70px;
-  }
 
   .menu-links {
     flex-direction: column;
@@ -360,13 +323,7 @@ button:hover {
     gap: 15px;
   }
 
-  .login-container {
-    position: absolute;
-    top: 15px;
-    display: flex;
-    gap: 10px;
-    z-index: 999;
-  }
+ 
 
 
   .menu-links {

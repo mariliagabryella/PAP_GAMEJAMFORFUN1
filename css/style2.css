@@ -9,15 +9,12 @@
   box-sizing: border-box;
 }
 body {
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    background: linear-gradient(135deg, #7e2430, #b9b6b6, #eadfdf, #ff0000);
-    background-size: 400% 400%; /* Para animação suave */
-    animation: gradientAnimation 10s ease infinite;
-    font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: white;
+  font-family: "Poppins", sans-serif;
 }
-
 /* 🔹 Animação do gradiente */
 @keyframes gradientAnimation {
     0% { background-position: 0% 50%; }
@@ -168,38 +165,8 @@ body {
   }
   
 
-  /* 🔹 Ícones de login/logout */
-.login-container {
-    position: absolute;
-    right: 20px;
-    top: 10px;
-  }
-  
-  /* 🔹 Estilo para Login e Logout */
-  .login-container a {
-    position: absolute;
-    right: 20px;
-    top: 12px;
-    color: whitesmoke;
-    text-decoration: none;
-    left: 10px;
-    margin: 0 15px;
-    font-size: 18px;
-    text-align: right;
-    font-family: "Barlow", sans-serif;
-    position: relative; /* Necessário para posicionar a barra */
-    padding-bottom: 5px; /* Dá espaço para a barra */
-  }
-  
-  .login-container a.active::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background-color: #be3144;
-  }
+ 
+
   
   .edicao {
 
@@ -394,12 +361,7 @@ body {
     .desktop-only {
       display: none; /* Oculta o login no menu fixo em telas pequenas */
     }
-    .login-container {
-      position: static;
-      text-align: center;
-      margin-top: -10px;
-      right: 70px;
-    }
+
   
     .menu-links {
       flex-direction: column;
@@ -407,13 +369,7 @@ body {
       gap: 15px;
     }
   
-    .login-container {
-      position: absolute;
-      top: 15px;
-      display: flex;
-      gap: 10px;
-      z-index: 999;
-    }
+   
 
   
     .dropdown {
