@@ -4,9 +4,7 @@ body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  background: linear-gradient(135deg, #ff0022b6, #0b07ff27, #ff00003b, #5100ff62);
-  background-size: 400% 400%; /* Para animação suave */
-  animation: gradientAnimation 10s ease infinite;
+  background: white;
   font-family: "Poppins", sans-serif;
 }
 

@@ -30,22 +30,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GameJamForFun</title>
     <link rel="icon" type="image/x-icon" href="img/logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://kit.fontawesome.com/YOUR-FONT-AWESOME-KIT.js" crossorigin="anonymous"></script> <!-- Importa os ícones -->
+
 
     <!-- 🔹 Importando estilos -->
     <link rel="stylesheet" href="css/loginstyle.css">
 </head>
 <body>
+    <?php include 'menu.php'; ?> <!-- Inclui o menu fixo na página -->
+
+
+    <div class="conteudo">
+
+    </div>
+
+    <!-- Container onde os ícones sociais serão exibidos -->
+    <div class="social-icons">
+        <?php include 'script.php'; ?> <!-- Inclui o script PHP que gera os ícones dinamicamente -->
+    </div>
+       
    <!-- 🔹 Canvas para o background interativo -->
    <canvas id="interactive-bg"></canvas>
 
-    <!-- 🔹 Botão fora do formulário -->
-    <div class="back-button-container">
-        <a href="index.php" class="back-button">Início</a>
-    </div>
-
-    <video autoplay muted loop class="video-bg">
-        <source src="img/game Jam anuncio 1.mov" type="video/mp4">
-    </video>
 
     <!-- 🔹 Overlay escuro sobre o vídeo -->
     <div class="video-overlay"></div>
@@ -67,6 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
     </div>
     <script src="interactive-script.js"></script> <!-- Script JS -->
+    
     
 </body>
 </html>

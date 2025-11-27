@@ -39,9 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
    <canvas id="interactive-bg"></canvas>
 
     <!-- 🔹 Botão fora do formulário -->
-    <div class="back-button-container">
-        <a href="index.php" class="back-button">Início</a>
-    </div>
+    
 
     <video autoplay muted loop class="video-bg">
         <source src="img/game Jam anuncio 1.mov" type="video/mp4">
