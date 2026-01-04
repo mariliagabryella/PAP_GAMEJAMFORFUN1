@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <p>Não tem conta? <a href="register.php">Criar Conta</a></p>
         </form>
     </div>
-    <script src="interactive-script.js"></script> <!-- Script JS -->
+    <script src="js/interactive-script.js"></script> <!-- Script JS -->
     
     
 </body>
