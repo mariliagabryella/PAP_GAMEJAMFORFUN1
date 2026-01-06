@@ -1,23 +1,7 @@
 <?php
-session_start(); // Inicia a sessão
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Captura os dados do formulário
-    $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
-    $senha = trim($_POST['senha']); // Apenas captura a senha digitada
-    
-    if ($email && $senha) { // Verifica se email e senha foram preenchidos
-        // Armazena o email na sessão para identificar o usuário logado
-        $_SESSION["usuarioEmail"] = $email;
-
-        // Redireciona para a página inicial
-        header("Location: index.php");
-        exit();
-    } else {
-        echo "Por favor, preencha todos os campos corretamente.";
-    }
-
-}
+// Arquivo duplicado de login removido. Redireciona para a página inicial.
+header('Location: /index.php');
+exit();
 
 ?>
 

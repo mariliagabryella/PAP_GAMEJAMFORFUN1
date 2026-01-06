@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt">
 
@@ -139,14 +140,16 @@
 
              <div class="carrossel-container">
         <div class="slides">
-            <img src="img/" alt="Foto do Evento 1">
-            <img src="img/" alt="Foto do Evento 2">
-            <img src="img/" alt="Foto do Evento 3">
-            <img src="img/" alt="Foto do Evento 4">
-            <img src="img/" alt="Foto do Evento 5">
-            <img src="img/" alt="Foto do Evento 6">
-            <img src="img/" alt="Foto do Evento 7">
-            <img src="img/" alt="Foto do Evento 8">
+            <img src="img/6125.jpg" alt="Foto do Evento 1">
+            <img src="img/5971.jpg" alt="Foto do Evento 2">
+            <img src="img/5983.jpg" alt="Foto do Evento 3">
+            <img src="img/5995.jpg" alt="Foto do Evento 4">
+            <img src="img/6006.jpg" alt="Foto do Evento 5">
+            <img src="img/6033.jpg" alt="Foto do Evento 6">
+            <img src="img/6039.jpg" alt="Foto do Evento 7">
+            <img src="img/6109.jpg" alt="Foto do Evento 8">
+            <img src="img/6114.jpg" alt="Foto do Evento 9">
+            <img src="img/6117.jpg" alt="Foto do Evento 10">
         </div>
         <button class="prev" onclick="mudarSlide(-1)">❮</button>
         <button class="next" onclick="mudarSlide(1)">❯</button>

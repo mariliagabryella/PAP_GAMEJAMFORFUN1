@@ -8,7 +8,7 @@
 $servidor = "localhost";
 $usuario = "root"; // 🔹 Substitua pelo seu usuário do MySQL
 $senha = ""; // 🔹 Substitua pela sua senha do MySQL
-$banco = "gamejam"; // 🔹 Nome do banco de dados
+$banco = "gamejamforfun2"; // 🔹 Nome do banco de dados
 
 
 // 🔹 Melhor conexão com tratamento de erros

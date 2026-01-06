@@ -1,24 +1,62 @@
 <?php
-session_start(); // Inicia a sessão
+session_start();
+
+// Conexão com o banco de dados
+$host = '127.0.0.1';
+$dbname = 'gamejamforfun2';
+$user = 'root';
+$password = '';
+
+$conn = new mysqli($host, $user, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Erro na conexão com o banco de dados: " . $conn->connect_error);
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Captura os dados do formulário
     $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
     $senha = trim($_POST['senha']); // Apenas captura a senha digitada
     
-    if ($email && $senha) { // Verifica se email e senha foram preenchidos
-        // Armazena o email na sessão para identificar o usuário logado
-        $_SESSION["usuarioEmail"] = $email;
+    if ($email && $senha) { 
+        // Consulta ao banco de dados
+        $stmt = $conn->prepare("SELECT nome, role_id, senha_hash FROM utilizadores WHERE email = ?");
+        if (!$stmt) {
+            die("Erro ao preparar a consulta: " . $conn->error);
+        }
 
-        // Redireciona para a página inicial
-        header("Location: index.php");
-        exit();
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows === 1) {
+            $user = $result->fetch_assoc();
+
+            // Verifica se a senha está correta
+            if (password_verify($senha, $user['senha_hash'])) {
+                // Armazena os dados do usuário na sessão
+                $_SESSION["usuarioEmail"] = $email;
+                $_SESSION["usuarioNome"] = $user['nome']; // Armazena o nome do usuário na sessão
+                $_SESSION["role_id"] = $user['role_id'];
+                
+                // Redireciona para a página inicial
+                header("Location: index.php");
+                exit();
+            } else {
+                echo "Senha incorreta.";
+            }
+        } else {
+            echo "Usuário não encontrado.";
+        }
+
+        $stmt->close();
     } else {
         echo "Por favor, preencha todos os campos corretamente.";
     }
 
 }
 
+$conn->close();
 ?>
 
 
@@ -74,7 +112,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
     </div>
     <script src="interactive-script.js"></script> <!-- Script JS -->
-    
+    <script>
+        // Dados de sessão
+        const sessionData = {
+            usuarioEmail: "<?php echo $_SESSION['usuarioEmail'] ?? ''; ?>",
+            usuarioNome: "<?php echo $_SESSION['usuarioNome'] ?? ''; ?>",
+            role_id: "<?php echo $_SESSION['role_id'] ?? ''; ?>"
+        };
+
+        // Log dos dados de sessão no console
+        console.log("Dados de Sessão:", sessionData);
+    </script>
     
 </body>
 </html>

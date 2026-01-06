@@ -1,4 +1,48 @@
+<?php 
+require 'textos.php';
+require 'bd_connection.php';
+?>
 
+<?php 
+session_start();
+
+$slug =[
+    'titulo_do_index',
+    'subtitulo_do_index',
+    'subtitulo_do_index1',
+    'sobrenos_titulo',
+    'texto_sobrenos',
+    'texto_sobrenos1',
+    'titulo_ondeestamos',
+    'texto_ondeestamos',
+    'texto_ondeestamos1',
+    'titudo_etapas',
+    'subtitulo_etapas',
+    'texto_etapas_inscrições',
+    'texto_etapas_inscrições1',
+    'subtitulo_etapas_dia_um',
+    'texto_etapas_dia_um',
+    'texto_etapas_dia_um1',
+    'texto_etapas_dia_um2',
+    'texto_etapas_dia_um3',
+    'subtitulo_etapas_dia_dois',
+    'texto_etapas_dia_dois',
+    'texto_etapas_dia_dois1',
+    'subtitulo_etapas_dia_tres',
+    'texto_etapas_dia_tres',
+    'texto_etapas_dia_tres1',
+    'texto_etapas_dia_tres2',
+    'texto_etapas_dia_tres3',
+    'patrocinio_titulo',
+    'agradecimentos_texto'
+];
+
+$textos = getTextos($pdo, $slug);
+
+if (!is_array($textos)) {
+    $textos = [];
+}
+?>
 
 <!DOCTYPE html>
 <html lang="pt">
@@ -15,9 +59,7 @@
 </head>
 
 <body>
-    <?php include 'menu.php'; ?> <!-- Inclui o menu fixo na página -->
-
-
+    <?php include 'menu.php'; ?>
     <div class="conteudo">
 
     </div>
@@ -35,12 +77,10 @@
     <div class="video-overlay"></div>
     <div class="video-text container">
  
-    <div class="stack" style="--stacks: 3; " >
-        <span style="--index: 0;">Game Jam For Fun</span>
-        <span style="--index: 1;">Game Jam For Fun</span>
-        <span style="--index: 2;">Game Jam For Fun</span>
+    <div class="stack" >
+        <span><?php echo $textos['titulo_do_index'] ?? ''; ?></span>
     </div>
-    <span class="right">Já imaginaste criar o teu próprio jogo?<p>Queres mostrar o teu talento? Esta é a oportunidade perfeita para ti!!</p></span>
+    <span class="right"><?php echo $textos['subtitulo_do_index'] ?? ''; ?></p></span>
 
      <!-- Logo abaixo do texto -->
      <div class="logo-container">
@@ -57,48 +97,21 @@
     <div class="container">
         <!-- 🔹 Carrossel de imagens à esquerda -->
         <div class="carrossel">
-        <div class="slides">
-            <img src="img/img1.jpg" alt="Foto 1">
-            <img src="img/img2.jpg" alt="Foto 2">
-            <img src="img/img3.jpg" alt="Foto 3">
+            <div class="slides">
+                <img src="img/img1.jpg" alt="Foto 1">
+                <img src="img/img2.jpg" alt="Foto 2">
+                <img src="img/img3.jpg" alt="Foto 3">
+
+            </div>
+            <button class="prev" onclick="mudarSlide(-1)">❮</button>
+            <button class="next" onclick="mudarSlide(1)">❯</button>
         </div>
-
-    </div>
-
-    <script>
-        let slideIndex = 0;
-        const slides = document.querySelectorAll(".slides img");
-
-        function showSlide(index) {
-            slides.forEach((slide, i) => {
-                slide.classList.remove("active");
-                if (i === index) slide.classList.add("active");
-            });
-        }
-
-        function mudarSlide(n) {
-            slideIndex = (slideIndex + n + slides.length) % slides.length;
-            showSlide(slideIndex);
-        }
-
-        setInterval(() => {
-            slideIndex = (slideIndex + 1) % slides.length;
-            showSlide(slideIndex);
-        }, 3000);
-
-        document.addEventListener("DOMContentLoaded", () => {
-            showSlide(slideIndex);
-        });
-    </script>
 
         <!-- 🔹 Texto sobre a organização à direita -->
         <div class="descricao">
-            <h2>Sobre Nós</h2>
-            <p> Bem-Vindo á  Game Jam For Fun! Somos uma comunidade de Alunos e 
-                Professores que gostamos de criação de jogos, aos alunos damos o incentivo
-                 da inovação e a criatividade. O nosso objetivo é proporcionar aos participantes 
-                 um experiência inesquecível. </p>
-            <p>Nesta 2ª Edição, promovemos mais um desafio e conexões entre os participantes de várias escolas. Esperamos que venham fazer parte desta jornada.</p>
+            <h2><?php echo $textos['sobrenos_titulo'] ?? ''; ?></h2>
+            <p><?php echo $textos['texto_sobrenos'] ?? ''; ?></p>
+            
         </div>
     </div>
 </section>
@@ -107,12 +120,8 @@
     <div class="container">
         <!-- 🔹 Texto à esquerda -->
         <div class="descrica">
-            <h2>Onde Estamos</h2>
-                    <p>Estamos localizados no Agrupamento de Escolas de Albergaria-a-Velha (AEAAV), Portugal,
-                     onde é ministrado o curso Técnico de Gestão e Programação de Sistemas Informáticos (TGPSI)
-                      com foco em programação e desenvolvimento digital.</p>
-                    <p> Os alunos e professores do mesmo criaram este projeto "Game Jam For Fun" que é uma iniciativa
-                     para promover a criação de jogos e a inovação tecnológica.  🎮</p>
+            <h2><?php echo $textos['titulo_ondeestamos'] ?? ''; ?></h2>
+                    <p><?php echo $textos['texto_ondeestamos'] ?? ''; ?></p>
          
         <a href="https://aeaav.pt" class="botao-visitar" target="_blank">Visitar</a>
         </div>
@@ -127,32 +136,29 @@
 
 <!-- 🏆 Seção das fases da Game Jam For Fun -->
 <div class="gamejam-section">
-    <h1 class="gamejam-title"> Todas as Etapas🎮 - 2025 </h1>
+    <h1 class="gamejam-title"> <?php echo $textos['titudo_etapas'] ?? ''; ?> </h1>
 
     <div class="container-boxes">
         <div class="box">
-            <h3>Inscrição</h3>
-            <p>Inscrições entre dias 28 de abril a 14 de maio de 2025.</p>
-            <p>Primeira fase: Apurar 16 equipas.</p>
+            <h3><?php echo $textos['subtitulo_etapas'] ?? ''; ?></h3>
+            <p><?php echo $textos['texto_etapas_inscrições'] ?? ''; ?></p>
+            <p><?php echo $textos['texto_etapas_inscrições1'] ?? ''; ?></p>
         </div>
 
         <div class="box">
-            <h3>1º dia</h3>
+            <h3><?php echo $textos['subtitulo_etapas_dia_um'] ?? ''; ?></h3>
             
-            <p>18:30 - Receção das equipas;</p>
-            <p>19:30 - Abertura com intervenção dos Júris e patrocinadores;</p>
-            <p>Divulgação do tema da Game Jam For Fun;</p>
-            <p>Início da Criação dos 
-                jogos com o Tema proposto.</p>
+            <p><?php echo $textos['texto_etapas_dia_um'] ?? ''; ?></p>
+            <p><?php echo $textos['texto_etapas_dia_um1'] ?? ''; ?></p>
+            <p><?php echo $textos['texto_etapas_dia_um2'] ?? ''; ?></p>
+            <p><?php echo $textos['texto_etapas_dia_um3'] ?? ''; ?></p>
         </div>
 
         <div class="box">
-            <h3>2º dia</h3>
+            <h3><?php echo $textos['subtitulo_etapas_dia_dois'] ?? ''; ?></h3>
             
-            <p>Continuação da criação dos jogos com tema proposto.
-            Durante os períodos da manhã e da tarde, a tensão arterial 
-            dos participantes será monitorizada pelos alunos do curso de Técnico Auxiliar de Saúde</p>
-            
+            <p><?php echo $textos['texto_etapas_dia_dois'] ?? ''; ?></p>
+            <p><?php echo $textos['texto_etapas_dia_dois1'] ?? ''; ?></p>
         </div>
 
         <div class="box">
@@ -227,7 +233,7 @@
                 <li><a href="login.php">Login</a></li>
                 <li><a href="register.php">Criar Conta</a></li>
             </ul>
-        </div>
+        </div> 
         
         <!-- Contatos -->
         <div class="footer-contacts">
@@ -266,7 +272,6 @@
 
 
 </body>
-
 <script src="script.js"></script>
 
 </html>

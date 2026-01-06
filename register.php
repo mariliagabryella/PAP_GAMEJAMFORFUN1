@@ -2,16 +2,22 @@
 include "config.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $nome = $_POST["nome"];
     $email = $_POST["email"];
     $senha = $_POST["senha"];
+    $role_id = 2;// Id do role do viewer
+    $ativo = 1;
+    $criado_em = date("Y-m-d H:i:s");
 
-    // 🔐 Criptografando a senha antes de salvar
+
+    //  Criptografando a senha antes de salvar
     $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
 
-    $sql = "INSERT INTO usuarios (email, senha) VALUES ('$email', '$senhaHash')";
+    $sql = "INSERT INTO utilizadores (nome, email, senha_hash, role_id, ativo, criado_em) VALUES ('$nome', '$email', '$senhaHash', '$role_id', '$ativo', '$criado_em')";
 
     if (mysqli_query($conn, $sql)) {
         echo "Conta criada com sucesso!";
+        header("Location: login.php"); 
     } else {
         echo "Erro ao criar conta: " . mysqli_error($conn); // 🔹 Mostra erro SQL se houver
     }
@@ -27,7 +33,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="icon" type="image/x-icon" href="img/logo.png">
     <link rel="stylesheet" href="css/loginstyle.css">
 </head>
-<body>
+<body>        
+    <?php include 'menu.php'; ?>
+
    <!-- 🔹 Canvas para o background interativo -->
    <canvas id="interactive-bg"></canvas>
 
@@ -45,6 +53,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="login-wrapper">
         <form action="register.php" method="POST">
             <h2>Criar Conta</h2>
+            
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" name="nome" required>
 
             <label for="email">E-mail:</label>
             <input type="email" id="email" name="email" required>
