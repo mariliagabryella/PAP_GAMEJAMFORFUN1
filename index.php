@@ -40,7 +40,7 @@
         <span style="--index: 1;">Game Jam For Fun</span>
         <span style="--index: 2;">Game Jam For Fun</span>
     </div>
-    <span class="right">Já imaginaste criar o teu próprio jogo?<p>Queres mostrar o teu talento? Esta é a oportunidade perfeita para ti!!</p></span>
+    <span class="right">Já imaginaste criar o teu próprio jogo? Mostra o teu talento!</p></span>
 
      <!-- Logo abaixo do texto -->
      <div class="logo-container">
