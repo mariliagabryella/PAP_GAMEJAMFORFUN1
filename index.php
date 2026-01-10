@@ -59,6 +59,7 @@ if (!is_array($textos)) {
 </head>
 
 <body>
+   
     <?php include 'menu.php'; ?>
     <div class="conteudo">
 
@@ -220,57 +221,7 @@ if (!is_array($textos)) {
         <p class="agradecimento">Agradecemos pelo patrocínio e participação no evento!</p>
     </div>
 </section>
-<footer class="footer">
-    <div class="footer-container">
-        <!-- Menu em coluna -->
-        <div class="footer-menu">
-            <h4>Menu</h4>
-            <ul>
-                <li><a href="index.php">Início</a></li>
-                <li><a href="index.php">SobreNós</a></li>
-                <li><a href="inscrição.php">Inscrição</a></li>
-                <li><a href="contact.php">Contactos</a></li>
-                <li><a href="login.php">Login</a></li>
-                <li><a href="register.php">Criar Conta</a></li>
-            </ul>
-        </div> 
-        
-        <!-- Contatos -->
-        <div class="footer-contacts">
-            <h4>Contactos</h4>
-            <ul>
-                <li>Email do Evento: <a href="mailto:eventos.gr550@aeaav.pt">eventos.gr550@aeaav.pt</a></li>
-                <li>Escola: Escola Secundária de Albergaria-A-Velha</li>
-                <li>Site da Escola: <a href="https://aeaav.pt/" target="_blank">https://aeaav.pt/</a></li>
-            </ul>
-        </div>
-    </div>
-    <p class="footer-credit">© 2025 Game Jam For Fun. Todos os direitos reservados.</p>
-</footer>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ <?php include 'footer.php'; ?>
 </body>
 <script src="script.js"></script>
 

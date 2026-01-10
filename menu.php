@@ -128,11 +128,6 @@ $currentPage = basename($_SERVER['PHP_SELF']);
         renderMenu($menuTree, $currentPage);
         ?>
 
-        <?php if (isset($_SESSION["usuarioEmail"])): ?>
-            <a href="logout.php" class="<?= ($currentPage == 'logout.php') ? 'active' : ''; ?>">Logout</a>
-        <?php else: ?>
-            <a href="login.php" class="<?= ($currentPage == 'login.php') ? 'active' : ''; ?>">Login</a>
-        <?php endif; ?>
 
     </div>
     <div class="menu-icon" onclick="toggleMenu()">☰</div>
@@ -140,3 +135,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 
 </div>
 </div>
+</body>
+
+
+</html>
