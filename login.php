@@ -112,17 +112,7 @@ $conn->close();
         </form>
     </div>
     <script src="interactive-script.js"></script> <!-- Script JS -->
-    <script>
-        // Dados de sessão
-        const sessionData = {
-            usuarioEmail: "<?php echo $_SESSION['usuarioEmail'] ?? ''; ?>",
-            usuarioNome: "<?php echo $_SESSION['usuarioNome'] ?? ''; ?>",
-            role_id: "<?php echo $_SESSION['role_id'] ?? ''; ?>"
-        };
-
-        // Log dos dados de sessão no console
-        console.log("Dados de Sessão:", sessionData);
-    </script>
+    
     
 </body>
 </html>

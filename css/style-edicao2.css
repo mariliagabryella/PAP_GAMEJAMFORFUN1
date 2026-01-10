@@ -15,8 +15,17 @@ body {
   100% { background-position: 0% 50%; }
 }
 
+.menu-links a {
+  font-family: "Poppins", sans-serif ;
+  
+}
+
+.menu{
+   background-color: #09122c;
+}
 .menu-links a.active::after {
   content: "";
+  font-family: "Poppins", sans-serif;
   position: absolute;
   bottom: 0;
   left: 0;
@@ -47,7 +56,6 @@ body {
 /* Título principal */
 .titulo-principal {
   font-size: clamp(3rem, 5vw + 1rem, 6rem);
-  font-family: "Silkscreen", sans-serif;
   font-weight: bold;
   color: #e40f0f;
   text-shadow: 3px 3px #061042;
@@ -172,7 +180,7 @@ body {
 }
 
 .cronograma h2 {
-  font-family: "Silkscreen", sans-serif;
+
   font-size: 2rem;
   color: #e40f0f;
   text-shadow: 2px 2px #061042;

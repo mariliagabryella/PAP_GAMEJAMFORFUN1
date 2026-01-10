@@ -68,6 +68,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <p>Já tem conta? <a href="login.php">Iniciar Sessão</a></p>
         </form>
     </div>
-    <script src="interactive-script.js"></script> <!-- Script JS -->
+    <script src="js/interactive-script.js"></script> <!-- Script JS -->
 </body>
 </html>
