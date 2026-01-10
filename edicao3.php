@@ -26,5 +26,7 @@
                 3ª Edição
                 <span class="edicao-numero">6,7 e 8 de Março de 2026</span>
             </h1>
+            <?php include 'footer.php'; ?>
+
 </body>
             </html>
