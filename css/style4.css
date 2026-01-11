@@ -444,14 +444,6 @@ body {
         display: none; /* Oculta o login no menu fixo em telas pequenas */
       }
     
-      .menu-links {
-        flex-direction: column;
-        text-align: center;
-        gap: 15px;
-      }
-    
-     
-    
     
       .box {
         width: 90%;
@@ -461,9 +453,7 @@ body {
         margin-top: 0px; /* Ajusta altura em telas menores */
       }
     
-      .menu-links {
-        flex-direction: column; /* Empilha os itens do menu */
-      }
+    
     
       .dropdown {
         position: relative;
@@ -482,11 +472,7 @@ body {
       }
       
     
-      .menu-icon {
-        display: block;
-        position: relative;
-        z-index: 1; /* Para que o menu também fique sobre o fundo */
-      }
+     
       .logo {
         left: 10px; /* Ajuste para telas menores */
         height: 60px;
@@ -498,34 +484,39 @@ body {
         height: 45px;
       }
     
-      .menu-container {
-        width: 100%; /* Ocupa toda a largura */
-        height: 20px; /* Altura ajustável */
-        position: absolute; /* Para ficar abaixo da logo e das barras */
-        top: 0; /* Alinhado no topo */
-        left: 0; /* Começa do lado esquerdo */
-        z-index: -1; /* Mantém o fundo atrás dos elementos */
-      }
-    
-      .menu-links {
-        display: none; /* Oculta os links do menu inicialmente */
-        flex-direction: column;
-        background-color: rgba(16, 14, 51, 0.041);
-        -webkit-backdrop-filter: blur(5px);
-        backdrop-filter: blur(5px);
-        position: absolute;
-        top: 110px;
-        height: 400px;
-        width: 100%;
-        left: 1px;
-        border-radius: 5px;
-      }
-    
-      .menu-links a {
-        display: block;
-        padding: 10px;
-        border-bottom: 2px solid transparent;
-        text-align: left;
-      }
-    }
+      /* Ícone do menu (hambúrguer) visível no mobile */
+.menu-icon {
+    display: block; /* Mostra o ícone apenas no mobile */
+    z-index: 2000; /* Mantém o ícone acima de tudo */
+}
+
+/* Container dos links do menu em modo mobile */
+.menu-links {
+    display: none; /* Escondido por padrão */
+    flex-direction: column; /* Links ficam em coluna */
+    background-color: rgba(9, 18, 44, 0.95); /* Fundo escuro semi-transparente */
+    position: fixed; /* Fica fixo na tela */
+    top: 60px; /* Começa no topo */
+    right: -250px; /* Começa escondido fora da tela à direita */
+    width: 400px; /* Largura do menu lateral */
+    height: 100vh; /* Altura total da tela */
+    padding: 30px 20px; /* Espaçamento interno */
+    transition: right 0.3s ease-in-out; /* Animação suave ao abrir */
+    z-index: 1500; /* Fica acima do conteúdo mas abaixo do ícone */
+}
+
+/* Quando o menu recebe a classe .show, ele aparece */
+.menu-links.show {
+    right:-250px; /* Move o menu para dentro da tela */
+    display: flex; /* Mostra os links */
+}
+
+/* Estilo dos links dentro do menu mobile */
+.menu-links a {
+    margin: 15px 0; /* Espaço entre os links */
+    font-size: 20px; /* Tamanho maior para facilitar toque */
+    text-align: left; /* Alinha texto à esquerda */
+}
+
+}
     

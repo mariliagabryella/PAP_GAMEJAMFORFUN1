@@ -1,0 +1,73 @@
+body {
+    background-color: #09122c;
+    color: white;
+    font-family: "Poppins", sans-serif;
+    padding: 20px;
+}
+
+/* Barra superior */
+.admin-menu {
+    background-color: #be3144;
+    padding: 15px 20px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.admin-info {
+    font-size: 0.9rem;
+}
+
+.admin-links a {
+    color: white;
+    margin-left: 20px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.admin-links a:hover {
+    color: #09122c;
+}
+
+/* Conteúdo */
+.admin-content {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Formulários */
+form {
+    background-color: rgba(255,255,255,0.05);
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+form label {
+    display: block;
+    margin-top: 10px;
+}
+
+form input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: none;
+}
+
+button {
+    background-color: #be3144;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #09122c;
+}

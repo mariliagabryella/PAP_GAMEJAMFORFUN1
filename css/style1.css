@@ -36,62 +36,52 @@ body {
   
   
   .menu {
-    position: fixed;
-  top: 0; /* Mantém o menu no topo */
+  position: fixed;
+  top: 0;
   width: 100%;
   background-color: #09122c;
-  z-index: 1000; /* Garante que o menu esteja acima dos outros elementos */
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 10px 20px;
-  height: 60px;/*Garante que o menu esteja acima dos outros elementos */
-  }
-  
-  .menu-icon {
-    display: none; /* Ícone oculto em telas grandes */
-    font-size: 30px;
-    color: rgb(255, 255, 255);
-    cursor: pointer;
-    margin-left: 300px;
-    margin-top: 10px;
-  }
-  
-  .menu-links {
-    display: flex;
-    margin-top: -50px;
-    margin-right: 60px;
-  }
-  
-  
-  
-  .menu-links a.active::after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 3px;
-      background-color: #BE3144;
-  }
-  .menu-links a {
-    color: whitesmoke;
-    text-decoration: none;
-    margin: 0 15px;
-    font-size: 18px;
-    text-align: center;
-    top: 30px;
-  
-    font-family: "Poppins", sans-serif;
-    position: relative; /* Necessário para posicionar a barra */
-    padding-bottom: 5px; /* Dá espaço para a barra */ /* Dá espaço para a barra */
-  
-  }
-  
-  /* Define a posição fixa dos ícones na lateral */
+  height: 60px;
+}
+
+.menu-icon {
+  display: none;
+  font-size: 30px;
+  color: white;
+  cursor: pointer;
+}
+
+.menu-links {
+  display: flex;
+  gap: 20px;
+  margin-right: 60px;
+}
+
+.menu-links a {
+  color: whitesmoke;
+  text-decoration: none;
+  font-size: 18px;
+  position: relative;
+  padding-bottom: 5px;
+}
+
+.menu-links a.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: #be3144;
+}
+  /* Define a posição fixa dos ícones na lateral 
   .social-icons {
     position: fixed;
-    right: 10px; /* Agora os ícones estão do lado direito */
+    right: 10px; /* Agora os ícones estão do lado direito 
     top: 50%;
     transform: translateY(-50%);
     display: flex;
@@ -99,10 +89,10 @@ body {
     gap: 10px;
   }
   
-  /* Estiliza os ícones */
+  Estiliza os ícones 
   .social-icons a {
     text-decoration: none;
-    font-size: 28px; /* Aumenta o tamanho do ícone */
+    font-size: 28px; /* Aumenta o tamanho do ícone 
     color: white;
     background-color: #09122c;
     padding: 15px;
@@ -116,10 +106,11 @@ body {
     transition: background-color 0.3s;
   }
   
-  /* Efeito ao passar o mouse */
+  /* Efeito ao passar o mouse *
   .social-icons a:hover {
     background-color: #BE3144;
   }
+    */
   .form-container {
     width: 80%;
     max-width: 600px;
@@ -316,19 +307,7 @@ button:hover {
     display: none; /* Oculta o login no menu fixo em telas pequenas */
 }
 
-  .menu-links {
-    flex-direction: column;
-    text-align: center;
-    gap: 15px;
-  }
-
  
-
-
-  .menu-links {
-      flex-direction: column; /* Empilha os itens do menu */
-  }
-
   .dropdown {
       position: relative;
       width: 100%;
@@ -352,9 +331,6 @@ button:hover {
         font-size: 16px;
 
     }
-
-    
-   
 
     input, select, textarea, button {
         font-size: 14px;
@@ -380,36 +356,38 @@ button:hover {
       height: 45px;
     }
   
-    .menu-container {
-     
-      width: 100%; /* Ocupa toda a largura */
-      height: 20px; /* Altura ajustável */
-      position: absolute; /* Para ficar abaixo da logo e das barras */
-      top: 0; /* Alinhado no topo */
-      left: 0; /* Começa do lado esquerdo */
-      z-index: -1; /* Mantém o fundo atrás dos elementos */
-    }
-  
-    .menu-links {
-      display: none; /* Oculta os links do menu inicialmente */
-      flex-direction: column;
-      background-color: rgba(16, 14, 51, 0.041);
-      -webkit-backdrop-filter: blur(5px);
-      backdrop-filter: blur(5px);
-      position: absolute;
-      top:110px;
-      height: 400px;
-      width: 100%;
-      left: 1px;
-      border-radius: 5px;
-    }
-  
-    .menu-links a {
-      display: block;
-      padding: 10px;
-      border-bottom: 2px solid transparent;
-      text-align: left;
-    }
+   /* Ícone do menu (hambúrguer) visível no mobile */
+.menu-icon {
+    display: block; /* Mostra o ícone apenas no mobile */
+    z-index: 2000; /* Mantém o ícone acima de tudo */
+}
+
+/* Container dos links do menu em modo mobile */
+.menu-links {
+    display: none; /* Escondido por padrão */
+    flex-direction: column; /* Links ficam em coluna */
+    background-color: rgba(9, 18, 44, 0.95); /* Fundo escuro semi-transparente */
+    position: fixed; /* Fica fixo na tela */
+    top: 60px; /* Começa no topo */
+    right: -250px; /* Começa escondido fora da tela à direita */
+    width: 400px; /* Largura do menu lateral */
+    height: 100vh; /* Altura total da tela */
+    padding: 30px 20px; /* Espaçamento interno */
+    transition: right 0.3s ease-in-out; /* Animação suave ao abrir */
+    z-index: 1500; /* Fica acima do conteúdo mas abaixo do ícone */
+}
+
+/* Quando o menu recebe a classe .show, ele aparece */
+.menu-links.show {
+    right:-250px; /* Move o menu para dentro da tela */
+    display: flex; /* Mostra os links */
+}
+
+/* Estilo dos links dentro do menu mobile */
+.menu-links a {
+    margin: 15px 0; /* Espaço entre os links */
+    font-size: 20px; /* Tamanho maior para facilitar toque */
+    text-align: left; /* Alinha texto à esquerda */
 }
 
 .container {
@@ -418,5 +396,5 @@ button:hover {
   flex-direction: column;
 }
 
-
+}
   
