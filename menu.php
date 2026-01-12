@@ -153,13 +153,23 @@ $menuTree = buildMenuTree($menuItems);
 
                 <div class="dropdown-content">
 
-                    <!-- Editar perfil -->
-                    <a href="editar_perfil.php">Editar Perfil</a>
+                  
+                      <?php if ($_SESSION["role_id"] == 3): ?>
+                       <a href="editar_perfil.php">Editar Perfil</a>
+                     <a href="painel_do_viewer.php">Painel Admin</a>
+                    <?php endif; ?>
+
+                      <?php if ($_SESSION["role_id"] == 2): ?>
+                       <a href="editar_perfil.php">Editar Perfil</a>
+                     <a href="admin.php">Painel Admin</a>
+                    <?php endif; ?>
 
                     <!-- Apenas administradores -->
                     <?php if ($_SESSION["role_id"] == 1): ?>
-                        <a href="admin.php">Painel Admin</a>
+                        <a href="admin.php">Painel Admin Master</a>
+                        <a href="editar_perfil.php">Editar Perfil</a>
                         <a href="criar_admin.php">Criar Admin</a>
+                        <a href="criar_viewer.php">Criar Viewer</a>
                     <?php endif; ?>
 
                     <!-- Logout -->

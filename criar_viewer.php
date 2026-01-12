@@ -1,8 +1,8 @@
 <?php
-// criar_admin.php
+// criar_viewer.php
 session_start();
 
-/* Apenas adminmaster pode criar admins */
+/* Apenas adminmaster pode criar viewer */
 if (!isset($_SESSION["role_id"]) || $_SESSION["role_id"] != 1) {
     header("Location: login.php");
     exit();
@@ -12,16 +12,16 @@ if (!isset($_SESSION["role_id"]) || $_SESSION["role_id"] != 1) {
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
-<title>Criar Admin</title>
+<title>Criar Viewer</title>
 <link rel="stylesheet" href="css/admin.css">
 </head>
 
 <body>
 
 <div class="admin-content">
-    <h2>Criar Admin</h2>
+    <h2>Criar Viewer</h2>
 
-    <form action="processar_criar_admin.php" method="POST" enctype="multipart/form-data" class="form-card">
+    <form action="processar_criar_viewer.php" method="POST" enctype="multipart/form-data" class="form-card">
 
         <div class="form-group">
             <label>Foto de Perfil (opcional):</label>
@@ -43,7 +43,7 @@ if (!isset($_SESSION["role_id"]) || $_SESSION["role_id"] != 1) {
             <input type="password" name="senha" required>
         </div>
 
-        <button type="submit">Criar Admin</button>
+        <button type="submit">Criar Viewer</button>
         <a href="admin.php" class="btn-voltar">Voltar</a>
     </form>
 </div>

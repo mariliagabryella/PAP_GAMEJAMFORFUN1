@@ -1,25 +1,33 @@
 <?php
 session_start();
 
-/* Tem de estar logado */
-if (!isset($_SESSION["usuarioEmail"])) {
+/* Apenas adminmaster pode processar edição */
+if (!isset($_SESSION["role_id"]) || $_SESSION["role_id"] != 1) {
     header("Location: login.php");
     exit();
 }
 
-$emailAntigo = $_SESSION["usuarioEmail"];
-$nome = $_POST["nome"] ?? '';
-$emailNovo = $_POST["email"] ?? '';
+/* Verifica dados básicos */
+if (!isset($_POST['id'])) {
+    header("Location: admin.php");
+    exit();
+}
+
+$id      = (int) $_POST['id'];
+$nome    = $_POST['nome'] ?? '';
+$email   = $_POST['email'] ?? '';
+$role_id = (int) ($_POST['role_id'] ?? 3);
 
 /* Conexão BD */
 $conn = new mysqli("127.0.0.1", "root", "", "gamejamforfun2");
+
 if ($conn->connect_error) {
     die("Erro: " . $conn->connect_error);
 }
 
 /* Busca foto atual */
-$stmt = $conn->prepare("SELECT foto FROM utilizadores WHERE email = ?");
-$stmt->bind_param("s", $emailAntigo);
+$stmt = $conn->prepare("SELECT foto FROM utilizadores WHERE id = ?");
+$stmt->bind_param("i", $id);
 $stmt->execute();
 $res = $stmt->get_result();
 $fotoAtual = "img/default.png";
@@ -32,7 +40,7 @@ if ($res->num_rows === 1) {
 }
 $stmt->close();
 
-/* Upload nova foto (se enviada) */
+/* Trata upload de nova foto (se enviada) */
 $fotoFinal = $fotoAtual;
 
 if (!empty($_FILES["foto"]["name"])) {
@@ -48,18 +56,14 @@ if (!empty($_FILES["foto"]["name"])) {
     }
 }
 
-/* Atualiza BD */
+/* Atualiza dados */
 $stmtUp = $conn->prepare("
     UPDATE utilizadores 
-    SET nome = ?, email = ?, foto = ? 
-    WHERE email = ?
+    SET nome = ?, email = ?, role_id = ?, foto = ? 
+    WHERE id = ?
 ");
-$stmtUp->bind_param("ssss", $nome, $emailNovo, $fotoFinal, $emailAntigo);
+$stmtUp->bind_param("ssisi", $nome, $email, $role_id, $fotoFinal, $id);
 $stmtUp->execute();
-
-/* Atualiza sessão */
-$_SESSION["usuarioNome"]  = $nome;
-$_SESSION["usuarioEmail"] = $emailNovo;
 
 $stmtUp->close();
 $conn->close();
