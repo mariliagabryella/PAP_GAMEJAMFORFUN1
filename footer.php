@@ -17,7 +17,7 @@
                 <h4>Menu</h4>
                 <ul>
                     <li><a href="/PAP_GAMEJAMFORFUN1/index.php">Início</a></li>
-                    <li><a href="/PAP_GAMEJAMFORFUN1/inscrição.php">Inscrição</a></li>
+                    <li><a href="/PAP_GAMEJAMFORFUN1/inscricao.php">Inscrição</a></li>
                     <li><a href="/PAP_GAMEJAMFORFUN1/contact.php">Contactos</a></li> 
                     <?php if (isset($_SESSION["usuarioEmail"])): ?> <li>
                         <a href="/PAP_GAMEJAMFORFUN1/logout.php">Logout</a></li> 

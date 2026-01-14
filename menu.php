@@ -116,6 +116,25 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 
 /* Constrói árvore final */
 $menuTree = buildMenuTree($menuItems);
+
+/* ============================================================
+   NOTIFICAÇÕES INTERNAS (CONTADOR)
+   ============================================================ */
+$notificacoes_nao_lidas = 0;
+
+if (isset($_SESSION["id_utilizador"])) {
+    $id_user_menu = $_SESSION["id_utilizador"];
+
+    $sqlNotif = "SELECT COUNT(*) AS total 
+                 FROM notificacoes 
+                 WHERE user_id = $id_user_menu AND lida = 0";
+
+    $resNotif = $conn->query($sqlNotif);
+
+    if ($resNotif && $rowNotif = $resNotif->fetch_assoc()) {
+        $notificacoes_nao_lidas = $rowNotif["total"];
+    }
+}
 ?>
 
 <!-- ============================================================
@@ -142,29 +161,29 @@ $menuTree = buildMenuTree($menuItems);
              ============================================================ -->
         <?php if (!isset($_SESSION["usuarioEmail"])): ?>
 
-            <!-- Utilizador NÃO está logado -->
             <a href="login.php">Login</a>
+            <a href="registar.php">Registar</a>
 
         <?php else: ?>
 
-            <!-- Utilizador logado -->
             <div class="dropdown">
                 <a href="#">Olá, <?php echo htmlspecialchars($_SESSION["usuarioNome"]); ?> ▾</a>
 
                 <div class="dropdown-content">
 
-                  
-                      <?php if ($_SESSION["role_id"] == 3): ?>
-                       <a href="editar_perfil.php">Editar Perfil</a>
-                     <a href="painel_do_viewer.php">Painel Admin</a>
+                    <!-- VIEWER -->
+                    <?php if ($_SESSION["role_id"] == 3): ?>
+                        <a href="editar_perfil.php">Editar Perfil</a>
+                        <a href="painel_do_viewer.php">Painel Viewer</a>
                     <?php endif; ?>
 
-                      <?php if ($_SESSION["role_id"] == 2): ?>
-                       <a href="editar_perfil.php">Editar Perfil</a>
-                     <a href="admin.php">Painel Admin</a>
+                    <!-- ADMIN NORMAL -->
+                    <?php if ($_SESSION["role_id"] == 2): ?>
+                        <a href="editar_perfil.php">Editar Perfil</a>
+                        <a href="admin.php">Painel Admin</a>
                     <?php endif; ?>
 
-                    <!-- Apenas administradores -->
+                    <!-- ADMIN MASTER -->
                     <?php if ($_SESSION["role_id"] == 1): ?>
                         <a href="admin.php">Painel Admin Master</a>
                         <a href="editar_perfil.php">Editar Perfil</a>
@@ -172,7 +191,15 @@ $menuTree = buildMenuTree($menuItems);
                         <a href="criar_viewer.php">Criar Viewer</a>
                     <?php endif; ?>
 
-                    <!-- Logout -->
+                    <!-- 🔔 NOTIFICAÇÕES -->
+                    <a href="notificacoes.php">
+                        Notificações
+                        <?php if ($notificacoes_nao_lidas > 0): ?>
+                            <span style="color:red;">(<?php echo $notificacoes_nao_lidas; ?>)</span>
+                        <?php endif; ?>
+                    </a>
+
+                    <!-- LOGOUT -->
                     <a href="logout.php">Sair</a>
                 </div>
             </div>
@@ -194,12 +221,10 @@ function toggleMenu() {
     const menu = document.getElementById('menu');
     const icon = document.getElementById('menu-icon-symbol');
 
-    // Alterna visibilidade do menu
     menu.classList.toggle('show');
-
-    // Troca ícone
     icon.textContent = menu.classList.contains('show') ? "✖" : "☰";
 }
 </script>
+
 
 </html>

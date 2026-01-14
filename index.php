@@ -89,7 +89,7 @@ if (!is_array($textos)) {
     </div>
     <!-- 🔹 Botões abaixo da logo -->
     <div class="button-container">
-        <a href="inscrição.php" class="button" id = "text">Inscrição</a>
+        <a href="inscricao.php" class="button" id = "text">Inscrição</a>
         <a href="docs/Regulamento.pdf"  class="button"  id = "text" target="_blank">Regulamento</a>
         <a href="docs/Declaração de Consentimento e Aceitação de participacaoGJFF.pdf"  class="button" id = "text" target="_blank">Consentimento</a>
     </div>

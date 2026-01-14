@@ -15,6 +15,11 @@
 
 <body>
     <?php include 'menu.php'; ?> <!-- Inclui o menu fixo na página -->
+    
+session_start();
+
+
+
 
 
     <div class="conteudo">
@@ -32,7 +37,7 @@
         </h1>
 
 
-        <form action="https://formsubmit.co/eventos.gr550@aeaav.pt" method="POST">
+       <form action="processar_inscricao.php" method="POST">
             <input type="hidden" name="_captcha" value="false">
             <label for="instituiçao">Instituição Escolar:</label>
             <input type="text" id="instituiçao" name="instituiçao" required>
@@ -135,12 +140,26 @@
             <textarea id="observacao" name="observacao" rows="4"></textarea>
 
             <!-- 📨 Botão de envio -->
-            <button type="submit">Game On</button>
+            <button type="submit" onclick="return verificarSessao()">Game On</button>
+
         </form>
 
 
     </div>
     </div>
+    <script>
+function verificarSessao() {
+    const logado = <?php echo isset($_SESSION["id"]) ? 'true' : 'false'; ?>;
+
+    if (!logado) {
+        alert("⚠ Precisa de iniciar sessão para enviar a inscrição.");
+        return false; // impede o envio
+    }
+
+    return true; // permite enviar
+}
+</script>
+
 
 
 <?php include 'footer.php'; ?>

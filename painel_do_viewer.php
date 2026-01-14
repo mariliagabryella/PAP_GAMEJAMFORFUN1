@@ -7,27 +7,51 @@ if (!isset($_SESSION["role_id"]) || $_SESSION["role_id"] != 3) {
     exit();
 }
 
-$nome  = $_SESSION["usuarioNome"];
-$email = $_SESSION["usuarioEmail"];
+$nome  = $_SESSION["nome"];
+$email = $_SESSION["email"];
 
 $conn = new mysqli("127.0.0.1", "root", "", "gamejamforfun2");
 if ($conn->connect_error) {
     die("Erro na conexão: " . $conn->connect_error);
 }
 
-/* Foto do viewer */
-$foto = "img/default.png";
-$stmt = $conn->prepare("SELECT foto FROM utilizadores WHERE email = ?");
+/* Buscar dados completos do viewer */
+$stmt = $conn->prepare("
+    SELECT nome, email, foto, criado_em, ativo 
+    FROM utilizadores 
+    WHERE email = ?
+");
 $stmt->bind_param("s", $email);
 $stmt->execute();
 $res = $stmt->get_result();
-if ($res->num_rows === 1) {
-    $row = $res->fetch_assoc();
-    if (!empty($row['foto'])) {
-        $foto = $row['foto'];
-    }
+$user = $res->fetch_assoc();
+
+if (!$user) {
+    // Evita erros e mostra mensagem útil
+    $foto = "img/default.png";
+    $criado_em = "Desconhecido";
+    $ultimoLogin = "Nunca";
+} else {
+    $foto       = $user['foto'] ?: "img/default.png";
+    $criado_em  = $user['criado_em'] ?? "Desconhecido";
+    $ultimoLogin = $user['ativo'] 
+    ? date("d/m/Y H:i", strtotime($user['ativo'])) 
+    : "Nunca";
+
 }
+
+
 $stmt->close();
+
+/* Verificar se email está confirmado */
+$stmt2 = $conn->prepare("SELECT id FROM verificacoes_email WHERE email = ?");
+$stmt2->bind_param("s", $email);
+$stmt2->execute();
+$stmt2->store_result();
+
+$emailPendente = $stmt2->num_rows > 0; // TRUE se ainda não confirmou
+
+$stmt2->close();
 $conn->close();
 ?>
 <!DOCTYPE html>
@@ -36,6 +60,9 @@ $conn->close();
 <meta charset="UTF-8">
 <title>Painel do Utilizador</title>
 <link rel="stylesheet" href="css/admin.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://kit.fontawesome.com/YOUR-FONT-AWESOME-KIT.js" crossorigin="anonymous"></script> <!-- Importa os ícones -->
+
 </head>
 <body>
 
@@ -49,11 +76,14 @@ $conn->close();
         <span id="painel-icon">☰</span>
     </div>
 
-    <div class="painel-links" id="painelLinks">
-        <a href="index.php">Voltar ao Site</a>
-        <a href="editar_perfil.php">Editar Perfil</a>
-        <a href="logout.php">Sair</a>
-    </div>
+ <div class="painel-links" id="painelLinks">
+    <a href="index.php">Voltar ao Site</a>
+    <a href="editar_perfil.php">Editar Perfil</a>
+    <a href="eliminar_perfil.php" style="color:#ff4d4d;">Eliminar Perfil</a>
+    <a href="notificacoes.php"><i class="fa-solid fa-bell" style="color: #ffffff;"></i></a>
+    <a href="logout.php">Sair</a>
+</div>
+
 </div>
 
 <script>
@@ -71,6 +101,7 @@ function togglePainelMenu() {
     <p>Bem-vindo(a), <?php echo htmlspecialchars($nome); ?>.</p>
 
     <div class="cards-dashboard">
+
         <div class="card-dashboard">
             <span class="card-label">O meu email</span>
             <span class="card-value"><?php echo htmlspecialchars($email); ?></span>
@@ -80,10 +111,35 @@ function togglePainelMenu() {
             <span class="card-label">Tipo de conta</span>
             <span class="card-value">Viewer</span>
         </div>
+
+        <div class="card-dashboard">
+            <span class="card-label">Conta criada em</span>
+            <span class="card-value"><?php echo $criado_em; ?></span>
+        </div>
+
+        <div class="card-dashboard">
+            <span class="card-label">Último login</span>
+            <span class="card-value"><?php echo $ultimoLogin; ?></span>
+        </div>
+
+        <div class="card-dashboard" style="background: <?php echo $emailPendente ? '#be3144' : '#2ecc71'; ?>;">
+            <span class="card-label">Estado do Email</span>
+            <span class="card-value">
+                <?php echo $emailPendente ? "Pendente de verificação" : "Verificado"; ?>
+            </span>
+        </div>
+
     </div>
 
     <h2>Informações</h2>
     <p>Aqui podes editar o teu perfil, alterar a tua foto e aceder ao site principal.</p>
+
+    <?php if ($emailPendente): ?>
+        <p style="color:#be3144; font-weight:bold;">
+            ⚠ O teu email ainda não foi verificado. Verifica a tua caixa de entrada.
+        </p>
+    <?php endif; ?>
+
 </div>
 
 </body>

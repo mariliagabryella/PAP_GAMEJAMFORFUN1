@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
 
                 if ($user['role_id'] == 3) {
-                    header("Location: viewer_painel.php"); // Viewer
+                    header("Location: painel_do_viewer.php"); // Viewer
                     exit();
                 }
 
