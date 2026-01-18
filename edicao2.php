@@ -26,7 +26,6 @@ $slug =[
     'Vencedor3_Edicao2',
     'Descricao2_Sobre_Edicao2',
     'Subtitulo_Cronograma_Edicao2',
-    'Descricao_Cronograma_Edicao2',
     'Dia1_Cronograma_Edicao2',
     'Descricao_Dia1_Edicao2',
     'Descricao1_Dia1_Edicao2',
@@ -44,6 +43,8 @@ $slug =[
     'Descricao3_Dia3_Edicao2',
     'Descricao4_Dia3_Edicao2',
     'Descricao5_Dia3_Edicao2',
+    'Descricao6_Dia3_Edicao2',
+    'Descricao7_Dia3_Edicao2',
     'Subtitulo_Patrocinadores_Edicao2',
     'Descricao_Patrocinadores_Edicao2'
     ];
