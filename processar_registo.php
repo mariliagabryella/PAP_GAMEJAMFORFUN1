@@ -70,6 +70,15 @@ if (!empty($_FILES['foto']['name'])) {
     $foto = $destino;
 }
 
+/* Criar notificação para todos os admins */
+$conn->query("
+    INSERT INTO notificacoes (user_id, mensagem, lida, data)
+    SELECT id, 'Novo registo de utilizador: $nome', 0, NOW()
+    FROM utilizadores
+    WHERE role_id IN (1,2)
+");
+
+
 /* ------------------------------
    CRIAR TOKEN DE VERIFICAÇÃO
 ------------------------------ */

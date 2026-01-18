@@ -7,8 +7,8 @@ if (!isset($_SESSION["role_id"]) || $_SESSION["role_id"] != 3) {
     exit();
 }
 
-$nome  = $_SESSION["nome"];
-$email = $_SESSION["email"];
+$nome  = $_SESSION["usuarioNome"];
+$email = $_SESSION["usuarioEmail"];
 
 $conn = new mysqli("127.0.0.1", "root", "", "gamejamforfun2");
 if ($conn->connect_error) {
@@ -38,6 +38,12 @@ if (!$user) {
     ? date("d/m/Y H:i", strtotime($user['ativo'])) 
     : "Nunca";
 
+    /* Contar notificações não lidas */
+$sqlNotif = $conn->prepare("SELECT COUNT(*) AS total FROM notificacoes WHERE user_id = ? AND lida = 0");
+$sqlNotif->bind_param("i", $id_user);
+$sqlNotif->execute();
+$notifCount = $sqlNotif->get_result()->fetch_assoc()["total"];
+
 }
 
 
@@ -61,7 +67,7 @@ $conn->close();
 <title>Painel do Utilizador</title>
 <link rel="stylesheet" href="css/admin.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<script src="https://kit.fontawesome.com/YOUR-FONT-AWESOME-KIT.js" crossorigin="anonymous"></script> <!-- Importa os ícones -->
+    <script src="https://kit.fontawesome.com/YOUR-FONT-AWESOME-KIT.js" crossorigin="anonymous"></script> <!-- Importa os ícones -->
 
 </head>
 <body>
@@ -79,7 +85,7 @@ $conn->close();
  <div class="painel-links" id="painelLinks">
     <a href="index.php">Voltar ao Site</a>
     <a href="editar_perfil.php">Editar Perfil</a>
-    <a href="eliminar_perfil.php" style="color:#ff4d4d;">Eliminar Perfil</a>
+    <a href="#" class="danger" onclick="abrirPopupEliminar()">Eliminar Perfil</a>
     <a href="notificacoes.php"><i class="fa-solid fa-bell" style="color: #ffffff;"></i></a>
     <a href="logout.php">Sair</a>
 </div>
@@ -141,6 +147,8 @@ function togglePainelMenu() {
     <?php endif; ?>
 
 </div>
+
+<?php include 'eliminar_perfil.php'; ?>
 
 </body>
 </html>

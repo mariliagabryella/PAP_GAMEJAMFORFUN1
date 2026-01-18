@@ -273,10 +273,337 @@ body {
   color: #999;
 }
 
+/* ============================================================
+   ESTILO PARA admin_inscricoes.php
+   ============================================================ */
+
+/* TÍTULO */
+.admin-content h1 {
+    font-family: "Silkscreen", sans-serif;
+    color: #be3144;
+    text-shadow: 1px 1px #000;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+/* CONTAINER */
+.admin-content {
+    max-width: 1300px;
+    margin: 40px auto;
+    padding: 20px;
+}
 
 
-/* RESPONSIVO */
+
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.65);
+    backdrop-filter: blur(4px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.popup-overlay.show {
+    display: flex;
+}
+
+.popup-box {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(8px);
+    padding: 30px;
+    width: 90%;
+    max-width: 420px;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    animation: popupFade 0.3s ease;
+    text-align: center;
+}
+
+@keyframes popupFade {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.popup-box h2 {
+    font-family: "Silkscreen", sans-serif;
+    color: #be3144;
+    margin-bottom: 15px;
+}
+
+.popup-box p {
+    font-family: "Poppins", sans-serif;
+    margin-bottom: 10px;
+}
+
+.popup-box .alerta {
+    color: #ff4d4d;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.popup-botoes {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.btn-eliminar {
+    background: #be3144;
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-family: "Silkscreen", sans-serif;
+    transition: 0.3s;
+}
+
+.btn-eliminar:hover {
+    background: #09122c;
+    box-shadow: 0 0 10px #be3144;
+}
+
+.btn-cancelar {
+    background: #4CAF50;
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-family: "Silkscreen", sans-serif;
+    transition: 0.3s;
+}
+
+.btn-cancelar:hover {
+    background: #2e7d32;
+}
+
+/* ============================================================
+   TABELA COMPACTA E MODERNA
+   ============================================================ */
+
+.tabela-inscricoes {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 6px; /* espaço entre linhas */
+    margin-top: 20px;
+}
+
+.tabela-inscricoes thead th {
+    background: #be3144;
+    color: white;
+    padding: 10px 12px;
+    font-family: "Silkscreen", sans-serif;
+    font-size: 13px;
+    text-align: left;
+    border-radius: 6px;
+}
+
+.tabela-inscricoes tbody tr {
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(4px);
+    border-radius: 8px;
+    transition: 0.2s;
+}
+
+.tabela-inscricoes tbody tr:hover {
+    background: rgba(255,255,255,0.12);
+}
+
+.tabela-inscricoes td {
+    padding: 8px 12px;
+    font-size: 13px;
+    border-bottom: none;
+}
+
+/* Células arredondadas */
+.tabela-inscricoes tbody tr td:first-child {
+    border-radius: 8px 0 0 8px;
+}
+.tabela-inscricoes tbody tr td:last-child {
+    border-radius: 0 8px 8px 0;
+}
+
+/* ESTADOS */
+.estado-aprovado {
+    color: #27ae60;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.estado-rejeitado {
+    color: #c0392b;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+/* BOTÕES DE AÇÃO COMPACTOS */
+.acoes {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.btn-aprovar,
+.btn-rejeitar,
+.btn-editar {
+    padding: 6px 10px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    color: white;
+    font-size: 12px;
+    transition: 0.2s;
+}
+
+.btn-aprovar { background: #27ae60; }
+.btn-aprovar:hover { background: #1e8449; }
+
+.btn-rejeitar { background: #c0392b; }
+.btn-rejeitar:hover { background: #922b21; }
+
+.btn-editar { background: #2980b9; }
+.btn-editar:hover { background: #1f618d; }
+
+/* ============================================================
+   FORMULÁRIO DE EDIÇÃO DE INSCRIÇÃO
+   ============================================================ */
+
+.perfil-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.perfil-card {
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(6px);
+    border-radius: 12px;
+    padding: 30px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    animation: fadeIn 0.4s ease;
+}
+
+.perfil-card h2 {
+    font-family: "Silkscreen", sans-serif;
+    color: #be3144;
+    text-shadow: 1px 1px #000;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+/* Inputs */
+.form-editar label {
+    font-weight: 600;
+    margin-top: 10px;
+    display: block;
+    font-size: 14px;
+}
+
+.form-editar input,
+.form-editar select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    font-size: 15px;
+    background: rgba(255,255,255,0.15);
+    color: white;
+    font-family: "Poppins", sans-serif;
+}
+
+.form-editar input::placeholder {
+    color: #ccc;
+}
+
+/* Botão Guardar */
+.btn-guardar,
+.form-editar button {
+    width: 100%;
+    padding: 12px;
+    background: #be3144;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 17px;
+    cursor: pointer;
+    font-family: "Silkscreen", sans-serif;
+    transition: 0.3s;
+}
+
+.btn-guardar:hover,
+.form-editar button:hover {
+    background: #09122c;
+    box-shadow: 0 0 10px #be3144;
+}
+
+/* Animação */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.acao.recuperar {
+    color: #f1c40f;
+}
+
+.acao.recuperar:hover {
+    transform: scale(1.2);
+    color: #f39c12;
+}
+
+
+/* ============================================================
+   RESPONSIVO — APENAS 768px
+   ============================================================ */
 @media (max-width: 768px) {
+    .perfil-card {
+        padding: 20px;
+        max-width: 90%;
+    }
+
+    .form-editar input,
+    .form-editar select {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .btn-guardar {
+        font-size: 16px;
+        padding: 10px;
+    }
+
+
+
+    .tabela-inscricoes th,
+    .tabela-inscricoes td {
+        font-size: 12px;
+        padding: 6px;
+    }
+
+    .acoes {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    /* Tabela scroll horizontal */
+    .tabela-inscricoes {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+
   .painel-toggle {
     display: block;
   }

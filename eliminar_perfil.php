@@ -1,42 +1,37 @@
 <?php
-session_start();
-
-if (!isset($_SESSION["role_id"]) || $_SESSION["role_id"] != 3) {
-    header("Location: login.php");
-    exit();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
 }
 
-$nome = $_SESSION["usuarioNome"];
+$nome = $_SESSION["usuarioNome"] ?? "Utilizador";
 ?>
 
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-<meta charset="UTF-8">
-<title>Confirmar Eliminação</title>
-<link rel="stylesheet" href="css/admin.css">
-</head>
+<!-- ============================
+     POPUP DE CONFIRMAÇÃO
+=============================== -->
+<div id="popup-eliminar" class="popup-overlay">
+    <div class="popup-box">
+        <h2>Eliminar Conta</h2>
 
-<body>
+        <p>Tem a certeza que deseja eliminar a sua conta,
+            <strong><?php echo htmlspecialchars($nome); ?></strong>?
+        </p>
 
-<div class="admin-content">
-    <h1>Eliminar Conta</h1>
+        <p class="alerta">Esta ação é permanente e não pode ser desfeita.</p>
 
-    <p>Tem a certeza que deseja eliminar a sua conta, <strong><?php echo htmlspecialchars($nome); ?></strong>?</p>
-    <p style="color:#ff4d4d; font-weight:bold;">Esta ação é permanente e não pode ser desfeita.</p>
-
-    <div style="margin-top:25px;">
-        <a href="processar_eliminar_perfil.php" 
-           style="padding:10px 20px; background:#ff4d4d; color:white; text-decoration:none; margin-right:15px;">
-           SIM, eliminar conta
-        </a>
-
-        <a href="painel_do_viewer.php" 
-           style="padding:10px 20px; background:#4CAF50; color:white; text-decoration:none;">
-           NÃO, voltar ao painel
-        </a>
+        <div class="popup-botoes">
+            <a href="processar_eliminar_perfil.php" class="btn-eliminar">SIM, eliminar conta</a>
+            <button onclick="fecharPopupEliminar()" class="btn-cancelar">Cancelar</button>
+        </div>
     </div>
 </div>
 
-</body>
-</html>
+<script>
+function abrirPopupEliminar() {
+    document.getElementById("popup-eliminar").classList.add("show");
+}
+
+function fecharPopupEliminar() {
+    document.getElementById("popup-eliminar").classList.remove("show");
+}
+</script>

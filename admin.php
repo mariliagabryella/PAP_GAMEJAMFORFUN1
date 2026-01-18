@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 /* ============================================================
    PERMISSÕES
@@ -14,6 +16,7 @@ if (!isset($_SESSION["role_id"]) || $_SESSION["role_id"] > 2) {
 $nome  = $_SESSION["usuarioNome"];
 $email = $_SESSION["usuarioEmail"];
 $role  = $_SESSION["role_id"];
+
 
 /* ============================================================
    CONEXÃO COM A BASE DE DADOS
@@ -40,6 +43,8 @@ if ($resFoto->num_rows === 1) {
     }
 }
 $stmtFoto->close();
+
+
 
 /* ============================================================
    ESTATÍSTICAS SIMPLES PARA OS CARDS DO PAINEL
@@ -147,191 +152,211 @@ if ($types !== "") {
 ?>
 <!DOCTYPE html>
 <html lang="pt">
+
 <head>
-<meta charset="UTF-8">
-<title>Painel Administrativo</title>
-<link rel="stylesheet" href="css/admin.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <meta charset="UTF-8">
+    <title>Painel Administrativo</title>
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
 <body>
 
-<!-- ============================================================
+    <!-- ============================================================
      MENU SUPERIOR DO PAINEL (COM FOTO + OLÁ + NOME + LINKS)
      ============================================================ -->
-<div class="painel-menu">
+    <div class="painel-menu">
 
-    <!-- FOTO + OLÁ + NOME -->
-    <div class="painel-user">
-        <img src="<?php echo htmlspecialchars($fotoLogado); ?>" class="painel-foto" alt="Foto">
-        <span class="painel-ola">Olá, <?php echo htmlspecialchars($nome); ?></span>
+        <!-- FOTO + OLÁ + NOME -->
+        <div class="painel-user">
+            <img src="<?php echo htmlspecialchars($fotoLogado); ?>" class="painel-foto" alt="Foto">
+            <span class="painel-ola">Olá, <?php echo htmlspecialchars($nome); ?></span>
+        </div>
+
+        <!-- ÍCONE HAMBURGER (MOBILE) -->
+        <div class="painel-toggle" onclick="togglePainelMenu()">
+            <span id="painel-icon">☰</span>
+        </div>
+
+        <!-- LINKS DO MENU -->
+        <div class="painel-links" id="painelLinks">
+            <a href="index.php">Voltar ao Site</a>
+            <a href="editar_perfil.php">Editar Perfil</a>
+
+            <?php if ($role == 1): ?>
+
+                <a href="admin.php">Painel Admin Master</a>
+                <a href="admin_inscricoes.php">Inscrições</a>
+                <a href="criar_admin.php">Criar Admin</a>
+                <a href="criar_viewer.php">Criar Viewer</a>
+            <?php endif; ?>
+
+            <?php if ($role == 2): ?>
+                <!-- MENU ADMIN NORMAL -->
+                <a href="admin.php">Painel Admin</a>
+                <a href="admin_inscricoes.php">Inscrições</a>
+                <a href="notificacoes_admin.php" class="notif-icon">
+                    <i class="fa-solid fa-bell"></i>
+                </a>
+
+                <a href="#" class="danger" onclick="abrirPopupEliminar()">Eliminar Perfil</a>
+            <?php endif; ?>
+
+
+            <a href="logout.php">Sair</a>
+        </div>
     </div>
 
-    <!-- ÍCONE HAMBURGER (MOBILE) -->
-    <div class="painel-toggle" onclick="togglePainelMenu()">
-        <span id="painel-icon">☰</span>
-    </div>
+    <script>
+        function togglePainelMenu() {
+            const menu = document.getElementById("painelLinks");
+            const icon = document.getElementById("painel-icon");
 
-    <!-- LINKS DO MENU -->
-    <div class="painel-links" id="painelLinks">
-        <a href="index.php">Voltar ao Site</a>
-        <a href="editar_perfil.php">Editar Perfil</a>
+            menu.classList.toggle("show");
+            icon.textContent = menu.classList.contains("show") ? "✖" : "☰";
+        }
+    </script>
 
-        <?php if ($role == 1): ?>
-            <a href="criar_admin.php">Criar Admin</a>
-            <a href="criar_viewer.php">Criar Viewer</a>
-        <?php endif; ?>
-
-        <a href="logout.php">Sair</a>
-    </div>
-</div>
-
-<script>
-function togglePainelMenu() {
-    const menu = document.getElementById("painelLinks");
-    const icon = document.getElementById("painel-icon");
-
-    menu.classList.toggle("show");
-    icon.textContent = menu.classList.contains("show") ? "✖" : "☰";
-}
-</script>
-
-<!-- ============================================================
+    <!-- ============================================================
      CONTEÚDO PRINCIPAL
      ============================================================ -->
-<div class="admin-content">
+    <div class="admin-content">
 
-    <h1>Painel Administrativo</h1>
-    <p>Bem-vindo(a), <?php echo htmlspecialchars($nome); ?>.</p>
+        <h1>Painel Administrativo</h1>
+        <p>Bem-vindo(a), <?php echo htmlspecialchars($nome); ?>.</p>
 
-    <!-- ========================================================
+        <!-- ========================================================
          CARDS DE ESTATÍSTICAS
          ======================================================== -->
-    <div class="cards-dashboard">
-        <div class="card-dashboard">
-            <span class="card-label">Total de Utilizadores</span>
-            <span class="card-value"><?php echo $totalUsers; ?></span>
+        <div class="cards-dashboard">
+            <div class="card-dashboard">
+                <span class="card-label">Total de Utilizadores</span>
+                <span class="card-value"><?php echo $totalUsers; ?></span>
+            </div>
+
+            <div class="card-dashboard">
+                <span class="card-label">Admins</span>
+                <span class="card-value"><?php echo $totalAdmins; ?></span>
+            </div>
+
+            <div class="card-dashboard">
+                <span class="card-label">Viewers</span>
+                <span class="card-value"><?php echo $totalViewers; ?></span>
+            </div>
+
+            <?php if ($ultimoUser): ?>
+                <div class="card-dashboard">
+                    <span class="card-label">Último Utilizador</span>
+                    <span class="card-value"><?php echo htmlspecialchars($ultimoUser['nome']); ?></span>
+                    <span class="card-extra"><?php echo htmlspecialchars($ultimoUser['email']); ?></span>
+                </div>
+            <?php endif; ?>
         </div>
 
-        <div class="card-dashboard">
-            <span class="card-label">Admins</span>
-            <span class="card-value"><?php echo $totalAdmins; ?></span>
-        </div>
-
-        <div class="card-dashboard">
-            <span class="card-label">Viewers</span>
-            <span class="card-value"><?php echo $totalViewers; ?></span>
-        </div>
-
-        <?php if ($ultimoUser): ?>
-        <div class="card-dashboard">
-            <span class="card-label">Último Utilizador</span>
-            <span class="card-value"><?php echo htmlspecialchars($ultimoUser['nome']); ?></span>
-            <span class="card-extra"><?php echo htmlspecialchars($ultimoUser['email']); ?></span>
-        </div>
-        <?php endif; ?>
-    </div>
-
-    <!-- ========================================================
+        <!-- ========================================================
          FILTROS / BUSCA
          ======================================================== -->
-    <form method="GET" class="filtros-form">
-        <div class="filtro-item">
-            <label>Buscar (nome ou email):</label>
-            <input type="text" name="busca" value="<?php echo htmlspecialchars($busca); ?>" placeholder="Digite para filtrar...">
-        </div>
+        <form method="GET" class="filtros-form">
+            <div class="filtro-item">
+                <label>Buscar (nome ou email):</label>
+                <input type="text" name="busca" value="<?php echo htmlspecialchars($busca); ?>" placeholder="Digite para filtrar...">
+            </div>
 
-        <div class="filtro-item">
-            <label>Função:</label>
-            <select name="filtroRole">
-                <option value="0">Todas</option>
-                <option value="1" <?php if ($filtroRole == 1) echo 'selected'; ?>>Admin Master</option>
-                <option value="2" <?php if ($filtroRole == 2) echo 'selected'; ?>>Admin</option>
-                <option value="3" <?php if ($filtroRole == 3) echo 'selected'; ?>>Viewer</option>
-            </select>
-        </div>
+            <div class="filtro-item">
+                <label>Função:</label>
+                <select name="filtroRole">
+                    <option value="0">Todas</option>
+                    <option value="1" <?php if ($filtroRole == 1) echo 'selected'; ?>>Admin Master</option>
+                    <option value="2" <?php if ($filtroRole == 2) echo 'selected'; ?>>Admin</option>
+                    <option value="3" <?php if ($filtroRole == 3) echo 'selected'; ?>>Viewer</option>
+                </select>
+            </div>
 
-        <button type="submit" class="btn-filtrar">
-            <i class="fa-solid fa-magnifying-glass"></i> Filtrar
-        </button>
+            <button type="submit" class="btn-filtrar">
+                <i class="fa-solid fa-magnifying-glass"></i> Filtrar
+            </button>
 
-        <a href="admin.php" class="btn-filtrar limpar">
-            Limpar
-        </a>
-    </form>
+            <a href="admin.php" class="btn-filtrar limpar">
+                Limpar
+            </a>
+        </form>
 
-    <!-- ========================================================
+        <!-- ========================================================
          GESTÃO DE UTILIZADORES
          ======================================================== -->
-    <h2>Gestão de Utilizadores</h2>
+        <h2>Gestão de Utilizadores</h2>
 
-    <div class="tabela-container">
-        <table class="tabela-users">
-            <tr>
-                <th>Foto</th>
-                <th>Nome</th>
-                <th>Email</th>
-                <th>Função</th>
-                <th>Criado em</th>
-                <th>Último Ativo</th>
-                <th>Ações</th>
-            </tr>
+        <div class="tabela-container">
+            <table class="tabela-users">
+                <tr>
+                    <th>Foto</th>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Função</th>
+                    <th>Criado em</th>
+                    <th>Último Ativo</th>
+                    <th>Ações</th>
+                </tr>
 
-            <?php foreach ($users as $u): ?>
-            <tr>
-                <td>
-                    <img src="<?php echo htmlspecialchars($u['foto'] ?: 'img/default.png'); ?>" 
-                         class="foto-mini" alt="Foto">
-                </td>
+                <?php foreach ($users as $u): ?>
+                    <tr>
+                        <td>
+                            <img src="<?php echo htmlspecialchars($u['foto'] ?: 'img/default.png'); ?>"
+                                class="foto-mini" alt="Foto">
+                        </td>
 
-                <td><?php echo htmlspecialchars($u['nome']); ?></td>
-                <td><?php echo htmlspecialchars($u['email']); ?></td>
+                        <td><?php echo htmlspecialchars($u['nome']); ?></td>
+                        <td><?php echo htmlspecialchars($u['email']); ?></td>
 
-                <td>
-                    <!-- Badge de role -->
-                    <?php if ($u['role_id'] == 1): ?>
-                        <span class="badge badge-master">Admin Master</span>
-                    <?php elseif ($u['role_id'] == 2): ?>
-                        <span class="badge badge-admin">Admin</span>
-                    <?php else: ?>
-                        <span class="badge badge-viewer">Viewer</span>
-                    <?php endif; ?>
-                </td>
+                        <td>
+                            <!-- Badge de role -->
+                            <?php if ($u['role_id'] == 1): ?>
+                                <span class="badge badge-master">Admin Master</span>
+                            <?php elseif ($u['role_id'] == 2): ?>
+                                <span class="badge badge-admin">Admin</span>
+                            <?php else: ?>
+                                <span class="badge badge-viewer">Viewer</span>
+                            <?php endif; ?>
+                        </td>
 
-                <td><?php echo htmlspecialchars($u['criado_em']); ?></td>
+                        <td><?php echo htmlspecialchars($u['criado_em']); ?></td>
 
-                <td><?php echo $u['ativo'] ? htmlspecialchars($u['ativo']) : "Nunca"; ?></td>
+                        <td><?php echo $u['ativo'] ? htmlspecialchars($u['ativo']) : "Nunca"; ?></td>
 
-                <td class="acoes">
-                    <?php if ($role == 1): ?>
-                        <!-- ADMIN MASTER: pode editar e eliminar (exceto ID 1, se quiseres proteger) -->
-                        <a href="editar_user.php?id=<?php echo $u['id']; ?>" 
-                        class="acao editar" title="Editar utilizador">
-                            <i class="fa-solid fa-pen"></i>
-                        </a>
+                        <td class="acoes">
+                            <?php if ($role == 1): ?>
+                                <!-- ADMIN MASTER: pode editar e eliminar (exceto ID 1, se quiseres proteger) -->
+                                <a href="editar_user.php?id=<?php echo $u['id']; ?>"
+                                    class="acao editar" title="Editar utilizador">
+                                    <i class="fa-solid fa-pen"></i>
+                                </a>
 
-                        <?php if ($u['id'] != 1): ?>
-                        <a href="eliminar_user.php?id=<?php echo $u['id']; ?>" 
-                           class="acao eliminar" 
-                           title="Eliminar utilizador"
-                           onclick="return confirm('Tem certeza que deseja eliminar este utilizador?');">
-                            <i class="fa-solid fa-trash"></i>
-                        </a>
-                        <?php endif; ?>
+                                <?php if ($u['id'] != 1): ?>
+                                    <a href="eliminar_user.php?id=<?php echo $u['id']; ?>"
+                                        class="acao eliminar"
+                                        title="Eliminar utilizador"
+                                        onclick="return confirm('Tem certeza que deseja eliminar este utilizador?');">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </a>
+                                <?php endif; ?>
 
-                    <?php elseif ($role == 2): ?>
-                        <!-- ADMIN NORMAL: APENAS VISUALIZA, SEM PERMISSÃO -->
-                        <span class="acao sem-permissao" title="Sem permissões para editar">
-                            <i class="fa-solid fa-lock"></i>
-                        </span>
-                    <?php endif; ?>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </table>
+                            <?php elseif ($role == 2): ?>
+                                <!-- ADMIN NORMAL: pode apenas recuperar password -->
+                                <a href="recuperar_password.php?id=<?php echo $u['id']; ?>"
+                                    class="acao editar"
+                                    title="Recuperar password">
+                                    <i class="fa-solid fa-key"></i>
+                                </a>
+                            <?php endif; ?>
+
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+        </div>
+
     </div>
-
-</div>
-
+    <?php include 'eliminar_perfil.php'; ?>
 </body>
+
 </html>

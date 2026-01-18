@@ -100,6 +100,15 @@ $stmt = $conn->prepare("
 $stmt->bind_param("is", $admin_id, $msg_admin);
 $stmt->execute();
 
+/* Criar notificação para admins */
+$conn->query("
+    INSERT INTO notificacoes (user_id, mensagem, lida, data)
+    SELECT id, 'Nova inscrição recebida', 0, NOW()
+    FROM utilizadores
+    WHERE role_id IN (1,2)
+");
+
+
 /* Email para o utilizador: inscrição recebida */
 $mensagem_email = "
     <h2>Inscrição Recebida - Game Jam For Fun 25</h2>

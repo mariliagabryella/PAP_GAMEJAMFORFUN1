@@ -168,36 +168,29 @@ if (isset($_SESSION["id_utilizador"])) {
 
             <div class="dropdown">
                 <a href="#">Olá, <?php echo htmlspecialchars($_SESSION["usuarioNome"]); ?> ▾</a>
+                
 
                 <div class="dropdown-content">
 
                     <!-- VIEWER -->
-                    <?php if ($_SESSION["role_id"] == 3): ?>
+                    <?php if ($_SESSION["role_id"] == 3): ?>                       
+                        <a href="painel_do_viewer.php">Conta</a>
                         <a href="editar_perfil.php">Editar Perfil</a>
-                        <a href="painel_do_viewer.php">Painel Viewer</a>
                     <?php endif; ?>
 
                     <!-- ADMIN NORMAL -->
                     <?php if ($_SESSION["role_id"] == 2): ?>
-                        <a href="editar_perfil.php">Editar Perfil</a>
                         <a href="admin.php">Painel Admin</a>
+                        <a href="editar_perfil.php">Editar Perfil</a>
                     <?php endif; ?>
 
                     <!-- ADMIN MASTER -->
                     <?php if ($_SESSION["role_id"] == 1): ?>
                         <a href="admin.php">Painel Admin Master</a>
                         <a href="editar_perfil.php">Editar Perfil</a>
-                        <a href="criar_admin.php">Criar Admin</a>
-                        <a href="criar_viewer.php">Criar Viewer</a>
                     <?php endif; ?>
 
-                    <!-- 🔔 NOTIFICAÇÕES -->
-                    <a href="notificacoes.php">
-                        Notificações
-                        <?php if ($notificacoes_nao_lidas > 0): ?>
-                            <span style="color:red;">(<?php echo $notificacoes_nao_lidas; ?>)</span>
-                        <?php endif; ?>
-                    </a>
+
 
                     <!-- LOGOUT -->
                     <a href="logout.php">Sair</a>

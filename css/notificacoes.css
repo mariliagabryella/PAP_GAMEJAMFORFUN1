@@ -1,0 +1,239 @@
+@import url("https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+/* ============================
+   GERAL
+=============================== */
+body {
+    background-color: #09122c;
+    color: white;
+    font-family: "Poppins", sans-serif;
+    padding: 20px;
+}
+
+/* ============================
+   MENU VIEWER
+=============================== */
+.painel-menu {
+    width: 100%;
+    background: #09122c;
+    padding: 15px 20px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    margin-bottom: 25px;
+}
+
+.painel-user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.painel-foto {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #be3144;
+}
+
+.painel-ola {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.painel-toggle {
+    display: none;
+    font-size: 32px;
+    cursor: pointer;
+}
+
+.painel-links {
+    display: flex;
+    gap: 20px;
+}
+
+.painel-links a {
+    color: white;
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+.painel-links a:hover {
+    background: #be3144;
+    box-shadow: 0 0 10px #be3144;
+}
+
+.painel-links a.danger {
+    color: #ff4d4d;
+}
+
+/* ============================
+   NOTIFICAÇÕES
+=============================== */
+.notif-container {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.notif-container h2 {
+    font-family: "Silkscreen", sans-serif;
+    color: #be3144;
+    text-shadow: 1px 1px #000;
+    margin-bottom: 20px;
+}
+
+.sem-notif {
+    text-align: center;
+    opacity: 0.7;
+}
+
+.notif-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.notif-card {
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(6px);
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    animation: fadeIn 0.4s ease;
+}
+
+.notif-data {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #be3144;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.notif-card p {
+    margin: 0;
+    font-size: 15px;
+}
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.65);
+    backdrop-filter: blur(4px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.popup-overlay.show {
+    display: flex;
+}
+
+.popup-box {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(8px);
+    padding: 30px;
+    width: 90%;
+    max-width: 420px;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    animation: popupFade 0.3s ease;
+    text-align: center;
+}
+
+@keyframes popupFade {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.popup-box h2 {
+    font-family: "Silkscreen", sans-serif;
+    color: #be3144;
+    margin-bottom: 15px;
+}
+
+.popup-box p {
+    font-family: "Poppins", sans-serif;
+    margin-bottom: 10px;
+}
+
+.popup-box .alerta {
+    color: #ff4d4d;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.popup-botoes {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.btn-eliminar {
+    background: #be3144;
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-family: "Silkscreen", sans-serif;
+    transition: 0.3s;
+}
+
+.btn-eliminar:hover {
+    background: #09122c;
+    box-shadow: 0 0 10px #be3144;
+}
+
+.btn-cancelar {
+    background: #4CAF50;
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-family: "Silkscreen", sans-serif;
+    transition: 0.3s;
+}
+
+.btn-cancelar:hover {
+    background: #2e7d32;
+}
+
+/* ============================
+   RESPONSIVO
+=============================== */
+@media (max-width: 768px) {
+    .painel-toggle {
+        display: block;
+    }
+
+    .painel-links {
+        position: fixed;
+        top: 70px;
+        right: -260px;
+        width: 240px;
+        height: 100vh;
+        background: rgba(9,18,44,0.95);
+        backdrop-filter: blur(6px);
+        flex-direction: column;
+        padding: 20px;
+        gap: 15px;
+        transition: right 0.3s ease-in-out;
+        border-left: 3px solid #be3144;
+        z-index: 999;
+    }
+
+    .painel-links.show {
+        right: 0;
+    }
+}

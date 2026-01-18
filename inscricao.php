@@ -15,8 +15,7 @@
 
 <body>
     <?php include 'menu.php'; ?> <!-- Inclui o menu fixo na página -->
-    
-session_start();
+
 
 
 

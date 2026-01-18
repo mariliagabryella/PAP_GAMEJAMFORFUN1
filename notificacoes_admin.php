@@ -11,18 +11,16 @@ if (!isset($_SESSION["id"])) {
 $id_user = $_SESSION["id"];
 
 $conn = new mysqli("127.0.0.1", "root", "", "gamejamforfun2");
-if ($conn->connect_error) {
-    die("Erro: " . $conn->connect_error);
-}
 
-/* Buscar dados do utilizador */
-$stmt = $conn->prepare("SELECT nome, foto FROM utilizadores WHERE id = ?");
+/* Buscar dados do admin */
+$stmt = $conn->prepare("SELECT nome, foto, role_id FROM utilizadores WHERE id = ?");
 $stmt->bind_param("i", $id_user);
 $stmt->execute();
 $user = $stmt->get_result()->fetch_assoc();
 
 $nome = $user["nome"];
 $foto = $user["foto"] ?: "img/default.png";
+$role = $user["role_id"];
 
 /* Buscar notificações */
 $sql = "SELECT * FROM notificacoes WHERE user_id = $id_user ORDER BY data DESC";
@@ -42,46 +40,13 @@ $conn->query("UPDATE notificacoes SET lida = 1 WHERE user_id = $id_user");
 
 <body>
 
-<!-- ============================
-     MENU VIEWER
-=============================== -->
-<div class="painel-menu">
-    <div class="painel-user">
-        <img src="<?php echo htmlspecialchars($foto); ?>" class="painel-foto" alt="Foto">
-        <span class="painel-ola">Olá, <?php echo htmlspecialchars($nome); ?> (Viewer)</span>
-    </div>
 
-    <div class="painel-toggle" onclick="togglePainelMenu()">
-        <span id="painel-icon">☰</span>
-    </div>
 
-    <div class="painel-links" id="painelLinks">
-        <a href="index.php">Voltar ao Site</a>
-        <a href="painel_do_viewer.php">Painel</a>
-        <a href="editar_perfil.php">Editar Perfil</a>
-        <a href="#" class="danger" onclick="abrirPopupEliminar()">Eliminar Perfil</a>
-        <a href="notificacoes.php"><i class="fa-solid fa-bell"></i></a>
-        <a href="logout.php">Sair</a>
-    </div>
-</div>
-
-<script>
-function togglePainelMenu() {
-    const menu = document.getElementById("painelLinks");
-    const icon = document.getElementById("painel-icon");
-    menu.classList.toggle("show");
-    icon.textContent = menu.classList.contains("show") ? "✖" : "☰";
-}
-</script>
-
-<!-- ============================
-     CONTEÚDO
-=============================== -->
 <div class="notif-container">
     <h2>Notificações</h2>
 
     <?php if ($res->num_rows == 0): ?>
-        <p class="sem-notif">Não tem notificações.</p>
+        <p class="sem-notif">Sem notificações.</p>
     <?php else: ?>
         <div class="notif-list">
         <?php while ($n = $res->fetch_assoc()): ?>

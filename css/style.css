@@ -223,10 +223,10 @@ body {
   display: none;
   position: absolute;
   background-color: #be31447f;
-  min-width: 140px;
-  margin-top: 30px;
+  min-width: 120px;
+  margin-top: 20px;
   padding: 10px;
-  border-radius: 3px;
+  border-radius: 2px;
   text-align: left;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
   z-index: 1000; /* Garante que fique acima de outros elementos */
@@ -241,7 +241,7 @@ body {
   font-size: 16px;
   text-align: left;
 
-  top: 10px;
+
 }
 
 /* ✨ Exibe o submenu ao passar o mouse */
@@ -577,6 +577,7 @@ button:hover {
   margin-top: 20px;
 }
 
+
 /* 🔹 Responsivo */
 @media (max-width: 768px) {
   .video-text .logo-container img {
@@ -703,7 +704,7 @@ button:hover {
 /* Estilo dos links dentro do menu mobile */
 .menu-links a {
     margin: 15px 0; /* Espaço entre os links */
-    font-size: 20px; /* Tamanho maior para facilitar toque */
+    font-size: 14px; /* Tamanho maior para facilitar toque */
     text-align: left; /* Alinha texto à esquerda */
 }
 
@@ -716,7 +717,7 @@ button:hover {
   .dropdown-content {
     position: static;
     display: none;
-    width: 100%; /* Ajusta a largura */
+    width: 30%; /* Ajusta a largura */
     text-align: center; /* Centraliza os links */
   }
 
