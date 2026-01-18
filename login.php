@@ -1,4 +1,7 @@
 <?php
+/* ============================================================
+   INICIAR SESSÃO
+   ============================================================ */
 session_start();
 
 /* ============================================================
@@ -20,8 +23,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($email && $senha) {
 
+        /* ------------------------------------------------------------
+           BUSCAR UTILIZADOR PELO EMAIL
+        ------------------------------------------------------------ */
         $stmt = $conn->prepare("
-            SELECT nome, role_id, senha_hash 
+            SELECT id, nome, role_id, senha_hash 
             FROM utilizadores 
             WHERE email = ?
         ");
@@ -29,26 +35,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute();
         $result = $stmt->get_result();
 
+        /* ------------------------------------------------------------
+           VERIFICA SE O UTILIZADOR EXISTE
+        ------------------------------------------------------------ */
         if ($result->num_rows === 1) {
 
             $user = $result->fetch_assoc();
 
+            /* ------------------------------------------------------------
+               VERIFICA SENHA
+            ------------------------------------------------------------ */
             if (password_verify($senha, $user['senha_hash'])) {
 
-                $_SESSION["usuarioEmail"] = $email;
-                $_SESSION["usuarioNome"]  = $user['nome'];
-                $_SESSION["role_id"]      = $user['role_id'];
+                /* ------------------------------------------------------------
+                   GUARDA DADOS NA SESSÃO
+                ------------------------------------------------------------ */
+                $_SESSION["usuarioEmail"]   = $email;
+                $_SESSION["usuarioNome"]    = $user['nome'];
+                $_SESSION["role_id"]        = $user['role_id'];
+                $_SESSION["id"]  = $user['id'];
 
-                header("Location: index.php");
-                exit();
+                /* ------------------------------------------------------------
+                   ATUALIZA O CAMPO "ativo" COM O HORÁRIO DO ÚLTIMO LOGIN
+                ------------------------------------------------------------ */
+                $update = $conn->prepare("UPDATE utilizadores SET ativo = NOW() WHERE email = ?");
+                $update->bind_param("s", $email);
+                $update->execute();
+
+                /* ------------------------------------------------------------
+                   REDIRECIONAMENTO POR TIPO DE UTILIZADOR
+                ------------------------------------------------------------ */
+                if ($user['role_id'] == 1) {
+                    header("Location: admin.php"); // Admin Master
+                    exit();
+                }
+
+                if ($user['role_id'] == 2) {
+                    header("Location: admin.php"); // Admin
+                    exit();
+                }
+
+                if ($user['role_id'] == 3) {
+                    header("Location: painel_do_viewer.php"); // Viewer
+                    exit();
+                }
+
             } else {
                 $erroLogin = "Senha incorreta.";
             }
+
         } else {
             $erroLogin = "Usuário não encontrado.";
         }
 
         $stmt->close();
+
     } else {
         $erroLogin = "Preencha todos os campos corretamente.";
     }
@@ -56,19 +97,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $conn->close();
 ?>
-
-
 <!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GameJamForFun - Login</title>
+
     <link rel="icon" type="image/x-icon" href="img/logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="css/loginstyle.css">
 </head>
+
 <body>
+
     <?php include 'menu.php'; ?> 
 
     <div class="conteudo"></div>
@@ -85,7 +127,9 @@ $conn->close();
             <h2>Login</h2>
 
             <?php if (!empty($erroLogin)): ?>
-                <p style="color: #ff8080; margin-bottom: 10px;"><?php echo $erroLogin; ?></p>
+                <p style="color: #ff8080; margin-bottom: 10px;">
+                    <?php echo $erroLogin; ?>
+                </p>
             <?php endif; ?>
 
             <label for="email">E-mail:</label>
@@ -99,5 +143,6 @@ $conn->close();
     </div>
 
     <script src="interactive-script.js"></script>
+
 </body>
 </html>
