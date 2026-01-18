@@ -1,4 +1,59 @@
+<?php 
+require 'textos.php';
+require 'bd_connection.php';
+?>
 
+<?php 
+session_start();
+
+$slug =[
+    'Titulo_Edicao2',
+    'Subtitulo_Edicao2',
+    'Data_Edicao2',
+    'Tema_Edicao2',
+    'Descricao_tema_edicao2',
+    'Participantes_Edicao2',
+    'Descricao_participantes_edicao2',
+    'Descricao1_participantes_edicao2',
+    'Local_Edicao2',
+    'Descricao_local_Edicao2',
+    'Subtitulo_Sobre_Edicao2',
+    'Descricao_Sobre_Edicao2',
+    'Descricao1_Sobre_Edicao2',
+    'Vencedores_Edicao2',
+    'Vencedor1_Edicao2',
+    'Vencedor2_Edicao2',
+    'Vencedor3_Edicao2',
+    'Descricao2_Sobre_Edicao2',
+    'Subtitulo_Cronograma_Edicao2',
+    'Descricao_Cronograma_Edicao2',
+    'Dia1_Cronograma_Edicao2',
+    'Descricao_Dia1_Edicao2',
+    'Descricao1_Dia1_Edicao2',
+    'Descricao2_Dia1_Edicao2',
+    'Descricao3_Dia1_Edicao2',
+    'Dia2_Cronograma_Edicao2',
+    'Descricao_Dia2_Edicao2',
+    'Descricao1_Dia2_Edicao2',
+    'Descricao2_Dia2_Edicao2',
+    'Descricao3_Dia2_Edicao2',
+    'Dia3_Cronograma_Edicao2',
+    'Descricao_Dia3_Edicao2',
+    'Descricao1_Dia3_Edicao2',
+    'Descricao2_Dia3_Edicao2',
+    'Descricao3_Dia3_Edicao2',
+    'Descricao4_Dia3_Edicao2',
+    'Descricao5_Dia3_Edicao2',
+    'Subtitulo_Patrocinadores_Edicao2',
+    'Descricao_Patrocinadores_Edicao2'
+    ];
+
+$textos = getTextos($pdo, $slug);
+
+if (!is_array($textos)) {
+    $textos = [];
+}
+?>
 <!DOCTYPE html>
 <html lang="pt">
 
@@ -21,15 +76,15 @@
         <div class="background"></div>
         <div class="container">
             <h1 class="titulo-principal">
-                Game Jam For Fun
-                <span class="edicao-numero">2ª Edição</span>
+                <?php echo $textos['Titulo_Edicao2'] ?? ''; ?>
+                <span class="edicao-numero"><?php echo $textos['Subtitulo_Edicao2'] ?? ''; ?></span>
             </h1>
             
             <div class="data-evento">
                 <div class="calendario-icon">
                     <i class="fas fa-calendar-alt"></i>
                 </div>
-                <p>23, 24 e 25 de Maio 2025</p>
+                <p><?php echo $textos['Data_Edicao2'] ?? ''; ?></p>
             </div>
             
             <div class="info-cards">
@@ -37,102 +92,95 @@
                     <div class="card-icon">
                         <i class="fas fa-gamepad"></i>
                     </div>
-                    <h3>Tema</h3>
-                    <p>O tema escolhido deste ano foi "Desliga-te"!!</p>
+                    <h3><?php echo $textos['Tema_Edicao2'] ?? ''; ?></h3>
+                    <p><?php echo $textos['Descricao_tema_edicao2'] ?? ''; ?></p>
                 </div>
                 
                 <div class="info-card">
                     <div class="card-icon">
                         <i class="fas fa-users"></i>
                     </div>
-                    <h3>Participantes</h3>
-                    <p>Tivemos 14 equipas!!</p>
-                    <p>Tivemos equipas da nossa escola e de outra escolas de Estarreja e da José Estevão.</p>
+                    <h3><?php echo $textos['Participantes_Edicao2'] ?? ''; ?></h3>
+                    <p><?php echo $textos['Descricao_participantes_edicao2'] ?? ''; ?></p>
+                    <p><?php echo $textos['Descricao1_participantes_edicao2'] ?? ''; ?></p>
                 </div>
                 
                 <div class="info-card">
                     <div class="card-icon">
                         <i class="fas fa-map-marker-alt"></i>
                     </div>
-                    <h3>Local</h3>
-                    <p>Escola Secundária de Albergaria-a-Velha</p>
+                    <h3><?php echo $textos['Local_Edicao2'] ?? ''; ?></h3>
+                    <p><?php echo $textos['Descricao_local_Edicao2'] ?? ''; ?></p>
                 </div>
             </div>
             
             <div class="descricao-evento">
-                <h2>Sobre</h2>
+                <h2><?php echo $textos['Subtitulo_Sobre_Edicao2'] ?? ''; ?></h2>
 
                 <p>
-                    A segunda edição da Game Jam for Fun decorreu entre 23 e 25 de maio, contando com a participação de 
-                    14 equipas de várias escolas do distrito, desafiadas a desenvolver um jogo em 48 horas. A sessão de
-                    abertura incluiu intervenções de várias personalidades da área da educação e tecnologia, destacando-se 
-                    a palestra do engenheiro Manu.
+                        <?php echo $textos['Descricao_Sobre_Edicao2'] ?? ''; ?>
                 </p>
 
                 <p>
-                   O tema escolhido, “DESLIGA-TE”, promoveu a reflexão sobre o uso excessivo da tecnologia e das redes sociais.
-                   Os jogos apresentados foram avaliados por um júri especializado, composto por representantes do ensino superior,
-                   empresas e entidades do setor.
+                    <?php echo $textos['Descricao1_Sobre_Edicao2'] ?? ''; ?>
                 </p>
                 
                 <p>
-                 🏆 Vencedores:</p>
+                 <?php echo $textos['Vencedores_Edicao2'] ?? ''; ?></p>
 
-                <p>🥇 1.º lugar: Os Guri – Escola Secundária de Albergaria-a-Velha</p>
+                <p><?php echo $textos['Vencedor1_Edicao2'] ?? ''; ?></p>
 
-                <p>🥈 2.º lugar: Os Bacanos – Escola Secundária de Estarreja</p>
+                <p><?php echo $textos['Vencedor2_Edicao2'] ?? ''; ?></p>
 
-                <p>🥉 3.º lugar: Equipa da Escola Secundária José Estêvão</p>
+                <p><?php echo $textos['Vencedor3_Edicao2'] ?? ''; ?></p>
                 </p>
 
                 <p>
-                    O evento terminou com um lanche-convívio, num clima de celebração e agradecimento. Mais do que jogos, 
-                    os participantes criaram memórias, laços e experiências marcantes.
+                        <?php echo $textos['Descricao2_Sobre_Edicao2'] ?? ''; ?>
                 </p>
 
             </div>
             
             <div class="cronograma">
-                <h2>Cronograma</h2>
+                <h2><?php echo $textos['Subtitulo_Cronograma_Edicao2'] ?? ''; ?></h2>
                 <div class="timeline">
                     <div class="timeline-item">
-                        <div class="timeline-date">Dia 23</div>
+                        <div class="timeline-date"><?php echo $textos['Dia1_Cronograma_Edicao2'] ?? ''; ?></div>
                         <div class="timeline-content">
-                            <h4>18:30 - Abertura</h4>
-                            <p>Receção das equipas</p>
-                            <h4>19:30 - Início da Game Jam</h4>
-                            <p>Apresentação do evento e anúncio do tema</p>
+                            <h4><?php echo $textos['Descricao_Dia1_Edicao2'] ?? ''; ?></h4>
+                            <p><?php echo $textos['Descricao1_Dia1_Edicao2'] ?? ''; ?></p>
+                            <h4><?php echo $textos['Descricao2_Dia1_Edicao2'] ?? ''; ?></h4>
+                            <p><?php echo $textos['Descricao3_Dia1_Edicao2'] ?? ''; ?></p>
                         </div>
                     </div>
                     
                     <div class="timeline-item">
-                        <div class="timeline-date">Dia 24</div>
+                        <div class="timeline-date"><?php echo $textos['Dia2_Cronograma_Edicao2'] ?? ''; ?></div>
                         <div class="timeline-content">
-                            <h4>- All Day - desenvolvimento dos jogos</h4>
-                            <p>Criação dos jogos</p>
+                            <h4><?php echo $textos['Descricao_Dia2_Edicao2'] ?? ''; ?></h4>
+                            <p><?php echo $textos['Descricao1_Dia2_Edicao2'] ?? ''; ?></p>
 
-                            <h4>- All Day - Monitoramento da tensão arterial</h4>
-                            <p> Durante os períodos da manhã e da tarde, a tensão arterial dos 
-                                participantes será monitorizada pelos alunos do curso de Técnico 
-                                Auxiliar de Saúde</p>
+                            <h4><?php echo $textos['Descricao2_Dia2_Edicao2'] ?? ''; ?></h4>
+                            <p><?php echo $textos['Descricao3_Dia2_Edicao2'] ?? ''; ?></p>
+                                </p>
 
                         </div>
                     </div>
                     
                     <div class="timeline-item">
-                        <div class="timeline-date">Dia 25</div>
+                        <div class="timeline-date"><?php echo $textos['Dia3_Cronograma_Edicao2'] ?? ''; ?></div>
                         <div class="timeline-content">
-                            <h4>12:00 - Entrega</h4>
-                            <p>Prazo final para submissão dos jogos</p>
+                            <h4><?php echo $textos['Descricao_Dia3_Edicao2'] ?? ''; ?></h4>
+                            <p><?php echo $textos['Descricao1_Dia3_Edicao2'] ?? ''; ?></p>
 
-                            <h4>14:30 - Palestra</h4>
-                            <p>Palestra sobre desenvolvimento de jogos</p>
+                            <h4><?php echo $textos['Descricao2_Dia3_Edicao2'] ?? ''; ?></h4>
+                            <p><?php echo $textos['Descricao3_Dia3_Edicao2'] ?? ''; ?></p>
 
-                            <h4>15:00 - Apresentações</h4>
-                            <p>Apresentação dos jogos desenvolvidos</p>
+                            <h4><?php echo $textos['Descricao4_Dia3_Edicao2'] ?? ''; ?></h4>
+                            <p><?php echo $textos['Descricao5_Dia3_Edicao2'] ?? ''; ?></p>
 
-                            <h4>18:00 - Divulgação dos vencedoras</h4>
-                            <p>Premiação das equipas vencedoras</p>
+                            <h4><?php echo $textos['Descricao6_Dia3_Edicao2'] ?? ''; ?></h4>
+                            <p><?php echo $textos['Descricao7_Dia3_Edicao2'] ?? ''; ?></p>
                         </div>
                     </div>
                 </div>
@@ -158,7 +206,7 @@
             
            <section id="patrocinadores" class="patrocinadores">
     <div class="container">
-        <h1>Patrocinadores</h1>
+        <h1><?php echo $textos['Subtitulo_Patrocinadores_Edicao2'] ?? ''; ?></h1>
         <div class="logos">
              <a href="https://www.facebook.com/pampas.pamplina/" target="_blank">
                 <img src="img/p1.png" alt="Patrocinador 1">
@@ -203,7 +251,7 @@
 
 
         <!-- 🔹 Texto de agradecimento -->
-        <p class="agradecimento">Agradecemos pelo patrocínio e participação no evento!</p>
+        <p class="agradecimento"><?php echo $textos['Descricao_Patrocinadores_Edicao2'] ?? ''; ?></p>
     </div>
 </section>
     
