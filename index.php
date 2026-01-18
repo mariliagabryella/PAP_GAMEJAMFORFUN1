@@ -163,18 +163,18 @@ if (!is_array($textos)) {
         </div>
 
         <div class="box">
-            <h3>3º dia</h3>
+            <h3><?php echo $textos['subtitulo_etapas_dia_tres'] ?? ''; ?></h3>
             
-            <p>Entrega dos jogos desenvolvidos pelas equipas participantes;</p>
-            <p>Receção aos júris e professores;</p>
-            <p>Apresentações e avaliação dos jogos;</p>
-            <p>Divulgação das equipas vencedoras, com atribuição dos 1.º, 2.º e 3.º lugares.</p>
+            <p><?php echo $textos['texto_etapas_dia_tres'] ?? ''; ?></p>
+            <p><?php echo $textos['texto_etapas_dia_tres1'] ?? ''; ?></p>
+            <p><?php echo $textos['texto_etapas_dia_tres2'] ?? ''; ?></p>
+            <p><?php echo $textos['texto_etapas_dia_tres3'] ?? ''; ?></p>
         </div>
     </div>
 </div>
 <section id="patrocinadores" class="patrocinadores">
     <div class="container">
-        <h1>Patrocinadores</h1>
+        <h1><?php echo $textos['patrocinios_titulo'] ?? ''; ?></h1>
         <div class="logos">
             <a href="https://www.facebook.com/pampas.pamplina/" target="_blank">
                 <img src="img/p1.png" alt="Patrocinador 1">
@@ -218,7 +218,7 @@ if (!is_array($textos)) {
         </div>
 
         <!-- 🔹 Texto de agradecimento -->
-        <p class="agradecimento">Agradecemos pelo patrocínio e participação no evento!</p>
+        <p class="agradecimento"><?php echo $textos['agradecimento_texto'] ?? ''; ?></p>
     </div>
 </section>
  <?php include 'footer.php'; ?>
