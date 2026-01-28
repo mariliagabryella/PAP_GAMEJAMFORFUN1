@@ -1,58 +1,3 @@
-<?php 
-require 'textos.php';
-require 'bd_connection.php';
-?>
-
-<?php 
-session_start();
-
-$slug =[
-    'Titulo-Edicao1',
-    'Subtitulo-Edicao1',
-    'Data-Edicao1',
-    'Tema-Edicao1',
-    'Descricao_tema_edicao1',
-    'Participantes-Edicao1',
-    'Descricao_participantes_edicao1',
-    'Descricao1_participantes_edicao1',
-    'Local-Edicao1',
-    'Descricao_local',
-    'Subtitulo_Sobre_Edicao1',
-    'Descricao_Sobre_Edicao1',
-    'Descricao1_Sobre_Edicao1',
-    'Vencedores_Edicao1',
-    'Vencedor1_Edicao1',
-    'Vencedor2_Edicao1',
-    'Vencedor3_Edicao1',
-    'Descricao2_Sobre_Edicao1',
-    'Subtitulo_Cronograma_Edicao1',
-    'Dia1_Cronograma_Edicao1',
-    'Descricao_Dia1_Edicao1',
-    'Descricao1_Dia1_Edicao1',
-    'Descricao2_Dia1_Edicao1',
-    'Descricao3_Dia1_Edicao1',
-    'Dia2_Cronograma_Edicao1',
-    'Descricao_Dia2_Edicao1',
-    'Descricao1_Dia2_Edicao1',
-    'Descricao2_Dia2_Edicao1',
-    'Descricao3_Dia2_Edicao1',
-    'Dia3_Cronograma_Edicao1',
-    'Descricao_Dia3_Edicao1',
-    'Descricao1_Dia3_Edicao1',
-    'Descricao2_Dia3_Edicao1',
-    'Descricao3_Dia3_Edicao1',
-    'Descricao4_Dia3_Edicao1',
-    'Descricao5_Dia3_Edicao1',
-    'Subtitulo_Patrocinadores_Edicao1',
-    'Descricao_Patrocinadores_Edicao1'
-];
-
-$textos = getTextos($pdo, $slug);
-
-if (!is_array($textos)) {
-    $textos = [];
-}
-?>
 <!DOCTYPE html>
 <html lang="pt">
 
@@ -75,15 +20,15 @@ if (!is_array($textos)) {
         <div class="background"></div>
         <div class="container">
             <h1 class="titulo-principal">
-                <?php echo $textos['Titulo-Edicao1'] ?? ''; ?>
-                <span class="edicao-numero"><?php echo $textos['Subtitulo-Edicao1'] ?? ''; ?></span>
+                Game Jam For Fun
+                <span class="edicao-numero">1ª Edição</span>
             </h1>
             
             <div class="data-evento">
                 <div class="calendario-icon">
                     <i class="fas fa-calendar-alt"></i>
                 </div>
-                <p><?php echo $textos['Data-Edicao1'] ?? ''; ?></p>
+                <p>19, 20 e 21 de Albril 2024</p>
             </div>
             
             <div class="info-cards">
@@ -91,91 +36,100 @@ if (!is_array($textos)) {
                     <div class="card-icon">
                         <i class="fas fa-gamepad"></i>
                     </div>
-                    <h3><?php echo $textos['Tema-Edicao1'] ?? ''; ?></h3>
-                    <p><?php echo $textos['Descricao_tema_edicao1'] ?? ''; ?></p>
+                    <h3>Tema</h3>
+                    <p>O tema escolhido deste ano foi "As Alterações climáticas"!!</p>
                 </div>
                 
                 <div class="info-card">
                     <div class="card-icon">
                         <i class="fas fa-users"></i>
                     </div>
-                    <h3><?php echo $textos['Participantes-Edicao1'] ?? ''; ?></h3>
-                    <p><?php echo $textos['Descricao_participantes_edicao1'] ?? ''; ?></p>
-                    <p><?php echo $textos['Descricao1_participantes_edicao1'] ?? ''; ?></p>
+                    <h3>Participantes</h3>
+                    <p>Tivemos 10 equipas!!</p>
+                    <p>Tivemos equipas da nossa escola e da escola de Estarreja.</p>
                 </div>
                 
                 <div class="info-card">
                     <div class="card-icon">
                         <i class="fas fa-map-marker-alt"></i>
                     </div>
-                    <h3><?php echo $textos['Local-Edicao1'] ?? ''; ?></h3>
-                    <p><?php echo $textos['Descricao_local'] ?? ''; ?></p>
+                    <h3>Local</h3>
+                    <p>Escola Secundária de Albergaria-a-Velha</p>
                 </div>
             </div>
             
             <div class="descricao-evento">
-              <h2><?php echo $textos['Subtitulo_Sobre_Edicao1'] ?? ''; ?></h2>
+              <h2>Sobre</h2>
 
                 <p>
-                     <?php echo $textos['Descricao_Sobre_Edicao1'] ?? ''; ?>
+                    A Game Jam 2024 – AEAAV realizou-se entre 19 e 21 de abril no Agrupamento de Escolas de Albergaria-a-Velha, 
+                    reunindo 10 equipas e 30 alunos no desenvolvimento de videojogos sobre o tema “As alterações climáticas”. 
+                    Durante 48 horas, os participantes dedicaram-se à criação, design e programação dos seus projetos, num 
+                    ambiente marcado pela cooperação e entreajuda.
                 </p>
 
                 <p>
-                    <?php echo $textos['Descricao1_Sobre_Edicao1'] ?? ''; ?>
+                   A iniciativa foi organizada pelos docentes de Informática, com o apoio dos alunos de TGPSI, que garantiram 
+                   todas as condições tecnológicas, logísticas e de apoio técnico. Outros grupos da escola contribuíram igualmente
+                   de forma voluntária para o bom funcionamento do evento. No domingo, as equipas apresentaram os seus jogos perante 
+                   familiares, convidados e um júri independente.
                 </p>
                 
                 <p>
-                 <?php echo $textos['Vencedores_Edicao1'] ?? ''; ?></p>
+                 🏆 Vencedores:</p>
 
-                <p><?php echo $textos['Vencedor1_Edicao1'] ?? ''; ?></p>
+                <p>🥇 1.º lugar: RDK(Clim'Pocalipse) – Agrupamento de Escolas de Estarreja</p>
 
-                <p><?php echo $textos['Vencedor2_Edicao1'] ?? ''; ?></p>
+                <p>🥈 2.º lugar: NoName (Be the hero)  – Agrupamento de Escolas de Albergaria-a-Velha</p>
 
-                <p><?php echo $textos['Vencedor3_Edicao1'] ?? ''; ?></p>
+                <p>🥉 3.º lugar: The Fingers (Finger Temperature) - Agrupamento de Escolas de Albergaria-a-Velha</p>
                 </p>
 
                 <p>
-                    <?php echo $textos['Descricao2_Sobre_Edicao1'] ?? ''; ?>
+                   A organização agradeceu a todos os que contribuíram para a realização do evento, incluindo os patrocinadores, pelo apoio essencial. Foi uma experiência enriquecedora e um verdadeiro sucesso!
 
                 </p>
 
             </div>
             
             <div class="cronograma">
-                <h2><?php echo $textos['Cronograma_Edicao1'] ?? ''; ?></h2>
+                <h2>Cronograma</h2>
                 <div class="timeline">
                     <div class="timeline-item">
-                        <div class="timeline-date"><?php echo $textos['Dia1_Cronograma_Edicao1'] ?? ''; ?></div>
+                        <div class="timeline-date">Dia 19</div>
                         <div class="timeline-content">
-                            <h4><?php echo $textos['Descricao_Dia1_Edicao1'] ?? ''; ?></h4>
-                            <p><?php echo $textos['Descricao1_Dia1_Edicao1'] ?? ''; ?></p>
-                            <h4><?php echo $textos['Descricao2_Dia1_Edicao1'] ?? ''; ?></h4>
-                            <p><?php echo $textos['Descricao3_Dia1_Edicao1'] ?? ''; ?></p>
+                            <h4>18:30 - Abertura</h4>
+                            <p>Receção das equipas</p>
+                            <h4>19:30 - Início da Game Jam</h4>
+                            <p>Apresentação do evento e anúncio do tema</p>
                         </div>
                     </div>
                     
                     <div class="timeline-item">
-                        <div class="timeline-date"><?php echo $textos['Dia2_Cronograma_Edicao1'] ?? ''; ?></div>
+                        <div class="timeline-date">Dia 20</div>
                         <div class="timeline-content">
-                            <h4><?php echo $textos['Descricao_Dia2_Edicao1'] ?? ''; ?></h4>
-                            <p><?php echo $textos['Descricao1_Dia2_Edicao1'] ?? ''; ?></p>
+                            <h4>- All Day - desenvolvimento dos jogos</h4>
+                            <p>Criação dos jogos</p>
 
-                            <h4><?php echo $textos['Descricao2_Dia2_2_Edicao1'] ?? ''; ?></h4>
-                            <p><?php echo $textos['Descricao3_Dia2_Edicao1'] ?? ''; ?></p>
+                            <h4>- All Day - Monitoramento da tensão arterial</h4>
+                            <p> Durante os períodos da manhã e da tarde, a tensão arterial dos 
+                                participantes será monitorizada pelos alunos do curso de Técnico 
+                                Auxiliar de Saúde</p>
 
                         </div>
                     </div>
                     
                     <div class="timeline-item">
-                        <div class="timeline-date"><?php echo $textos['Dia3_Cronograma_Edicao1'] ?? ''; ?></div>
+                        <div class="timeline-date">Dia 21</div>
                         <div class="timeline-content">
-                            <h4><?php echo $textos['Descricao_Dia3_Edicao1'] ?? ''; ?></h4>
-                            <p><?php echo $textos['Descricao1_Dia3_Edicao1'] ?? ''; ?></p>
+                            <h4>12:00 - Entrega</h4>
+                            <p>Prazo final para submissão dos jogos</p>
 
-                            <h4><?php echo $textos['Descricao2_Dia3_Edicao1'] ?? ''; ?></h4>
-                            <p><?php echo $textos['Descricao3_Dia3_Edicao1'] ?? ''; ?></p>
-                            <h4><?php echo $textos['Descricao4_Dia3_Edicao1'] ?? ''; ?></h4>
-                            <p><?php echo $textos['Descricao5_Dia3_Edicao1'] ?? ''; ?></p>
+                            <h4>14:30 - Apresentações</h4>
+                            <p>Apresentação dos jogos desenvolvidos</p>
+
+                            <h4>17:00 - Divulgação dos vencedoras</h4>
+                            <p>Premiação das equipas vencedoras</p>
                         </div>
                     </div>
                 </div>
@@ -200,7 +154,7 @@ if (!is_array($textos)) {
             
            <section id="patrocinadores" class="patrocinadores">
     <div class="container">
-        <h1><?php echo $textos['Subtitulo_Patrocinadores_Edicao1'] ?? ''; ?></h1>
+        <h1>Patrocinadores</h1>
         <div class="logos">
              
             <a href="https://reage.pt/" target="_blank">
@@ -238,7 +192,7 @@ if (!is_array($textos)) {
 
 
         <!-- 🔹 Texto de agradecimento -->
-        <p class="agradecimento"><?php echo $textos['Descricao_Patrocinadores_Edicao1'] ?? ''; ?></p>
+        <p class="agradecimento">Agradecemos pelo patrocínio e participação no evento!</p>
     </div>
 </section>
     

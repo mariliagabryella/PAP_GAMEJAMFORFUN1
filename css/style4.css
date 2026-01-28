@@ -287,102 +287,136 @@ body {
     margin-left: -80px;
 }
 
-/* 🔹 Seção do formulário */
+/* ================================
+   SECÇÃO DE CONTACTO — NOVA VERSÃO
+================================ */
+
 .contact-form-section {
     display: flex;
-    align-items: center;
     justify-content: center;
-    min-height: 100vh;
-    padding: 20px;
-    margin-top: 40px;
+    align-items: center;
+    padding: 60px 20px;
+    background: white;
+    background-size: 300% 300%;
+    animation: gradientAnimation 12s ease infinite;
 }
 
-/* 🔹 Contêiner do formulário */
 .contact-form-container {
-   
-    padding: 30px;
-    border-radius: 10px;
-  
-    text-align: center;
+    background:#09122c;
+    backdrop-filter: blur(10px);
+    padding: 40px;
+    border-radius: 15px;
     width: 100%;
-    max-width: 500px;
-    color: #be3144;
-    font-family: "Silkscreen", sans-serif;
+    max-width: 550px;
+    text-align: center;
+    color:#09122c;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
 }
 
-/* 🔹 Campo com linha elegante */
-.form-group {
-    position: relative;
+/* Título */
+.contact-form-container h1 {
+    font-family: "Silkscreen", sans-serif;
+    font-size: 2rem;
+    color: #be3144;
+    margin-bottom: 10px;
+}
+
+.contact-form-container p {
+    font-family: "Poppins", sans-serif;
+    font-size: 1rem;
+    color: #e6e6e6;
     margin-bottom: 25px;
+}
+
+/* Campos */
+.form-group {
+    margin-bottom: 25px;
+    text-align: left;
 }
 
 .form-group input,
 .form-group textarea {
     width: 100%;
-    padding: 10px 0;
-    border: none;
-    border-radius: 0;
-    background: transparent;
-    color: #09122c;
+    padding: 12px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 8px;
+    color: white;
     font-size: 1rem;
     font-family: "Poppins", sans-serif;
+    transition: 0.3s;
 }
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-    color:#09122c;
-    font-style: italic;
+    color: #cccccc;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
+    border-color: #be3144;
+    background: rgba(255,255,255,0.15);
     outline: none;
 }
 
-.form-line {
-    display: block;
-    width: 100%;
-    height: 3px;
-    background-color: #be3144;
-    margin-top: 5px;
-}
-
-/* 🔹 Botão de envio */
+/* Botão */
 .submit-btn {
-    display: inline-block;
-    background-color: #be3144;
+    width: 100%;
+    padding: 14px;
+    background: #be3144;
     color: white;
-    padding: 10px 180px;
     border: none;
-    border-radius: 5px;
-    font-size: 1.1rem;
+    border-radius: 8px;
+    font-size: 1.2rem;
     font-family: "Silkscreen", sans-serif;
     cursor: pointer;
-    transition: all 0.3s ease;
-
+    transition: 0.3s;
 }
 
 .submit-btn:hover {
-    background-color: #09122c;
-    box-shadow: 0 5px 15px #09122c;
+    background: #ff4b5c;
+    box-shadow: 0 6px 20px rgba(255, 75, 92, 0.4);
 }
 
-/* 🔹 Responsivo */
-@media (max-width: 768px) {
+/* Ícones Sociais */
+.contact-social {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.contact-social a {
+    font-size: 28px;
+    color: white;
+    background: #be3144;
+    padding: 12px;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.contact-social a:hover {
+    background: #09122c;
+    transform: scale(1.15);
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
     .contact-form-container {
-        flex-direction: column;
-        width: 300px;
+        padding: 25px;
     }
+
+    .submit-btn {
+        font-size: 1rem;
+    }
+
 
     .form-group input,
     .form-group textarea {
         font-size: 0.9rem;
     }
 
-    .submit-btn {
-        font-size: 1rem;
-        padding: 8px 15px;
-    }
 
     .contact-wrapper {
         flex-direction: column; /* Empilha o formulário e carrossel */

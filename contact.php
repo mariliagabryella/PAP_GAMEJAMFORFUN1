@@ -27,36 +27,37 @@
     </div>
        
 
-    <section class="contact-form-section">
+  <section class="contact-form-section">
     <div class="contact-form-container">
         <h1>Entre em Contacto</h1>
         <p>Envie-nos uma mensagem e responderemos o mais breve possível!</p>
 
-        <form action="https://formsubmit.co/eventos.gr550@aeaav.pt" method="POST" class="contact-form">
-            <!-- Campo de Nome -->
+        <form action="processar_contacto.php" method="POST" class="contact-form">
             <div class="form-group">
-                <input type="text" name="name" placeholder="Nome" required>
-                <hr class="form-line">
+                <input type="text" name="nome" placeholder="Nome" required>
             </div>
 
-            <!-- Campo de Email -->
             <div class="form-group">
                 <input type="email" name="email" placeholder="Email" required>
-                <hr class="form-line">
             </div>
 
-            <!-- Campo de Mensagem -->
             <div class="form-group">
-                <textarea name="message" placeholder="Mensagem" rows="5" required></textarea>
-                <hr class="form-line">
+                <textarea name="mensagem" placeholder="Mensagem" rows="5" required></textarea>
             </div>
 
-            <!-- Botão de envio -->
             <button type="submit" class="submit-btn">Enviar</button>
         </form>
-    </div>
 
+        <!-- Ícones sociais dentro da secção -->
+        <div class="contact-social">
+            <a href="https://facebook.com" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="https://instagram.com" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://discord.com" target="_blank"><i class="fa-brands fa-discord"></i></a>
+            <a href="mailto:gamejamforfunteste@gmail.com"><i class="fa-solid fa-envelope"></i></a>
+        </div>
+    </div>
 </section>
+
     
     <?php include 'footer.php'; ?>
 </body>

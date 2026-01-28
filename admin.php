@@ -187,6 +187,9 @@ if ($types !== "") {
 
                 <a href="admin.php">Painel Admin Master</a>
                 <a href="admin_inscricoes.php">Inscrições</a>
+                   <a href="notificacoes_admin.php" class="notif-icon">
+                    <i class="fa-solid fa-bell"></i>
+                </a>
                 <a href="criar_admin.php">Criar Admin</a>
                 <a href="criar_viewer.php">Criar Viewer</a>
             <?php endif; ?>

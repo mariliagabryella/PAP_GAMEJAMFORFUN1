@@ -561,6 +561,19 @@ body {
     color: #f39c12;
 }
 
+.badge-verde {
+    background: #2ecc71;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.badge-vermelho {
+    background: #e74c3c;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
 
 /* ============================================================
    RESPONSIVO — APENAS 768px

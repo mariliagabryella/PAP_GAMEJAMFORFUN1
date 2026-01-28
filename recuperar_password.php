@@ -63,7 +63,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $novaPass = password_hash($_POST["password"], PASSWORD_DEFAULT);
 
-    $stmt = $conn->prepare("UPDATE utilizadores SET password=? WHERE id=?");
+    /* CORREÇÃO: coluna correta é senha_hash */
+    $stmt = $conn->prepare("UPDATE utilizadores SET senha_hash=? WHERE id=?");
+
+    if (!$stmt) {
+        die("Erro no prepare: " . $conn->error);
+    }
+
     $stmt->bind_param("si", $novaPass, $id);
     $stmt->execute();
 
@@ -83,82 +89,63 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <body>
 
-    <!-- ============================================================
-     MENU SUPERIOR DO PAINEL (COM FOTO + OLÁ + NOME + LINKS)
-     ============================================================ -->
-    <div class="painel-menu">
+<!-- ============================================================
+     MENU SUPERIOR DO ADMIN NORMAL
+============================================================ -->
+<div class="painel-menu">
 
-        <!-- FOTO + OLÁ + NOME -->
-        <div class="painel-user">
-            <img src="<?php echo htmlspecialchars($fotoLogado); ?>" class="painel-foto" alt="Foto">
-            <span class="painel-ola">Olá, <?php echo htmlspecialchars($nome); ?></span>
-        </div>
-
-        <!-- ÍCONE HAMBURGER (MOBILE) -->
-        <div class="painel-toggle" onclick="togglePainelMenu()">
-            <span id="painel-icon">☰</span>
-        </div>
-
-        <!-- LINKS DO MENU -->
-        <div class="painel-links" id="painelLinks">
-            <a href="index.php">Voltar ao Site</a>
-            <a href="editar_perfil.php">Editar Perfil</a>
-
-            <?php if ($role == 1): ?>
-
-                <a href="admin.php">Painel Admin Master</a>
-                <a href="admin_inscricoes.php">Inscrições</a>
-                <a href="criar_admin.php">Criar Admin</a>
-                <a href="criar_viewer.php">Criar Viewer</a>
-            <?php endif; ?>
-
-            <?php if ($role == 2): ?>
-                <!-- MENU ADMIN NORMAL -->
-                <a href="admin.php">Painel Admin</a>
-                <a href="admin_inscricoes.php">Inscrições</a>
-                <a href="notificacoes_admin.php" class="notif-icon">
-                    <i class="fa-solid fa-bell"></i>
-                </a>
-
-                <a href="#" class="danger" onclick="abrirPopupEliminar()">Eliminar Perfil</a>
-            <?php endif; ?>
-
-
-            <a href="logout.php">Sair</a>
-        </div>
+    <div class="painel-user">
+        <img src="<?php echo htmlspecialchars($fotoLogado); ?>" class="painel-foto" alt="Foto">
+        <span class="painel-ola">Olá, <?php echo htmlspecialchars($nome); ?> (Admin)</span>
     </div>
 
-    <script>
-        function togglePainelMenu() {
-            const menu = document.getElementById("painelLinks");
-            const icon = document.getElementById("painel-icon");
+    <div class="painel-toggle" onclick="togglePainelMenu()">
+        <span id="painel-icon">☰</span>
+    </div>
 
-            menu.classList.toggle("show");
-            icon.textContent = menu.classList.contains("show") ? "✖" : "☰";
-        }
-    </script>
-    <!-- ============================================================
+    <div class="painel-links" id="painelLinks">
+        <a href="index.php">Voltar ao Site</a>
+        <a href="editar_perfil.php">Editar Perfil</a>
+        <a href="admin.php">Painel Admin</a>
+        <a href="admin_inscricoes.php">Inscrições</a>
+        <a href="notificacoes_admin.php" class="notif-icon">
+            <i class="fa-solid fa-bell"></i>
+        </a>
+        <a href="#" class="danger" onclick="abrirPopupEliminar()">Eliminar Perfil</a>
+        <a href="logout.php">Sair</a>
+    </div>
+</div>
+
+<script>
+function togglePainelMenu() {
+    const menu = document.getElementById("painelLinks");
+    const icon = document.getElementById("painel-icon");
+    menu.classList.toggle("show");
+    icon.textContent = menu.classList.contains("show") ? "✖" : "☰";
+}
+</script>
+
+<!-- ============================================================
      FORMULÁRIO DE RECUPERAÇÃO DE PASSWORD
 ============================================================ -->
-    <div class="perfil-container">
-        <div class="perfil-card">
+<div class="perfil-container">
+    <div class="perfil-card">
 
-            <h2>Recuperar Password</h2>
+        <h2>Recuperar Password</h2>
 
-            <p>Está a alterar a password de:</p>
-            <p><strong><?php echo htmlspecialchars($user["nome"]); ?></strong></p>
+        <p>Está a alterar a password de:</p>
+        <p><strong><?php echo htmlspecialchars($user["nome"]); ?></strong></p>
 
-            <form method="POST">
-                <label>Nova Password:</label>
-                <input type="password" name="password" required>
+        <form method="POST">
+            <label>Nova Password:</label>
+            <input type="password" name="password" required>
 
-                <button type="submit" class="btn-guardar">Guardar Nova Password</button>
-                <a href="admin.php" class="btn-voltar">Voltar</a>
-            </form>
+            <button type="submit" class="btn-guardar">Guardar Nova Password</button>
+            <a href="admin.php" class="btn-voltar">Voltar</a>
+        </form>
 
-        </div>
     </div>
+</div>
 
 </body>
-
 </html>

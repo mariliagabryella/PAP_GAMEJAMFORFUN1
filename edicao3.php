@@ -1,22 +1,3 @@
-<?php 
-require 'textos.php';
-require 'bd_connection.php';
-?>
-
-<?php 
-session_start();
-
-$slug =[
-    'Titulo-Edicao3',
-    'Subtitulo-Edicao3',
-    ];
-
-$textos = getTextos($pdo, $slug);
-
-if (!is_array($textos)) {
-    $textos = [];
-}
-?>
 <!DOCTYPE html>
 <html lang="pt">
 
