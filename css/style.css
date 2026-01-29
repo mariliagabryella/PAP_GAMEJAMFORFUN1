@@ -742,23 +742,26 @@ button:hover {
 }
 
 /* Container dos links do menu em modo mobile */
+/* Container dos links do menu em modo mobile */
 .menu-links {
     display: none; /* Escondido por padrão */
     flex-direction: column; /* Links ficam em coluna */
     background-color: rgba(9, 18, 44, 0.95); /* Fundo escuro semi-transparente */
     position: fixed; /* Fica fixo na tela */
-    top: 60; /* Começa no topo */
-    right: -250px; /* Começa escondido fora da tela à direita */
-    width: 400px; /* Largura do menu lateral */
+    top: 60px; /* Começa no topo */
+    right: -300px; /* Começa escondido fora da tela à direita */
+    width: 250px; /* Largura do menu lateral */
     height: 100vh; /* Altura total da tela */
     padding: 30px 20px; /* Espaçamento interno */
     transition: right 0.3s ease-in-out; /* Animação suave ao abrir */
     z-index: 1500; /* Fica acima do conteúdo mas abaixo do ícone */
 }
 
+
 /* Quando o menu recebe a classe .show, ele aparece */
 .menu-links.show {
-    right:-250px; /* Move o menu para dentro da tela */
+  
+   right: -90px;
     display: flex; /* Mostra os links */
 }
 
@@ -788,7 +791,7 @@ button:hover {
 
   .video-text {
     width: 80%;
-    font-size: 18px;
+    font-size:18px;
   }
   .video-overlay {
     height: 700px; /* Ajusta altura para telas menores */

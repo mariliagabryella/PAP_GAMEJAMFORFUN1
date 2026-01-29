@@ -189,6 +189,8 @@ if ($types !== "") {
                 <a href="admin_inscricoes.php">Inscrições</a>
                    <a href="notificacoes_admin.php" class="notif-icon">
                     <i class="fa-solid fa-bell"></i>
+                    <a href="editar_site.php">Editar Site</a>
+
                 </a>
                 <a href="criar_admin.php">Criar Admin</a>
                 <a href="criar_viewer.php">Criar Viewer</a>
@@ -198,6 +200,7 @@ if ($types !== "") {
                 <!-- MENU ADMIN NORMAL -->
                 <a href="admin.php">Painel Admin</a>
                 <a href="admin_inscricoes.php">Inscrições</a>
+                <a href="editar_site.php">Editar Site</a>
                 <a href="notificacoes_admin.php" class="notif-icon">
                     <i class="fa-solid fa-bell"></i>
                 </a>

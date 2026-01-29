@@ -40,6 +40,18 @@ function getMenuItems($conn) {
 $menuItems = getMenuItems($conn);
 
 /* ============================================================
+   BUSCAR LISTA DE EDIÇÕES
+============================================================ */
+function getEdicoes($conn) {
+    $sql = "SELECT id, edicao_numero FROM edicoes ORDER BY id ASC";
+    $result = $conn->query($sql);
+    return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+}
+
+$listaEdicoes = getEdicoes($conn);
+
+
+/* ============================================================
    CONSTRUIR ÁRVORE DE MENUS (SUPORTA SUBMENUS)
    ============================================================ */
 function buildMenuTree($items, $parentId = null) {
@@ -153,8 +165,21 @@ if (isset($_SESSION["id_utilizador"])) {
     <!-- LINKS DO MENU (DINÂMICOS + ADMIN) -->
     <div class="menu-links" id="menu">
 
+
         <!-- Links vindos da BD -->
         <?php renderMenu($menuTree, $currentPage); ?>
+        <!-- SUBMENU DAS EDIÇÕES -->
+<div class="dropdown">
+    <a href="#">Edições ▾</a>
+    <div class="dropdown-content">
+        <?php foreach ($listaEdicoes as $ed): ?>
+            <a href="edicao.php?id=<?php echo $ed['id']; ?>">
+                <?php echo htmlspecialchars($ed['edicao_numero']); ?>
+            </a>
+        <?php endforeach; ?>
+    </div>
+</div>
+
 
         <!-- ============================================================
              ÁREA DO UTILIZADOR (LOGIN / PERFIL / ADMIN / LOGOUT)

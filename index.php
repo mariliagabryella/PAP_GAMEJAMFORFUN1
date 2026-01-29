@@ -1,5 +1,6 @@
 <?php
 session_start();
+include 'conteudo_index.php';
 ?>
 
 <!DOCTYPE html>
@@ -24,27 +25,33 @@ session_start();
         <?php include 'script.php'; ?>
     </div>
 
+    <!-- ============================
+         VÍDEO DE FUNDO DINÂMICO
+    ============================= -->
     <video class="video-bg" autoplay muted loop>
-        <source src="img/Game jaaam.mp4" type="video/mp4">
+        <source src="<?php echo index_conteudo('video_url'); ?>" type="video/mp4">
     </video>
 
     <div class="video-overlay"></div>
 
+    <!-- ============================
+         HERO / TÍTULO PRINCIPAL
+    ============================= -->
     <div class="video-text container">
 
         <div class="stack" style="--stacks: 3;">
-            <span style="--index: 0;">Game Jam For Fun</span>
-            <span style="--index: 1;">Game Jam For Fun</span>
-            <span style="--index: 2;">Game Jam For Fun</span>
+            <span style="--index: 0;"><?php echo index_conteudo('titulo'); ?></span>
+            <span style="--index: 1;"><?php echo index_conteudo('titulo'); ?></span>
+            <span style="--index: 2;"><?php echo index_conteudo('titulo'); ?></span>
         </div>
 
         <span class="right">
-            Já imaginaste criar o teu próprio jogo?
-            <p>Queres mostrar o teu talento? Esta é a oportunidade perfeita para ti!!</p>
+            <?php echo index_conteudo('subtitulo'); ?>
+            <p><?php echo index_conteudo('descricao'); ?></p>
         </span>
 
         <div class="logo-container">
-            <img src="img/loge.png" alt="Logo do Evento">
+            <img src="<?php echo index_conteudo('logo'); ?>" alt="Logo do Evento">
         </div>
 
         <div class="button-container">
@@ -54,6 +61,9 @@ session_start();
         </div>
     </div>
 
+    <!-- ============================
+         SOBRE NÓS (DINÂMICO)
+    ============================= -->
     <section id="sobre-nos" class="sobre-nos">
         <div class="container">
 
@@ -76,11 +86,6 @@ session_start();
                     });
                 }
 
-                function mudarSlide(n) {
-                    slideIndex = (slideIndex + n + slides.length) % slides.length;
-                    showSlide(slideIndex);
-                }
-
                 setInterval(() => {
                     slideIndex = (slideIndex + 1) % slides.length;
                     showSlide(slideIndex);
@@ -92,21 +97,24 @@ session_start();
             </script>
 
             <div class="descricao">
-                <h2>Sobre Nós</h2>
-                <p>Bem-Vindo à Game Jam For Fun! Somos uma comunidade de Alunos e Professores apaixonados pela criação de jogos. Incentivamos a inovação e a criatividade, proporcionando aos participantes uma experiência inesquecível.</p>
-                <p>Nesta 2ª Edição, promovemos mais um desafio e conexões entre participantes de várias escolas. Esperamos que venham fazer parte desta jornada.</p>
+                <h2><?php echo index_conteudo('sobre_titulo'); ?></h2>
+                <p><?php echo index_conteudo('sobre_texto1'); ?></p>
+                <p><?php echo index_conteudo('sobre_texto2'); ?></p>
             </div>
 
         </div>
     </section>
 
+    <!-- ============================
+         LOCALIZAÇÃO (DINÂMICO)
+    ============================= -->
     <section id="localizacao" class="localizacao">
         <div class="container">
 
             <div class="descrica">
-                <h2>Onde Estamos</h2>
-                <p>Estamos localizados no Agrupamento de Escolas de Albergaria-a-Velha (AEAAV), Portugal, onde é ministrado o curso Técnico de Gestão e Programação de Sistemas Informáticos (TGPSI).</p>
-                <p>Os alunos e professores criaram este projeto "Game Jam For Fun" como iniciativa para promover a criação de jogos e a inovação tecnológica. 🎮</p>
+                <h2><?php echo index_conteudo('local_titulo'); ?></h2>
+                <p><?php echo index_conteudo('local_texto1'); ?></p>
+                <p><?php echo index_conteudo('local_texto2'); ?></p>
 
                 <a href="https://aeaav.pt" class="botao-visitar" target="_blank">Visitar</a>
             </div>
@@ -121,8 +129,11 @@ session_start();
         </div>
     </section>
 
+    <!-- ============================
+         ETAPAS (DINÂMICO)
+    ============================= -->
     <div class="gamejam-section">
-        <h1 class="gamejam-title">Todas as Etapas 🎮 - 2025</h1>
+        <h1 class="gamejam-title"><?php echo index_conteudo('etapas_titulo'); ?></h1>
 
         <div class="container-boxes">
 
@@ -157,9 +168,12 @@ session_start();
         </div>
     </div>
 
+    <!-- ============================
+         PATROCINADORES (DINÂMICO)
+    ============================= -->
     <section id="patrocinadores" class="patrocinadores">
         <div class="container">
-            <h1>Patrocinadores</h1>
+            <h1><?php echo index_conteudo('patrocinadores_titulo'); ?></h1>
 
             <div class="logos">
                 <a href="https://www.facebook.com/pampas.pamplina/" target="_blank"><img src="img/p1.png"></a>
@@ -174,7 +188,7 @@ session_start();
                 <a href="https://deltacafes.com/" target="_blank"><img src="img/p11.png"></a>
             </div>
 
-            <p class="agradecimento">Agradecemos pelo patrocínio e participação no evento!</p>
+            <p class="agradecimento"><?php echo index_conteudo('patrocinadores_agradecimento'); ?></p>
         </div>
     </section>
 

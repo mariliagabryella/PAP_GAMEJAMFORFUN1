@@ -574,6 +574,21 @@ body {
     padding: 4px 8px;
     border-radius: 4px;
 }
+.botao-nova-edicao {
+    display: inline-block;
+    background: #1e90ff;
+    color: white;
+    padding: 10px 20px;
+    margin: 20px 0;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.botao-nova-edicao:hover {
+    background: #0077cc;
+}
+
 
 /* ============================================================
    RESPONSIVO — APENAS 768px
