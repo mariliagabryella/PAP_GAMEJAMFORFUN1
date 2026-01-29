@@ -177,7 +177,7 @@
                 <img src="img/p5.png" alt="Patrocinador 5">
             </a>
 
-             <a href="https://www.facebook.com/Papaduxo/?locale=pt_BR" target="_blank">
+             <a href="https://www.facebook.com/Papaduxo/?locale=pt_BR" taget="_blank">
                 <img src="img/p6.png" alt="Patrocinador 6">
             </a>
 
