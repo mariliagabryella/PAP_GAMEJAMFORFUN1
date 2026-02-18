@@ -1,47 +1,52 @@
+<?php
+session_start();
+include 'bd_connection.php';
 
+// Buscar conteúdo da página
+$stmt = $pdo->query("SELECT * FROM inscricao_pagina WHERE id = 1");
+$info = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// Buscar plataformas
+$plataformas = $pdo->query("SELECT * FROM inscricao_plataformas ORDER BY nome ASC")->fetchAll();
+
+// Buscar linguagens
+$linguagens = $pdo->query("SELECT * FROM inscricao_linguagens ORDER BY nome ASC")->fetchAll();
+?>
 <!DOCTYPE html>
-
 <html lang="pt">
 
 <head>
-    <meta charset="UTF-8"> <!-- Define a codificação de caracteres para suportar acentos -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Ajusta a visualização para dispositivos móveis -->
-    <title>GameJamForFun</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?= htmlspecialchars($info['titulo']) ?></title>
+
     <link rel="icon" type="image/x-icon" href="img/logo.png">
-    <link rel="stylesheet" href="css/style1.css"> <!-- Importa o arquivo de estilos CSS -->
+    <link rel="stylesheet" href="css/style1.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://kit.fontawesome.com/YOUR-FONT-AWESOME-KIT.js" crossorigin="anonymous"></script> <!-- Importa os ícones -->
 </head>
 
 <body>
-    <?php include 'menu.php'; ?> <!-- Inclui o menu fixo na página -->
+    <?php include 'menu.php'; ?>
 
+    <div class="conteudo"></div>
 
-
-
-
-
-    <div class="conteudo">
-
-    </div>
-
-    <!-- Container onde os ícones sociais serão exibidos -->
     <div class="social-icons">
-        <?php include 'script.php'; ?> <!-- Inclui o script PHP que gera os ícones dinamicamente -->
+        <?php include 'script.php'; ?>
     </div>
-
 
     <div class="form-container">
-        <h1>Inscrição - <p>Game Jam For Fun 25</p>
+
+        <!-- TÍTULO E SUBTÍTULO DINÂMICOS -->
+        <h1>
+            <?= htmlspecialchars($info['titulo']) ?>
+            <p><?= htmlspecialchars($info['subtitulo']) ?></p>
         </h1>
 
-
-       <form action="processar_inscricao.php" method="POST">
+        <form action="processar_inscricao.php" method="POST">
             <input type="hidden" name="_captcha" value="false">
-            <label for="instituiçao">Instituição Escolar:</label>
-            <input type="text" id="instituiçao" name="instituiçao" required>
 
-
+            <label for="instituicao">Instituição Escolar:</label>
+            <input type="text" id="instituicao" name="instituicao" required>
 
             <label for="professor">Nome do Professor Responsável:</label>
             <input type="text" id="professor" name="professor" required>
@@ -49,26 +54,26 @@
             <label for="email_professor">E-mail do Professor:</label>
             <input type="email" id="email_professor" name="email_professor" required>
 
+            <!-- PLATAFORMAS DINÂMICAS -->
             <label for="plataforma">Plataforma de Desenvolvimento:</label>
             <select id="plataforma" name="plataforma" required>
                 <option value="">Escolha uma opção...</option>
-                <option value="Unity">Unity</option>
-                <option value="Unreal Engine">Unreal Engine</option>
-                <option value="GameMaker">GameMaker</option>
-                <option value="Roblox Studio">Roblox Studio</option>
-                <option value="Construct 3D">Construct 3D</option>
-
-
+                <?php foreach ($plataformas as $p): ?>
+                    <option value="<?= htmlspecialchars($p['nome']) ?>">
+                        <?= htmlspecialchars($p['nome']) ?>
+                    </option>
+                <?php endforeach; ?>
             </select>
 
-            <!-- Linguagem de Programação -->
+            <!-- LINGUAGENS DINÂMICAS -->
             <label for="linguagem">Linguagem de Programação:</label>
             <select id="linguagem" name="linguagem" onchange="toggleEscreverLinguagem(this)" required>
                 <option value="">Escolha uma opção...</option>
-                <option value="C#">C#</option>
-                <option value="Python">Python</option>
-                <option value="Luau">Lua</option>
-                <option value="Outra">Outra</option>
+                <?php foreach ($linguagens as $l): ?>
+                    <option value="<?= htmlspecialchars($l['nome']) ?>">
+                        <?= htmlspecialchars($l['nome']) ?>
+                    </option>
+                <?php endforeach; ?>
             </select>
 
             <!-- Campo de texto para "Outra" -->
@@ -77,10 +82,7 @@
                 <input type="text" id="linguagem-outra" name="linguagem-outra" placeholder="Digite aqui...">
             </div>
 
-
-
-
-            <!-- 🔹 Escolha do número de participantes -->
+            <!-- Número de participantes -->
             <label for="num_participantes">Número de Participantes:</label>
             <select id="num_participantes" name="num_participantes" onchange="mostrarCampos()">
                 <option value="1">1 Participante</option>
@@ -88,86 +90,57 @@
                 <option value="3">3 Participantes</option>
             </select>
 
-            <!-- 🔹 Campos dos Participantes (Inicialmente escondidos) -->
-            <div id="participante1">
-                <label for="participante1">Nome do Participante :</label>
-                <input type="text" id="participante1_input" name="participante1">
+            <!-- PARTICIPANTES -->
+            <?php for ($i = 1; $i <= 3; $i++): ?>
+                <div id="participante<?= $i ?>" style="<?= $i === 1 ? '' : 'display:none;' ?>">
+                    <label>Nome do Participante <?= $i ?>:</label>
+                    <input type="text" name="participante<?= $i ?>">
 
-                <label for="idade1">Idade:</label>
-                <input type="number" id="idade1" name="idade1">
+                    <label>Idade:</label>
+                    <input type="number" name="idade<?= $i ?>">
 
-                <label for="email_aluno1">E-mail:</label>
-                <input type="email" id="email_aluno1" name="email_aluno1">
+                    <label>E-mail:</label>
+                    <input type="email" name="email_aluno<?= $i ?>">
 
-                <label for="curso1">Curso/Turma:</label>
-                <input type="text" id="curso1" name="curso1">
-                <h1 class="divider">-------------------</h1>
-            </div>
-               
-            <div id="participante2" style="display: none;">
-                <label for="participante2">Nome do Participante :</label>
-                <input type="text" id="participante2_input" name="participante2">
+                    <label>Curso/Turma:</label>
+                    <input type="text" name="curso<?= $i ?>">
 
-                <label for="idade2">Idade:</label>
-                <input type="number" id="idade2" name="idade2">
+                    <h1 class="divider">-------------------</h1>
+                </div>
+            <?php endfor; ?>
 
-                <label for="email_aluno2">E-mail:</label>
-                <input type="email" id="email_aluno2" name="email_aluno2">
-
-                <label for="curso2">Curso/Turma:</label>
-                <input type="text" id="curso2" name="curso2">
-                <h1 class="divider">-------------------</h1>
-            </div>
-            
-            <div id="participante3" style="display: none;">
-                <label for="participante3">Nome do Participante :</label>
-                <input type="text" id="participante3_input" name="participante3">
-
-                <label for="idade3">Idade:</label>
-                <input type="number" id="idade3" name="idade3">
-
-                <label for="email_aluno3">E-mail:</label>
-                <input type="email" id="email_aluno3" name="email_aluno3">
-
-                <label for="curso3">Curso/Turma:</label>
-                <input type="text" id="curso3" name="curso3">
-                <h1 class="divider">-------------------</h1>
-            </div>
-            
-          
             <label for="observacao">Observações Médicas:</label>
             <textarea id="observacao" name="observacao" rows="4"></textarea>
 
-            <!-- 📨 Botão de envio -->
             <button type="submit" onclick="return verificarSessao()">Game On</button>
 
         </form>
-
-
-    </div>
     </div>
     <script>
-function verificarSessao() {
-    const logado = <?php echo isset($_SESSION["id"]) ? 'true' : 'false'; ?>;
+        function verificarSessao() {
+            const logado = <?= isset($_SESSION["id"]) ? 'true' : 'false' ?>;
+            if (!logado) {
+                alert("⚠ Precisa de iniciar sessão para enviar a inscrição.");
+                return false;
+            }
+            return true;
+        }
 
-    if (!logado) {
-        alert("⚠ Precisa de iniciar sessão para enviar a inscrição.");
-        return false; // impede o envio
-    }
+        function toggleEscreverLinguagem(select) {
+            document.getElementById("outra-linguagem").style.display =
+                select.value === "Outra" ? "block" : "none";
+        }
 
-    return true; // permite enviar
-}
-</script>
-
-
-
+        function mostrarCampos() {
+            const total = document.getElementById("num_participantes").value;
+            for (let i = 1; i <= 3; i++) {
+                document.getElementById("participante" + i).style.display =
+                    i <= total ? "block" : "none";
+            }
+        }
+    </script>
+       
+    
 <?php include 'footer.php'; ?>
-
-
-
-
 </body>
-
-<script src="js/script.js"></script>
-
 </html>

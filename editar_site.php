@@ -73,13 +73,10 @@ if ($res && !empty($res["foto"])) {
 
     <div class="editar-site-menu">
         <a href="editar_index.php" class="editar-btn">Página Inicial (Index)</a>
-        <a href="editar_sobre.php" class="editar-btn">Sobre Nós</a>
-        <a href="editar_localizacao.php" class="editar-btn">Localização</a>
         <a href="editar_edicao.php" class="editar-btn">Edição</a>
         <a href="admin_edicoes.php">Gerir Edições</a>
-        <a href="editar_patrocinadores.php" class="editar-btn">Patrocinadores</a>
-        <a href="editar_contacto.php" class="editar-btn">Página Contacto</a>
-        <a href="editar_inscricao.php" class="editar-btn">Página Inscrição</a>
+        <a href="admin_contactos_pagina.php" class="editar-btn">Página Contacto</a>
+        <a href="admin_inscricao_pagina.php" class="editar-btn">Página Inscrição</a>
     </div>
 </div>
 

@@ -78,11 +78,10 @@ $conn->query("
     WHERE role_id IN (1,2)
 ");
 
-
 /* ------------------------------
-   CRIAR TOKEN DE VERIFICAÇÃO
+   GERAR PIN DE VERIFICAÇÃO
 ------------------------------ */
-$token = bin2hex(random_bytes(32));
+$pin = rand(100000, 999999);
 
 /* ------------------------------
    INSERIR UTILIZADOR
@@ -91,7 +90,7 @@ $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
 
 $stmt = $conn->prepare("
     INSERT INTO utilizadores (nome, email, senha_hash, role_id, ativo, criado_em, foto)
-    VALUES (?, ?, ?, 3, NOW(), NOW(), ?)
+    VALUES (?, ?, ?, 3, NULL, NOW(), ?)
 ");
 
 $stmt->bind_param("ssss", $nome, $email, $senha_hash, $foto);
@@ -102,41 +101,112 @@ if (!$stmt->execute()) {
 
 $stmt->close();
 
-
 /* ------------------------------
-   GUARDAR TOKEN DE VERIFICAÇÃO
+   GUARDAR PIN NA BD
 ------------------------------ */
 $stmt = $conn->prepare("
-    INSERT INTO verificacoes_email (email, token)
+    REPLACE INTO verificacoes_pin (email, pin)
     VALUES (?, ?)
 ");
-$stmt->bind_param("ss", $email, $token);
+$stmt->bind_param("ss", $email, $pin);
 $stmt->execute();
 $stmt->close();
 
 /* ------------------------------
-   ENVIAR EMAIL DE VERIFICAÇÃO
+   ENVIAR EMAIL COM O PIN
 ------------------------------ */
 require 'enviar_email.php';
 
-$link = "http://172.20.10.2/PAP_GAMEJAMFORFUN1/verificar_email.php?token=$token";
-
-
 $mensagem = "
-    <h2>Confirmação de Conta</h2>
-    <p>Olá $nome,</p>
-    <p>Clique no link abaixo para ativar a sua conta:</p>
-    <p><a href='$link'>$link</a></p>
+<!DOCTYPE html>
+<html lang='pt'>
+<head>
+<meta charset='UTF-8'>
+<style>
+    body {
+        background: #0d0d0d;
+        font-family: 'Poppins', Arial, sans-serif;
+        color: #ffffff;
+        padding: 0;
+        margin: 0;
+    }
+
+    .container {
+        max-width: 500px;
+        margin: 40px auto;
+        background: #1a1a1a;
+        border-radius: 12px;
+        padding: 30px;
+        border: 1px solid #ff2e2e33;
+        box-shadow: 0 0 20px rgba(255, 0, 0, 0.25);
+    }
+
+    h2 {
+        color: #ff2e2e;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    p {
+        color: #cccccc;
+        font-size: 15px;
+        line-height: 1.6;
+    }
+
+    .pin-box {
+        background: #ff2e2e;
+        color: #ffffff;
+        padding: 15px;
+        text-align: center;
+        font-size: 32px;
+        letter-spacing: 6px;
+        border-radius: 8px;
+        margin: 25px 0;
+        font-weight: bold;
+    }
+
+    .footer {
+        margin-top: 25px;
+        text-align: center;
+        font-size: 12px;
+        color: #777;
+    }
+</style>
+</head>
+
+<body>
+
+<div class='container'>
+    <h2>Verificação de Conta</h2>
+
+    <p>Olá <strong>$nome</strong>,</p>
+
+    <p>Obrigado por se registar na <strong>Game Jam For Fun</strong>!</p>
+
+    <p>Para ativar a sua conta, introduza o código abaixo na página de verificação:</p>
+
+    <div class='pin-box'>$pin</div>
+
+    <p>Se não pediu este código, pode ignorar este email.</p>
+
+    <div class='footer'>
+        © " . date('Y') . " Game Jam For Fun<br>
+        Este email foi enviado automaticamente — não responda.
+    </div>
+</div>
+
+</body>
+</html>
 ";
 
-enviarEmail($email, "Verificação de Conta - GameJam", $mensagem);
+enviarEmail($email, "Código de Verificação - GameJam", $mensagem);
 
 /* ------------------------------
-   INICIAR SESSÃO AUTOMÁTICA
+   INICIAR SESSÃO (AINDA NÃO ATIVA)
 ------------------------------ */
 $_SESSION["nome"]  = $nome;
 $_SESSION["email"] = $email;
-$_SESSION["role_id"]      = 3;
+$_SESSION["role_id"] = 3;
 
 /* Buscar ID do utilizador */
 $stmt = $conn->prepare("SELECT id FROM utilizadores WHERE email = ?");
@@ -150,8 +220,9 @@ $stmt->close();
 $conn->close();
 
 /* ------------------------------
-   REDIRECIONAR PARA O PAINEL VIEWER
+   REDIRECIONAR PARA VERIFICAÇÃO DO PIN
 ------------------------------ */
-header("Location: painel_do_viewer.php");
+header("Location: verificar_pin.php?email=$email");
 exit();
 ?>
+

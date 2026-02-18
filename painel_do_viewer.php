@@ -7,8 +7,8 @@ if (!isset($_SESSION["role_id"]) || $_SESSION["role_id"] != 3) {
     exit();
 }
 
-$nome  = $_SESSION["usuarioNome"];
-$email = $_SESSION["usuarioEmail"];
+$nome  = $_SESSION["nome"];
+$email = $_SESSION["email"];
 
 $conn = new mysqli("127.0.0.1", "root", "", "gamejamforfun2");
 if ($conn->connect_error) {
