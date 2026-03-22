@@ -1,13 +1,13 @@
 <?php
 session_start();
 
-/* Tem de estar logado */
-if (!isset($_SESSION["usuarioEmail"])) {
+/* Tem de estar logado - AGORA USA A VARIÁVEL CORRETA */
+if (!isset($_SESSION["email"])) {
     header("Location: login.php");
     exit();
 }
 
-$emailAntigo = $_SESSION["usuarioEmail"];
+$emailAntigo = $_SESSION["email"];
 $nome = $_POST["nome"] ?? '';
 $emailNovo = $_POST["email"] ?? '';
 
@@ -48,7 +48,7 @@ if (!empty($_FILES["foto"]["name"])) {
     }
 }
 
-/* Atualiza BD */
+/* Atualiza BD (Procura pelo email antigo e atualiza para o novo) */
 $stmtUp = $conn->prepare("
     UPDATE utilizadores 
     SET nome = ?, email = ?, foto = ? 
@@ -57,12 +57,13 @@ $stmtUp = $conn->prepare("
 $stmtUp->bind_param("ssss", $nome, $emailNovo, $fotoFinal, $emailAntigo);
 $stmtUp->execute();
 
-/* Atualiza sessão */
-$_SESSION["usuarioNome"]  = $nome;
-$_SESSION["usuarioEmail"] = $emailNovo;
+/* Atualiza sessão - AGORA ATUALIZA AS VARIÁVEIS CERTAS */
+$_SESSION["nome"]  = $nome; /* Assumindo que também usas "nome" e não "usuarioNome" noutros lados */
+$_SESSION["email"] = $emailNovo;
 
 $stmtUp->close();
 $conn->close();
 
 header("Location: admin.php");
 exit();
+?>

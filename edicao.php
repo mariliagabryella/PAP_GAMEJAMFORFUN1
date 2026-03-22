@@ -11,14 +11,16 @@ include 'conteudo_edicao.php'; // Função edicao($id, 'campo')
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo edicao($id, 'titulo_pagina'); ?></title>
     <link rel="icon" type="image/x-icon" href="img/logo.png">
-    <link rel="stylesheet" href="css/style3.css">
     <link rel="stylesheet" href="css/style-edicao2.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
 <body>
     <?php include 'menu.php'; ?>
-
+<div class="pacman-bg">
+    <div class="pacman"></div>
+    <div class="fantasma"></div>
+</div>
     <div class="conteudo"></div>
 
     <section id="edicao2" class="edicao">
@@ -78,6 +80,36 @@ include 'conteudo_edicao.php'; // Função edicao($id, 'campo')
                 <button class="next" onclick="mudarSlide(1)">❯</button>
             </div>
 
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    let slideIndex = 0;
+                    // Procura todas as imagens que o PHP imprimiu dentro da div .slides
+                    const slides = document.querySelectorAll(".slides img");
+
+                    if (slides.length > 0) {
+                        // Ativa a primeira imagem para ela ficar visível imediatamente!
+                        slides[0].classList.add("active");
+
+                        // Função para mudar a imagem ao clicar nas setas
+                        window.mudarSlide = function(n) {
+                            slides[slideIndex].classList.remove("active");
+                            slideIndex += n;
+                            
+                            // Faz o carrossel dar a volta (loop)
+                            if (slideIndex >= slides.length) slideIndex = 0;
+                            if (slideIndex < 0) slideIndex = slides.length - 1;
+                            
+                            slides[slideIndex].classList.add("active");
+                        };
+
+                        // BÓNUS: Faz o carrossel passar sozinho a cada 4 segundos
+                        setInterval(function() {
+                            mudarSlide(1);
+                        }, 4000);
+                    }
+                });
+            </script>
+
         </div>
     </section>
 
@@ -106,4 +138,3 @@ include 'conteudo_edicao.php'; // Função edicao($id, 'campo')
 
 </body>
 </html>
-

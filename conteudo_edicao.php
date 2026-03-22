@@ -34,23 +34,11 @@ function getEdicaoData($id) {
 function getEdicaoCarrossel($id) {
     global $pdo;
 
-    $stmt = $pdo->prepare("
-        SELECT imagem, legenda 
-        FROM edicoes_carrossel 
-        WHERE id_edicao = :id
-        ORDER BY ordem ASC, id ASC
-    ");
+    $stmt = $pdo->prepare("SELECT carrossel FROM edicoes WHERE id = :id");
     $stmt->execute([':id' => $id]);
-    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $html = "";
-    foreach ($rows as $row) {
-        $img = htmlspecialchars($row['imagem']);
-        $alt = htmlspecialchars($row['legenda'] ?? '');
-        $html .= "<img src='$img' alt='$alt'>";
-    }
-
-    return $html;
+    return $row['carrossel'] ?? '';
 }
 
 /* ============================================================

@@ -11,56 +11,126 @@ if (!isset($_SESSION["id"])) {
 $id_user = $_SESSION["id"];
 
 $conn = new mysqli("127.0.0.1", "root", "", "gamejamforfun2");
+if ($conn->connect_error) {
+    die("Erro na conexão: " . $conn->connect_error);
+}
 
-/* Buscar dados do admin */
+/* Buscar dados do utilizador logado para o Menu */
 $stmt = $conn->prepare("SELECT nome, foto, role_id FROM utilizadores WHERE id = ?");
 $stmt->bind_param("i", $id_user);
 $stmt->execute();
 $user = $stmt->get_result()->fetch_assoc();
 
 $nome = $user["nome"];
-$foto = $user["foto"] ?: "img/default.png";
+$fotoLogado = $user["foto"] ?: "img/default.png";
 $role = $user["role_id"];
 
-/* Buscar notificações */
-$sql = "SELECT * FROM notificacoes WHERE user_id = $id_user ORDER BY data DESC";
-$res = $conn->query($sql);
-
-/* Marcar como lidas */
-$conn->query("UPDATE notificacoes SET lida = 1 WHERE user_id = $id_user");
+/* Buscar notificações APENAS AS NÃO APAGADAS (apagada = 0) */
+$sql = "SELECT * FROM notificacoes WHERE user_id = ? AND apagada = 0 ORDER BY data DESC";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $id_user);
+$stmt->execute();
+$res = $stmt->get_result();
 ?>
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-<meta charset="UTF-8">
-<title>Notificações</title>
-<link rel="stylesheet" href="css/notificacoes.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <meta charset="UTF-8">
+    <title>Notificações | Painel Premium</title>
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
-
 <body>
 
-
-
-<div class="notif-container">
-    <h2>Notificações</h2>
-
-    <?php if ($res->num_rows == 0): ?>
-        <p class="sem-notif">Sem notificações.</p>
-    <?php else: ?>
-        <div class="notif-list">
-        <?php while ($n = $res->fetch_assoc()): ?>
-            <div class="notif-card">
-                <div class="notif-data">
-                    <i class="fa-solid fa-bell"></i>
-                    <span><?php echo date("d/m/Y H:i", strtotime($n["data"])); ?></span>
-                </div>
-                <p><?php echo htmlspecialchars($n["mensagem"]); ?></p>
-            </div>
-        <?php endwhile; ?>
+    <div class="painel-menu">
+        <div class="painel-user">
+            <img src="<?php echo htmlspecialchars($fotoLogado); ?>" class="painel-foto" alt="Foto">
+            <span class="painel-ola">Olá, <span class="destaque-nome"><?php echo htmlspecialchars($nome); ?></span></span>
         </div>
-    <?php endif; ?>
-</div>
-<?php include 'eliminar_perfil.php'; ?>
+
+
+
+        <div class="painel-links" id="painelLinks">
+            <a href="index.php"><i class="fa-solid fa-house"></i> Site</a>
+            <a href="editar_perfil.php"><i class="fa-solid fa-user-pen"></i> Perfil</a>
+
+            <?php if ($role == 1 || $role == 2): ?>
+                <a href="admin.php">Painel</a>
+            <?php endif; ?>
+
+            <a href="logout.php" class="btn-sair"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+        </div>
+    </div>
+
+    <div class="admin-content">
+        <div class="cabecalho-dashboard">
+            <h1 class="titulo-painel">Centro de <span class="glow-text">Notificações</span></h1>
+        </div>
+
+        <section class="secao glass-panel">
+            <div class="header-notificacoes">
+                <h2 class="secao-titulo"><i class="fa-solid fa-inbox"></i> As tuas mensagens</h2>
+                
+                <div class="acoes-notif-header">
+                    <?php if ($res->num_rows > 0): ?>
+                        <a href="marcar_todas_lidas.php" class="btn-secundario"><i class="fa-solid fa-check-double"></i> Ler Todas</a>
+                    <?php endif; ?>
+                    <a href="lixo_notificacoes.php" class="btn-secundario btn-lixo"><i class="fa-solid fa-trash-can"></i> Lixo</a>
+                </div>
+            </div>
+
+            <div class="notif-container">
+                <?php if ($res->num_rows == 0): ?>
+                    <div class="sem-notif">
+                        <i class="fa-solid fa-bell-slash"></i>
+                        <p>Não tens notificações no momento.</p>
+                    </div>
+                <?php else: ?>
+                    <div class="notif-list">
+                    <?php while ($n = $res->fetch_assoc()): ?>
+                        
+                        <?php $classe_lida = ($n['lida'] == 0) ? 'nao-lida' : 'lida'; ?>
+                        
+                        <div class="notif-card <?php echo $classe_lida; ?>">
+                            <div class="notif-icone">
+                                <i class="fa-solid fa-bell"></i>
+                            </div>
+                            
+                            <div class="notif-conteudo">
+                                <p class="notif-mensagem"><?php echo htmlspecialchars($n["mensagem"]); ?></p>
+                                <span class="notif-data"><i class="fa-regular fa-clock"></i> <?php echo date("d/m/Y H:i", strtotime($n["data"])); ?></span>
+                            </div>
+
+                            <div class="notif-acoes">
+                                <?php if ($n['lida'] == 0): ?>
+                                    <a href="acao_notificacao.php?acao=ler&id=<?php echo $n['id']; ?>" class="acao aprovar tooltip" title="Marcar como lida">
+                                        <i class="fa-solid fa-check"></i>
+                                    </a>
+                                <?php else: ?>
+                                    <span class="visto-duplo tooltip" title="Lida">
+                                        <i class="fa-solid fa-check-double"></i>
+                                    </span>
+                                <?php endif; ?>
+                                
+                                <a href="acao_notificacao.php?acao=apagar&id=<?php echo $n['id']; ?>" class="acao rejeitar tooltip" title="Mover para o Lixo">
+                                    <i class="fa-solid fa-trash"></i>
+                                </a>
+                            </div>
+                        </div>
+                    <?php endwhile; ?>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        function togglePainelMenu() {
+            const menu = document.getElementById("painelLinks");
+            const icon = document.getElementById("painel-icon");
+            menu.classList.toggle("show");
+            icon.textContent = menu.classList.contains("show") ? "✖" : "☰";
+        }
+    </script>
 </body>
 </html>

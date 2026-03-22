@@ -1,5 +1,12 @@
 <?php
 session_start();
+
+// Se o utilizador não estiver logado, redireciona para o login
+if (!isset($_SESSION["id"])) {
+    header("Location: login.php");
+    exit();
+}
+
 include 'bd_connection.php';
 
 // Buscar conteúdo da página
@@ -105,27 +112,19 @@ $linguagens = $pdo->query("SELECT * FROM inscricao_linguagens ORDER BY nome ASC"
                     <label>Curso/Turma:</label>
                     <input type="text" name="curso<?= $i ?>">
 
-                    <h1 class="divider">-------------------</h1>
+                    <h1 class="divider">. . . . . . . . . . . . .</h1>
                 </div>
             <?php endfor; ?>
 
             <label for="observacao">Observações Médicas:</label>
             <textarea id="observacao" name="observacao" rows="4"></textarea>
 
-            <button type="submit" onclick="return verificarSessao()">Game On</button>
+            <button type="submit">Game On</button>
 
         </form>
     </div>
-    <script>
-        function verificarSessao() {
-            const logado = <?= isset($_SESSION["id"]) ? 'true' : 'false' ?>;
-            if (!logado) {
-                alert("⚠ Precisa de iniciar sessão para enviar a inscrição.");
-                return false;
-            }
-            return true;
-        }
 
+    <script>
         function toggleEscreverLinguagem(select) {
             document.getElementById("outra-linguagem").style.display =
                 select.value === "Outra" ? "block" : "none";
@@ -139,8 +138,7 @@ $linguagens = $pdo->query("SELECT * FROM inscricao_linguagens ORDER BY nome ASC"
             }
         }
     </script>
-       
-    
+
 <?php include 'footer.php'; ?>
 </body>
 </html>

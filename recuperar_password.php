@@ -4,148 +4,197 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 /* ============================================================
-   VERIFICAR LOGIN
+   1. VERIFICAR LOGIN E CONEXÃO
 ============================================================ */
 if (!isset($_SESSION["id"])) {
-    header("Location: login.php?erro=Precisa+de+iniciar+sessao");
+    header("Location: login.php?erro=Sessão+expirada");
     exit();
 }
 
-/* ============================================================
-   LIGAR À BASE DE DADOS
-============================================================ */
 $conn = new mysqli("127.0.0.1", "root", "", "gamejamforfun2");
 if ($conn->connect_error) {
     die("Erro na conexão: " . $conn->connect_error);
 }
 
 /* ============================================================
-   BUSCAR DADOS DO ADMIN LOGADO
+   2. DADOS DO UTILIZADOR LOGADO (QUEM ESTÁ A OPERAR)
 ============================================================ */
-$userId = $_SESSION["id"];
-
-$stmt = $conn->prepare("SELECT nome, foto, role_id FROM utilizadores WHERE id = ?");
-$stmt->bind_param("i", $userId);
-$stmt->execute();
-$admin = $stmt->get_result()->fetch_assoc();
-
-$nome = $admin["nome"];
-$fotoLogado = $admin["foto"] ?: "img/default.png";
-$role = (int)$admin["role_id"];
-
-/* Apenas ADMIN NORMAL pode recuperar passwords */
-if ($role !== 2) {
-    die("Acesso negado.");
-}
+$userIdSessao = $_SESSION["id"];
+$roleSessao = (int)$_SESSION["role_id"];
 
 /* ============================================================
-   BUSCAR UTILIZADOR A EDITAR
+   3. DADOS DO UTILIZADOR ALVO (QUEM VAI RECEBER A PASS)
 ============================================================ */
 if (!isset($_GET["id"])) {
-    die("ID inválido.");
+    header("Location: admin.php");
+    exit();
 }
 
-$id = (int) $_GET["id"];
+$idAlvo = (int) $_GET["id"];
 
-$stmt = $conn->prepare("SELECT nome, email FROM utilizadores WHERE id = ?");
-$stmt->bind_param("i", $id);
+// SEGURANÇA: Só Admins (1 e 2) ou o PRÓPRIO utilizador podem estar aqui
+if ($roleSessao != 1 && $roleSessao != 2 && $userIdSessao !== $idAlvo) {
+    die("Acesso negado. Não tens permissão para alterar esta password.");
+}
+
+// Buscar dados do utilizador que vai sofrer a alteração
+$stmt = $conn->prepare("SELECT nome, email, foto FROM utilizadores WHERE id = ?");
+$stmt->bind_param("i", $idAlvo);
 $stmt->execute();
-$user = $stmt->get_result()->fetch_assoc();
+$userAlvo = $stmt->get_result()->fetch_assoc();
 
-if (!$user) {
-    die("Utilizador não encontrado.");
+if (!$userAlvo) {
+    die("Utilizador alvo não encontrado.");
 }
+
+// Buscar dados de quem está logado para o menu superior
+$stmtMenu = $conn->prepare("SELECT nome, foto FROM utilizadores WHERE id = ?");
+$stmtMenu->bind_param("i", $userIdSessao);
+$stmtMenu->execute();
+$dadosMenu = $stmtMenu->get_result()->fetch_assoc();
+
+$nomeMenu = $dadosMenu["nome"];
+$fotoMenu = $dadosMenu["foto"] ?: "img/default.png";
 
 /* ============================================================
-   PROCESSAR ALTERAÇÃO DE PASSWORD
+   4. PROCESSAR ALTERAÇÃO DE PASSWORD (LÓGICA SERVER-SIDE)
 ============================================================ */
+$erro = "";
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $pass = $_POST["password"];
+    $confirmPass = $_POST["confirm_password"];
 
-    $novaPass = password_hash($_POST["password"], PASSWORD_DEFAULT);
+    // Validação de complexidade (Regex)
+    $hasUpper   = preg_match('@[A-Z]@', $pass);
+    $hasLower   = preg_match('@[a-z]@', $pass);
+    $hasNumber  = preg_match('@[0-9]@', $pass);
+    $hasSpecial = preg_match('@[^\w]@', $pass);
 
-    /* CORREÇÃO: coluna correta é senha_hash */
-    $stmt = $conn->prepare("UPDATE utilizadores SET senha_hash=? WHERE id=?");
-
-    if (!$stmt) {
-        die("Erro no prepare: " . $conn->error);
+    if ($pass !== $confirmPass) {
+        $erro = "As passwords não coincidem!";
+    } elseif (strlen($pass) < 10) {
+        $erro = "A password deve ter pelo menos 10 caracteres.";
+    } elseif (!$hasUpper || !$hasLower || !$hasNumber || !$hasSpecial) {
+        $erro = "A password não cumpre os requisitos de segurança.";
+    } else {
+        $novaPassHash = password_hash($pass, PASSWORD_DEFAULT);
+        
+        $stmtUpdate = $conn->prepare("UPDATE utilizadores SET senha_hash=? WHERE id=?");
+        $stmtUpdate->bind_param("si", $novaPassHash, $idAlvo);
+        
+        if ($stmtUpdate->execute()) {
+            // Redirecionamento inteligente
+            $destino = ($roleSessao == 3) ? "painel_do_viewer.php?sucesso=pass" : "admin.php?sucesso=pass";
+            header("Location: $destino");
+            exit();
+        } else {
+            $erro = "Erro ao atualizar a base de dados.";
+        }
     }
-
-    $stmt->bind_param("si", $novaPass, $id);
-    $stmt->execute();
-
-    header("Location: admin.php?sucesso=pass");
-    exit();
 }
 ?>
 <!DOCTYPE html>
 <html lang="pt">
-
 <head>
     <meta charset="UTF-8">
-    <title>Recuperar Password</title>
+    <title>Segurança da Conta | Game Jam</title>
     <link rel="stylesheet" href="css/admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
-
 <body>
 
-<!-- ============================================================
-     MENU SUPERIOR DO ADMIN NORMAL
-============================================================ -->
-<div class="painel-menu">
-
-    <div class="painel-user">
-        <img src="<?php echo htmlspecialchars($fotoLogado); ?>" class="painel-foto" alt="Foto">
-        <span class="painel-ola">Olá, <?php echo htmlspecialchars($nome); ?> (Admin)</span>
+    <div class="painel-menu">
+        <div class="painel-user">
+            <img src="<?php echo htmlspecialchars($fotoMenu); ?>" class="painel-foto">
+            <span class="painel-ola">Olá, <span class="destaque-nome"><?php echo htmlspecialchars($nomeMenu); ?></span></span>
+        </div>
+        <div class="painel-links" id="painelLinks">
+            <a href="index.php"><i class="fa-solid fa-house"></i>Site</a>
+            <a href="editar_perfil.php"><i class="fa-solid fa-user-pen"></i> Perfil</a>
+            <?php
+                $voltar = ($roleSessao == 3) ? "painel_do_viewer.php" : "admin.php";
+                echo "<a href='$voltar'><i class='active'></i> Painel</a>";
+            ?>
+         <a href="eliminar_perfil.php" class="danger"><i class="fa-solid fa-user-xmark"></i> Eliminar Conta</a>
+            <a href="logout.php" class="btn-sair"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+        </div>
     </div>
 
-    <div class="painel-toggle" onclick="togglePainelMenu()">
-        <span id="painel-icon">☰</span>
-    </div>
+    <div class="admin-content">
+        <div class="cabecalho-dashboard">
+            <h1 class="titulo-painel">Atualizar <span class="glow-text">Segurança</span></h1>
+        </div>
 
-    <div class="painel-links" id="painelLinks">
-        <a href="index.php">Voltar ao Site</a>
-        <a href="editar_perfil.php">Editar Perfil</a>
-        <a href="admin.php">Painel Admin</a>
-        <a href="admin_inscricoes.php">Inscrições</a>
-        <a href="notificacoes_admin.php" class="notif-icon">
-            <i class="fa-solid fa-bell"></i>
-        </a>
-        <a href="#" class="danger" onclick="abrirPopupEliminar()">Eliminar Perfil</a>
-        <a href="logout.php">Sair</a>
-    </div>
-</div>
+        <form method="POST" class="form-card">
+            <?php if($erro): ?>
+                <div class="msg-erro"><i class="fa-solid fa-circle-exclamation"></i> <?php echo $erro; ?></div>
+            <?php endif; ?>
 
-<script>
-function togglePainelMenu() {
-    const menu = document.getElementById("painelLinks");
-    const icon = document.getElementById("painel-icon");
-    menu.classList.toggle("show");
-    icon.textContent = menu.classList.contains("show") ? "✖" : "☰";
-}
-</script>
+            <div class="user-highlight">
+                <p>Alterar password de:</p>
+                <h3><i class="fa-solid fa-user-shield"></i> <?php echo htmlspecialchars($userAlvo["nome"]); ?></h3>
+            </div>
 
-<!-- ============================================================
-     FORMULÁRIO DE RECUPERAÇÃO DE PASSWORD
-============================================================ -->
-<div class="perfil-container">
-    <div class="perfil-card">
+            <div class="form-group">
+                <label><i class="fa-solid fa-key"></i> Nova Password:</label>
+                <input type="password" name="password" id="passInput" placeholder="••••••••••••" required>
+            </div>
 
-        <h2>Recuperar Password</h2>
+            <div class="password-checklist">
+                <p><i class="fa-solid fa-list-check"></i> Requisitos Mínimos:</p>
+                <ul>
+                    <li id="req-length"><i class="fa-solid fa-circle-xmark"></i> 10+ Caracteres</li>
+                    <li id="req-upper"><i class="fa-solid fa-circle-xmark"></i> Letra MAIÚSCULA</li>
+                    <li id="req-lower"><i class="fa-solid fa-circle-xmark"></i> Letra minúscula</li>
+                    <li id="req-number"><i class="fa-solid fa-circle-xmark"></i> Um número (0-9)</li>
+                    <li id="req-special"><i class="fa-solid fa-circle-xmark"></i> Símbolo (!@#$%...)</li>
+                </ul>
+            </div>
 
-        <p>Está a alterar a password de:</p>
-        <p><strong><?php echo htmlspecialchars($user["nome"]); ?></strong></p>
+            <div class="form-group">
+                <label><i class="fa-solid fa-lock"></i> Confirmar Password:</label>
+                <input type="password" name="confirm_password" placeholder="Repete a password" required>
+            </div>
 
-        <form method="POST">
-            <label>Nova Password:</label>
-            <input type="password" name="password" required>
-
-            <button type="submit" class="btn-guardar">Guardar Nova Password</button>
-            <a href="admin.php" class="btn-voltar">Voltar</a>
+            <div class="form-actions">
+                <?php 
+                    $voltar = ($roleSessao == 3) ? "painel_do_viewer.php" : "admin.php";
+                ?>
+                <a href="<?php echo $voltar; ?>" class="btn-voltar-outline"><i class="fa-solid fa-arrow-left"></i> Cancelar</a>
+                <button type="submit" class="btn-submit"><i class="fa-solid fa-shield-check"></i> Salvar Password</button>
+            </div>
         </form>
-
     </div>
-</div>
+
+    <script>
+        const passInput = document.getElementById('passInput');
+        
+        const requirements = {
+            length:  { id: 'req-length',  regex: /.{10,}/ },
+            upper:   { id: 'req-upper',   regex: /[A-Z]/ },
+            lower:   { id: 'req-lower',   regex: /[a-z]/ },
+            number:  { id: 'req-number',  regex: /[0-9]/ },
+            special: { id: 'req-special', regex: /[^A-Za-z0-9]/ }
+        };
+
+        passInput.addEventListener('input', function() {
+            const value = passInput.value;
+
+            for (const key in requirements) {
+                const item = document.getElementById(requirements[key].id);
+                const icon = item.querySelector('i');
+                const isValid = requirements[key].regex.test(value);
+
+                if (isValid) {
+                    item.classList.add('valid');
+                    icon.className = "fa-solid fa-circle-check";
+                } else {
+                    item.classList.remove('valid');
+                    icon.className = "fa-solid fa-circle-xmark";
+                }
+            }
+        });
+    </script>
 
 </body>
 </html>

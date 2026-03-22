@@ -1,515 +1,403 @@
 <?php
-// editar_edicao.php
 session_start();
 
-// Apenas admins (1 e 2)
-if (!isset($_SESSION["role_id"]) || $_SESSION["role_id"] > 2) {
-    die("Sem permissão para aceder a esta página.");
+// 1. CONEXÃO À BASE DE DADOS
+$conn = new mysqli('127.0.0.1', 'root', '', 'gamejamforfun2');
+$conn->set_charset("utf8mb4");
+
+// 2. BUSCAR OS DADOS DO UTILIZADOR LOGADO
+$user_id = $_SESSION["id"] ?? 0; 
+$nome = $_SESSION["nome"] ?? "Utilizador"; 
+$fotoLogado = "img/default_user.png"; 
+$role = $_SESSION["role_id"] ?? 3;
+
+if ($user_id > 0) {
+    $resUser = $conn->query("SELECT foto FROM utilizadores WHERE id = '$user_id'");
+    if ($resUser && $resUser->num_rows > 0) {
+        $userDados = $resUser->fetch_assoc();
+        if (!empty($userDados['foto'])) {
+            $fotoLogado = $userDados['foto'];
+        }
+    }
 }
 
 $EDICAO_ID = isset($_GET["id"]) ? intval($_GET["id"]) : 1;
-
-$host = '127.0.0.1';
-$dbname = 'gamejamforfun2';
-$user = 'root';
-$password = '';
-
-$conn = new mysqli($host, $user, $password, $dbname);
-if ($conn->connect_error) {
-    die("Erro BD: " . $conn->connect_error);
-}
-
 $mensagem = "";
-$nome = $_SESSION["usuarioNome"] ?? "Utilizador"; $role = $_SESSION["role_id"] ?? 0; $fotoLogado = $_SESSION["usuarioFoto"] ?? "img/default-user.png";
 
-/* ============================================================
-   GUARDAR CAMPOS DE TEXTO DA EDIÇÃO
-============================================================ */
+// 3. GUARDAR ALTERAÇÕES (SÓ EXECUTA QUANDO O FORMULÁRIO É SUBMETIDO)
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["guardar_edicao"])) {
+    
+    // --- LÓGICA DO CRONOGRAMA ---
+    $titulos = $_POST['cron_titulo'] ?? [];
+    $descricoes = $_POST['cron_desc'] ?? [];
+    $dias = $_POST['cron_dia'] ?? [];
+    $cron_html = "";
+    
+    // Só cria HTML se existirem etapas enviadas (assim permite apagar todas)
+    if (!empty($titulos)) {
+        $cron_html = '<div class="timeline">' . "\n";
+        $dia_at = "";
 
-    $titulo_pagina   = $_POST["titulo_pagina"] ?? "";
-    $titulo_evento   = $_POST["titulo_evento"] ?? "";
-    $edicao_numero   = $_POST["edicao_numero"] ?? "";
-    $data_evento     = $_POST["data_evento"] ?? "";
-    $tema            = $_POST["tema"] ?? "";
-    $participantes1  = $_POST["participantes1"] ?? "";
-    $participantes2  = $_POST["participantes2"] ?? "";
-    $local           = $_POST["local"] ?? "";
-    $descricao       = $_POST["descricao"] ?? "";
-    $cronograma      = $_POST["cronograma"] ?? "";
-    $pat_titulo      = $_POST["patrocinadores_titulo"] ?? "";
-    $pat_agradece    = $_POST["patrocinadores_agradecimento"] ?? "";
+        for ($i = 0; $i < count($titulos); $i++) {
+            $d = htmlspecialchars($dias[$i]);
+            $t = htmlspecialchars($titulos[$i]);
+            $de = htmlspecialchars($descricoes[$i]);
+            
+            if (empty($d) && empty($t)) continue;
 
-    $stmt = $conn->prepare("UPDATE edicoes 
-        SET titulo_pagina=?, titulo_evento=?, edicao_numero=?, data_evento=?, tema=?, 
-            participantes1=?, participantes2=?, local=?, descricao=?, cronograma=?,
-            patrocinadores_titulo=?, patrocinadores_agradecimento=?
-        WHERE id=?");
-    $stmt->bind_param(
-        "ssssssssssssi",
-        $titulo_pagina,
-        $titulo_evento,
-        $edicao_numero,
-        $data_evento,
-        $tema,
-        $participantes1,
-        $participantes2,
-        $local,
-        $descricao,
-        $cronograma,
-        $pat_titulo,
-        $pat_agradece,
-        $EDICAO_ID
-    );
+            if ($d !== $dia_at) {
+                if ($dia_at !== "") $cron_html .= "</div></div>\n";
+                $cron_html .= "<div class=\"timeline-item\"><div class=\"timeline-date\">$d</div><div class=\"timeline-content\">\n";
+                $dia_at = $d;
+            }
+            $cron_html .= "<h4>$t</h4><p>$de</p>\n";
+        }
+        if ($dia_at !== "") $cron_html .= "</div></div>\n";
+        $cron_html .= "</div>";
+    }
 
+    // --- LÓGICA DAS FOTOS DO CARROSSEL ---
+    $fotos_finais = []; // DECLARADA AQUI PARA EVITAR O WARNING DA LINHA 115
+
+    if (isset($_POST['fotos_existentes']) && is_array($_POST['fotos_existentes'])) {
+        $fotos_finais = $_POST['fotos_existentes'];
+    }
+
+    if (isset($_FILES['fotos_novas']) && !empty($_FILES['fotos_novas']['name'][0])) {
+        $pasta_destino = __DIR__ . "/img/"; 
+        if (!is_dir($pasta_destino)) {
+            mkdir($pasta_destino, 0777, true);
+        }
+
+        foreach ($_FILES['fotos_novas']['tmp_name'] as $key => $tmp_name) {
+            if ($_FILES['fotos_novas']['error'][$key] === 0) { 
+                $nome_original = basename($_FILES['fotos_novas']['name'][$key]);
+                $novo_nome = time() . "_" . preg_replace("/[^a-zA-Z0-9\.]/", "", $nome_original);
+                
+                $caminho_final_absoluto = $pasta_destino . $novo_nome;
+                $caminho_relativo = "img/" . $novo_nome;
+
+                if (move_uploaded_file($tmp_name, $caminho_final_absoluto)) {
+                    $fotos_finais[] = $caminho_relativo;
+                } else {
+                    die("❌ ERRO: Não foi possível guardar a foto na pasta 'img/'.");
+                }
+            }
+        }
+    }
+
+    $carrossel_html = "";
+    foreach ($fotos_finais as $caminho_foto) {
+        $carrossel_html .= '<img src="' . htmlspecialchars($caminho_foto) . '">' . "\n";
+    }
+
+    // --- ATUALIZAR A BASE DE DADOS (AGORA SÓ HÁ UM UPDATE, DENTRO DO IF) ---
+    $sql = "UPDATE edicoes SET 
+        titulo_pagina=?, titulo_evento=?, edicao_numero=?, data_evento=?, 
+        tema=?, local=?, participantes1=?, participantes2=?, 
+        descricao=?, cronograma=?, 
+        patrocinadores_titulo=?, patrocinadores_agradecimento=?, carrossel=? 
+        WHERE id=?";
+        
+    $stmt = $conn->prepare($sql);
+    if (!$stmt) {
+        die("❌ Erro fatal ao preparar Base de Dados: " . $conn->error);
+    }
+    
+    $stmt->bind_param("sssssssssssssi", 
+        $_POST['titulo_pagina'], $_POST['titulo_evento'], $_POST['edicao_numero'], $_POST['data_evento'], 
+        $_POST['tema'], $_POST['local'], $_POST['participantes1'], $_POST['participantes2'], 
+        $_POST['descricao'], $cron_html, 
+        $_POST['pat_titulo'], $_POST['pat_agradece'], $carrossel_html, $EDICAO_ID);
+    
     if ($stmt->execute()) {
-        $mensagem = "Conteúdo da edição atualizado com sucesso.";
+        $mensagem = "✅ Edição, cronograma e fotos atualizados com sucesso!";
     } else {
-        $mensagem = "Erro ao atualizar edição: " . $stmt->error;
-    }
-    $stmt->close();
-}
-
-/* ============================================================
-   UPLOAD IMAGENS CARROSSEL
-============================================================ */
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["upload_carrossel"])) {
-
-    if (!empty($_FILES["carrossel_imagens"]["name"][0])) {
-
-        $uploadDir = "uploads/";
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0777, true);
-        }
-
-        foreach ($_FILES["carrossel_imagens"]["tmp_name"] as $idx => $tmpName) {
-            if (!is_uploaded_file($tmpName)) continue;
-
-            $nomeOriginal = basename($_FILES["carrossel_imagens"]["name"][$idx]);
-            $ext = pathinfo($nomeOriginal, PATHINFO_EXTENSION);
-            $novoNome = time() . "_" . uniqid() . "." . $ext;
-            $destino = $uploadDir . $novoNome;
-
-            if (move_uploaded_file($tmpName, $destino)) {
-                $legenda = $_POST["carrossel_legenda"][$idx] ?? "";
-
-                $stmt = $conn->prepare("INSERT INTO edicoes_carrossel (id_edicao, imagem, legenda, ordem) 
-                                        VALUES (?, ?, ?, 0)");
-                $stmt->bind_param("iss", $EDICAO_ID, $destino, $legenda);
-                $stmt->execute();
-                $stmt->close();
-            }
-        }
-
-        $mensagem = "Imagens do carrossel enviadas com sucesso.";
+        die("❌ Erro fatal ao Guardar na BD: " . $stmt->error);
     }
 }
 
-/* ============================================================
-   APAGAR IMAGEM DO CARROSSEL
-============================================================ */
-if (isset($_GET["del_carrossel"])) {
-    $idDel = intval($_GET["del_carrossel"]);
+// 4. BUSCAR DADOS ATUAIS DA EDIÇÃO PARA MOSTRAR NO FORMULÁRIO
+$res = $conn->query("SELECT * FROM edicoes WHERE id=$EDICAO_ID");
+$edicao = $res->fetch_assoc();
 
-    $stmt = $conn->prepare("SELECT imagem FROM edicoes_carrossel WHERE id=? AND id_edicao=?");
-    $stmt->bind_param("ii", $idDel, $EDICAO_ID);
-    $stmt->execute();
-    $res = $stmt->get_result();
-    if ($row = $res->fetch_assoc()) {
-        $ficheiro = $row["imagem"];
-        if (is_file($ficheiro)) {
-            @unlink($ficheiro);
-        }
-    }
-    $stmt->close();
-
-    $stmt = $conn->prepare("DELETE FROM edicoes_carrossel WHERE id=? AND id_edicao=?");
-    $stmt->bind_param("ii", $idDel, $EDICAO_ID);
-    $stmt->execute();
-    $stmt->close();
-
-    $mensagem = "Imagem do carrossel apagada.";
+if (!$edicao) {
+    $edicao = [
+        'titulo_pagina' => '', 'titulo_evento' => '', 'edicao_numero' => '', 'data_evento' => '',
+        'tema' => '', 'local' => '', 'participantes1' => '', 'participantes2' => '',
+        'descricao' => '', 'cronograma' => '', 'patrocinadores_titulo' => '', 'patrocinadores_agradecimento' => '', 'carrossel' => ''
+    ];
 }
 
-/* ============================================================
-   ATUALIZAR ORDEM DO CARROSSEL
-============================================================ */
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["guardar_ordem_carrossel"])) {
-    if (!empty($_POST["ordem_carrossel"])) {
-        foreach ($_POST["ordem_carrossel"] as $idCar => $ordem) {
-            $idCar = intval($idCar);
-            $ordem = intval($ordem);
-            $stmt = $conn->prepare("UPDATE edicoes_carrossel SET ordem=? WHERE id=? AND id_edicao=?");
-            $stmt->bind_param("iii", $ordem, $idCar, $EDICAO_ID);
-            $stmt->execute();
-            $stmt->close();
-        }
-        $mensagem = "Ordem do carrossel atualizada.";
+// --- EXTRAIR AS FOTOS DO HTML (MÉTODO DIRETO) ---
+$fotosAtuais = []; // A variável é criada aqui para nunca dar erro!
+if (!empty($edicao['carrossel'])) {
+    preg_match_all('/src="([^"]+)"/i', $edicao['carrossel'], $matches);
+    if (!empty($matches[1])) {
+        $fotosAtuais = $matches[1];
     }
 }
 
-/* ============================================================
-   UPLOAD LOGOS PATROCINADORES
-============================================================ */
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["upload_patrocinador"])) {
-
-    if (!empty($_FILES["patrocinador_logo"]["name"][0])) {
-
-        $uploadDir = "uploads/";
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0777, true);
-        }
-
-        foreach ($_FILES["patrocinador_logo"]["tmp_name"] as $idx => $tmpName) {
-            if (!is_uploaded_file($tmpName)) continue;
-
-            $nomeOriginal = basename($_FILES["patrocinador_logo"]["name"][$idx]);
-            $ext = pathinfo($nomeOriginal, PATHINFO_EXTENSION);
-            $novoNome = time() . "_" . uniqid() . "." . $ext;
-            $destino = $uploadDir . $novoNome;
-
-            if (move_uploaded_file($tmpName, $destino)) {
-                $link = $_POST["patrocinador_link"][$idx] ?? "#";
-
-                $stmt = $conn->prepare("INSERT INTO edicoes_patrocinadores (id_edicao, logo, link, ordem) 
-                                        VALUES (?, ?, ?, 0)");
-                $stmt->bind_param("iss", $EDICAO_ID, $destino, $link);
-                $stmt->execute();
-                $stmt->close();
-            }
-        }
-
-        $mensagem = "Patrocinadores adicionados com sucesso.";
-    }
-}
-
-/* ============================================================
-   APAGAR PATROCINADOR
-============================================================ */
-if (isset($_GET["del_patrocinador"])) {
-    $idDel = intval($_GET["del_patrocinador"]);
-
-    $stmt = $conn->prepare("SELECT logo FROM edicoes_patrocinadores WHERE id=? AND id_edicao=?");
-    $stmt->bind_param("ii", $idDel, $EDICAO_ID);
-    $stmt->execute();
-    $res = $stmt->get_result();
-    if ($row = $res->fetch_assoc()) {
-        $ficheiro = $row["logo"];
-        if (is_file($ficheiro)) {
-            @unlink($ficheiro);
+// --- EXTRAIR AS ETAPAS DO CRONOGRAMA ---
+$etapas = [];
+if (!empty($edicao['cronograma'])) {
+    $dom = new DOMDocument();
+    @$dom->loadHTML(mb_convert_encoding($edicao['cronograma'], 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+    $xpath = new DOMXPath($dom);
+    $items = $xpath->query("//div[contains(@class, 'timeline-item')]");
+    foreach ($items as $item) {
+        $dia_node = $xpath->query(".//div[contains(@class, 'timeline-date')]", $item)->item(0);
+        $dia = $dia_node ? $dia_node->nodeValue : "";
+        $h4s = $xpath->query(".//h4", $item);
+        $ps = $xpath->query(".//p", $item);
+        for ($i = 0; $i < $h4s->length; $i++) {
+            $etapas[] = ['dia' => $dia, 'titulo' => $h4s->item($i)->nodeValue, 'desc' => $ps->item($i)->nodeValue ?? ""];
         }
     }
-    $stmt->close();
-
-    $stmt = $conn->prepare("DELETE FROM edicoes_patrocinadores WHERE id=? AND id_edicao=?");
-    $stmt->bind_param("ii", $idDel, $EDICAO_ID);
-    $stmt->execute();
-    $stmt->close();
-
-    $mensagem = "Patrocinador apagado.";
-}
-
-/* ============================================================
-   ATUALIZAR ORDEM PATROCINADORES
-============================================================ */
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["guardar_ordem_patrocinadores"])) {
-    if (!empty($_POST["ordem_patrocinador"])) {
-        foreach ($_POST["ordem_patrocinador"] as $idPat => $ordem) {
-            $idPat = intval($idPat);
-            $ordem = intval($ordem);
-            $stmt = $conn->prepare("UPDATE edicoes_patrocinadores SET ordem=? WHERE id=? AND id_edicao=?");
-            $stmt->bind_param("iii", $ordem, $idPat, $EDICAO_ID);
-            $stmt->execute();
-            $stmt->close();
-        }
-        $mensagem = "Ordem dos patrocinadores atualizada.";
-    }
-}
-
-/* ============================================================
-   BUSCAR DADOS ATUAIS DA EDIÇÃO
-============================================================ */
-$edicao = [];
-$stmt = $conn->prepare("SELECT * FROM edicoes WHERE id=?");
-$stmt->bind_param("i", $EDICAO_ID);
-$stmt->execute();
-$res = $stmt->get_result();
-if ($res && $res->num_rows === 1) {
-    $edicao = $res->fetch_assoc();
-}
-$stmt->close();
-
-/* Carrossel */
-$carrossel = [];
-$resCar = $conn->query("SELECT * FROM edicoes_carrossel WHERE id_edicao = {$EDICAO_ID} ORDER BY ordem ASC, id ASC");
-if ($resCar) {
-    $carrossel = $resCar->fetch_all(MYSQLI_ASSOC);
-}
-
-/* Patrocinadores */
-$patrocinadores = [];
-$resPat = $conn->query("SELECT * FROM edicoes_patrocinadores WHERE id_edicao = {$EDICAO_ID} ORDER BY ordem ASC, id ASC");
-if ($resPat) {
-    $patrocinadores = $resPat->fetch_all(MYSQLI_ASSOC);
 }
 ?>
 <!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <title>Editar Edição #<?php echo $EDICAO_ID; ?></title>
-    <link rel="stylesheet" href="css/style3.css">
+    <title>Editar Edição | Painel Premium</title>
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    
     <style>
-        body { background:#050816; color:#fff; font-family: Arial, sans-serif; }
-        .container-edicao { max-width: 1100px; margin: 40px auto; background:#0b1020; padding:20px 30px; border-radius:10px; }
-        h1, h2 { margin-bottom:10px; }
-        label { display:block; margin-top:10px; font-weight:bold; }
-        input[type="text"], textarea { width:100%; padding:8px; border-radius:5px; border:1px solid #333; background:#050816; color:#fff; }
-        textarea { min-height:120px; }
-        .btn { margin-top:15px; padding:8px 16px; border:none; border-radius:5px; cursor:pointer; }
-        .btn-primary { background:#ff0044; color:#fff; }
-        .btn-secondary { background:#1f2937; color:#fff; }
-        .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:15px; margin-top:10px; }
-        .card-mini { background:#111827; padding:10px; border-radius:8px; text-align:center; }
-        .card-mini img { max-width:100%; max-height:120px; object-fit:cover; border-radius:5px; }
-        .msg { margin-bottom:15px; padding:10px; border-radius:5px; background:#064e3b; color:#bbf7d0; }
-        .ordem-input { width:60px; text-align:center; }
-        a.apagar { color:#f87171; display:inline-block; margin-top:5px; }
-        .tabs { display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap; }
-        .tab-btn { padding:8px 14px; border-radius:5px; border:none; cursor:pointer; background:#111827; color:#fff; }
-        .tab-btn.active { background:#ff0044; }
-        .tab-content { display:none; }
-        .tab-content.active { display:block; }
+        .lista-fotos-ordenavel {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        .foto-item {
+            position: relative;
+            cursor: grab;
+            background: #1e293b;
+            padding: 5px;
+            border-radius: 8px;
+            border: 2px dashed #475569;
+        }
+        .foto-item:active { cursor: grabbing; }
+        .foto-item img {
+            height: 100px;
+            border-radius: 5px;
+            display: block;
+        }
+        .btn-remover-foto {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        .input-file-modern {
+            background: #1e293b;
+            padding: 10px;
+            border-radius: 8px;
+            color: #fff;
+            width: 100%;
+            border: 1px dashed #475569;
+        }
+        /* Estilos para os cartões da timeline */
+        .etapa-card {
+            background: #1e293b;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #334155;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .etapa-card input, .etapa-card textarea {
+            background: #0f172a;
+            border: 1px solid #334155;
+            color: white;
+            padding: 8px;
+            border-radius: 4px;
+        }
+        .del-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            padding: 5px 10px;
+            font-weight: bold;
+        }
     </style>
-
-    <!-- TinyMCE (editor WYSIWYG) -->
-  <script src="https://cdn.tiny.cloud/1/your-api-key-88cghqoghdad9ff815vom8yl8or773zmi26pvjk1edd43lsz/tinymce/6/tinymce.min.js" referrerpolicy="origin">
-
-    tinymce.init({
-        selector: '.editor-html',
-        height: 250,
-        menubar: false,
-        plugins: 'link lists',
-        toolbar: 'undo redo | bold italic underline | bullist numlist | link | removeformat',
-        content_style: 'body { background:#050816; color:#fff; }'
-    });
-    </script>
 </head>
 <body>
 
-<!-- ============================================================
-     MENU SUPERIOR DO PAINEL
-============================================================ -->
-<div class="painel-menu">
-    <div class="painel-user">
-        <img src="<?php echo htmlspecialchars($fotoLogado); ?>" class="painel-foto" alt="Foto">
-        <span class="painel-ola">Olá, <?php echo htmlspecialchars($nome); ?></span>
+    <div class="painel-menu">
+        <div class="painel-user">
+            <img src="<?php echo htmlspecialchars($fotoLogado); ?>" class="painel-foto" alt="Foto">
+            <span class="painel-ola">Olá, <span class="destaque-nome"><?php echo htmlspecialchars($nome); ?></span></span>
+        </div>
+
+
+        <div class="painel-links" id="painelLinks">
+            <a href="index.php"><i class="fa-solid fa-house"></i> Site</a>
+            <a href="editar_perfil.php"><i class="fa-solid fa-user-pen"></i> Perfil</a>
+
+            <?php if ($role <= 2): ?>
+                <a href="admin.php"><i class="active"></i> Painel</a>
+            <?php endif; ?>
+
+            <a href="logout.php" class="btn-sair"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+        </div>
     </div>
 
-    <div class="painel-toggle" onclick="togglePainelMenu()">
-        <span id="painel-icon">☰</span>
-    </div>
+    <div class="admin-content">
+        <div class="cabecalho-dashboard">
+            <a href="admin_edicoes.php" class="btn-voltar"><i class="fa-solid fa-arrow-left"></i> Voltar</a>
+            <h1 class="titulo-painel">Gerir <span class="glow-text">Edição do Evento</span></h1>
+        </div>
 
-    <div class="painel-links" id="painelLinks">
-        <a href="index.php">Voltar ao Site</a>
-        <a href="editar_perfil.php">Editar Perfil</a>
-        <a href="editar_site.php" class="active">Editar Site</a>
-
-        <?php if ($role == 1): ?>
-            <a href="admin.php">Painel Admin Master</a>
-            <a href="admin_inscricoes.php">Inscrições</a>
-            <a href="criar_admin.php">Criar Admin</a>
-            <a href="criar_viewer.php">Criar Viewer</a>
+        <?php if ($mensagem): ?>
+            <div class="notif-card lida" style="border-left: 4px solid #2ecc71; margin-bottom: 20px;">
+                <div class="notif-icone"><i class="fa-solid fa-circle-check" style="color: #2ecc71;"></i></div>
+                <div class="notif-conteudo">
+                    <p class="notif-mensagem"><?php echo $mensagem; ?></p>
+                </div>
+            </div>
         <?php endif; ?>
 
-        <?php if ($role == 2): ?>
-            <a href="admin.php">Painel Admin</a>
-            <a href="admin_inscricoes.php">Inscrições</a>
-        <?php endif; ?>
-
-        <a href="logout.php">Sair</a>
-    </div>
-</div>
-
-<script>
-function togglePainelMenu() {
-    const menu = document.getElementById("painelLinks");
-    const icon = document.getElementById("painel-icon");
-    menu.classList.toggle("show");
-    icon.textContent = menu.classList.contains("show") ? "✖" : "☰";
-}
-</script>
-
-
-
-<div class="container-edicao">
-    <h1>Editar Edição #<?php echo $EDICAO_ID; ?></h1>
-
-    <?php if ($mensagem): ?>
-        <div class="msg"><?php echo htmlspecialchars($mensagem); ?></div>
-    <?php endif; ?>
-
-    <div class="tabs">
-        <button class="tab-btn active" data-tab="tab-geral">Geral</button>
-        <button class="tab-btn" data-tab="tab-carrossel">Carrossel</button>
-        <button class="tab-btn" data-tab="tab-patrocinadores">Patrocinadores</button>
-    </div>
-
-    <!-- ===================== TAB GERAL ===================== -->
-    <div id="tab-geral" class="tab-content active">
-        <form method="post">
-            <h2>Informação Geral</h2>
-
-            <label>Título da Página</label>
-            <input type="text" name="titulo_pagina" value="<?php echo htmlspecialchars($edicao['titulo_pagina'] ?? ''); ?>">
-
-            <label>Título do Evento</label>
-            <input type="text" name="titulo_evento" value="<?php echo htmlspecialchars($edicao['titulo_evento'] ?? ''); ?>">
-
-            <label>Número da Edição (ex: 1ª Edição)</label>
-            <input type="text" name="edicao_numero" value="<?php echo htmlspecialchars($edicao['edicao_numero'] ?? ''); ?>">
-
-            <label>Data do Evento</label>
-            <input type="text" name="data_evento" value="<?php echo htmlspecialchars($edicao['data_evento'] ?? ''); ?>">
-
-            <label>Tema</label>
-            <input type="text" name="tema" value="<?php echo htmlspecialchars($edicao['tema'] ?? ''); ?>">
-
-            <label>Participantes (linha 1)</label>
-            <input type="text" name="participantes1" value="<?php echo htmlspecialchars($edicao['participantes1'] ?? ''); ?>">
-
-            <label>Participantes (linha 2)</label>
-            <input type="text" name="participantes2" value="<?php echo htmlspecialchars($edicao['participantes2'] ?? ''); ?>">
-
-            <label>Local</label>
-            <input type="text" name="local" value="<?php echo htmlspecialchars($edicao['local'] ?? ''); ?>">
-
-            <h2>Descrição</h2>
-            <textarea name="descricao" class="editor-html"><?php echo htmlspecialchars($edicao['descricao'] ?? ''); ?></textarea>
-
-            <h2>Cronograma</h2>
-            <textarea name="cronograma" class="editor-html"><?php echo htmlspecialchars($edicao['cronograma'] ?? ''); ?></textarea>
-
-            <h2>Patrocinadores (Texto)</h2>
-            <label>Título</label>
-            <input type="text" name="patrocinadores_titulo" value="<?php echo htmlspecialchars($edicao['patrocinadores_titulo'] ?? ''); ?>">
-
-            <label>Agradecimento</label>
-            <textarea name="patrocinadores_agradecimento"><?php echo htmlspecialchars($edicao['patrocinadores_agradecimento'] ?? ''); ?></textarea>
-
-            <button type="submit" name="guardar_edicao" class="btn btn-primary">Guardar Conteúdo</button>
-        </form>
-    </div>
-
-    <!-- ===================== TAB CARROSSEL ===================== -->
-    <div id="tab-carrossel" class="tab-content">
-        <h2>Carrossel de Imagens</h2>
-
         <form method="post" enctype="multipart/form-data">
-            <label>Adicionar novas imagens</label>
-            <input type="file" name="carrossel_imagens[]" multiple>
-
-            <p>Podes opcionalmente escrever legendas (na mesma ordem das imagens):</p>
-            <div id="legendas-carrossel"></div>
-
-            <button type="submit" name="upload_carrossel" class="btn btn-primary">Enviar Imagens</button>
-        </form>
-
-        <hr>
-
-        <form method="post">
-            <h3>Imagens atuais</h3>
-            <div class="grid">
-                <?php foreach ($carrossel as $c): ?>
-                    <div class="card-mini">
-                        <img src="<?php echo htmlspecialchars($c['imagem']); ?>" alt="">
-                        <div>ID: <?php echo $c['id']; ?></div>
-                        <div>
-                            Ordem: 
-                            <input type="number" class="ordem-input" 
-                                   name="ordem_carrossel[<?php echo $c['id']; ?>]" 
-                                   value="<?php echo (int)$c['ordem']; ?>">
-                        </div>
-                        <a class="apagar" 
-                           href="editar_edicao.php?id=<?php echo $EDICAO_ID; ?>&del_carrossel=<?php echo $c['id']; ?>"
-                           onclick="return confirm('Apagar esta imagem do carrossel?');">
-                           Apagar
-                        </a>
-                    </div>
-                <?php endforeach; ?>
+            
+            <div class="card">
+                <h3>📌 Cabeçalho e Identificação</h3>
+                <div class="grid">
+                    <div><label>Título da Página</label><input type="text" name="titulo_pagina" value="<?= htmlspecialchars($edicao['titulo_pagina']) ?>"></div>
+                    <div><label>Título do Evento</label><input type="text" name="titulo_evento" value="<?= htmlspecialchars($edicao['titulo_evento']) ?>"></div>
+                    <div><label>Número da Edição</label><input type="text" name="edicao_numero" value="<?= htmlspecialchars($edicao['edicao_numero']) ?>"></div>
+                </div>
             </div>
 
-            <button type="submit" name="guardar_ordem_carrossel" class="btn btn-secondary">Guardar Ordem</button>
-        </form>
-    </div>
-
-    <!-- ===================== TAB PATROCINADORES ===================== -->
-    <div id="tab-patrocinadores" class="tab-content">
-        <h2>Patrocinadores (Logos)</h2>
-
-        <form method="post" enctype="multipart/form-data">
-            <label>Adicionar novos patrocinadores</label>
-            <input type="file" name="patrocinador_logo[]" multiple>
-
-            <p>Links (na mesma ordem dos logos):</p>
-            <div id="links-patrocinadores"></div>
-
-            <button type="submit" name="upload_patrocinador" class="btn btn-primary">Enviar Patrocinadores</button>
-        </form>
-
-        <hr>
-
-        <form method="post">
-            <h3>Patrocinadores atuais</h3>
-            <div class="grid">
-                <?php foreach ($patrocinadores as $p): ?>
-                    <div class="card-mini">
-                        <img src="<?php echo htmlspecialchars($p['logo']); ?>" alt="">
-                        <div>ID: <?php echo $p['id']; ?></div>
-                        <div>Link: <small><?php echo htmlspecialchars($p['link']); ?></small></div>
-                        <div>
-                            Ordem: 
-                            <input type="number" class="ordem-input" 
-                                   name="ordem_patrocinador[<?php echo $p['id']; ?>]" 
-                                   value="<?php echo (int)$p['ordem']; ?>">
-                        </div>
-                        <a class="apagar" 
-                           href="editar_edicao.php?id=<?php echo $EDICAO_ID; ?>&del_patrocinador=<?php echo $p['id']; ?>"
-                           onclick="return confirm('Apagar este patrocinador?');">
-                           Apagar
-                        </a>
-                    </div>
-                <?php endforeach; ?>
+            <div class="card">
+                <h3>🗂️ Informações da Página Inicial</h3>
+                <div class="grid">
+                    <div><label>Tema</label><input type="text" name="tema" value="<?= htmlspecialchars($edicao['tema']) ?>"></div>
+                    <div><label>Local</label><input type="text" name="local" value="<?= htmlspecialchars($edicao['local']) ?>"></div>
+                    <div><label>Data</label><input type="text" name="data_evento" value="<?= htmlspecialchars($edicao['data_evento']) ?>"></div>
+                    <div><label>Equipas (Linha 1)</label><input type="text" name="participantes1" value="<?= htmlspecialchars($edicao['participantes1']) ?>"></div>
+                    <div><label>Escolas (Linha 2)</label><input type="text" name="participantes2" value="<?= htmlspecialchars($edicao['participantes2']) ?>"></div>
+                </div>
             </div>
 
-            <button type="submit" name="guardar_ordem_patrocinadores" class="btn btn-secondary">Guardar Ordem</button>
+            <div class="card">
+                <h3>📝 História</h3>
+                <textarea name="descricao" id="editor_v5"><?= htmlspecialchars($edicao['descricao']) ?></textarea>
+            </div>
+
+            <div class="card">
+                <h3>📸 Fotos do Carrossel</h3>
+                
+                <div style="margin-bottom: 20px;">
+                    <label><strong>Organizar Fotos Atuais <small style="color: #94a3b8;">(Arrasta para mudar a ordem. Clica no X para apagar)</small>:</strong></label>
+                    <div id="lista-fotos-ordenavel" class="lista-fotos-ordenavel">
+                        <?php if (empty($fotosAtuais)): ?>
+                            <p style="color:#94a3b8; width: 100%;">Nenhuma foto atualmente.</p>
+                        <?php else: ?>
+                            <?php foreach ($fotosAtuais as $foto): ?>
+                                <div class="foto-item">
+                                    <img src="<?= htmlspecialchars($foto) ?>" alt="Foto Carrossel">
+                                    <input type="hidden" name="fotos_existentes[]" value="<?= htmlspecialchars($foto) ?>">
+                                    <button type="button" class="btn-remover-foto" onclick="this.parentElement.remove()" title="Remover Foto"><i class="fa-solid fa-xmark"></i></button>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
+                </div>
+
+                <div>
+                    <label><i class="fa-solid fa-upload"></i> Adicionar Novas Fotos <small style="color:#94a3b8;">(Serão adicionadas ao final do carrossel)</small></label><br><br>
+                    <input type="file" name="fotos_novas[]" multiple accept="image/*" class="input-file-modern">
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>⏱️ Cronograma</h3>
+                <div id="lista-etapas">
+                    <?php if(empty($etapas)): ?>
+                         <p style="color:#94a3b8; margin-bottom:15px;">Sem etapas. Clica em "+ Adicionar Etapa" para começar.</p>
+                    <?php else: ?>
+                        <?php foreach ($etapas as $e): ?>
+                        <div class="etapa-card">
+                            <input type="text" name="cron_dia[]" value="<?= htmlspecialchars($e['dia']) ?>" placeholder="Dia">
+                            <input type="text" name="cron_titulo[]" value="<?= htmlspecialchars($e['titulo']) ?>" placeholder="Hora/Título">
+                            <textarea name="cron_desc[]" rows="1" placeholder="Descrição"><?= htmlspecialchars($e['desc']) ?></textarea>
+                            <button type="button" class="del-btn" onclick="this.parentElement.remove()">Eliminar</button>
+                        </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
+                <button type="button" class="btn-add" onclick="addEtapa()" style="padding: 10px; background: #3b82f6; color: white; border: none; border-radius: 4px; cursor: pointer;">+ Adicionar Etapa</button>
+            </div>
+
+            <div class="card">
+                <h3>🤝 Patrocinadores</h3>
+                <div class="grid">
+                    <div><label>Título</label><input type="text" name="pat_titulo" value="<?= htmlspecialchars($edicao['patrocinadores_titulo']) ?>"></div>
+                    <div><label>Texto</label><input type="text" name="pat_agradece" value="<?= htmlspecialchars($edicao['patrocinadores_agradecimento']) ?>"></div>
+                </div>
+            </div>
+
+            <button type="submit" name="guardar_edicao" class="btn-save" style="width: 100%; margin-top: 20px; padding: 15px; background: #10b981; color: white; font-size: 16px; border: none; border-radius: 8px; cursor: pointer;">
+                <i class="fa-solid fa-floppy-disk"></i> GUARDAR ALTERAÇÕES
+            </button>
         </form>
     </div>
-</div>
 
-<script>
-// Tabs simples
-document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+    <script>
+        ClassicEditor.create(document.querySelector('#editor_v5')).catch(e => console.error(e));
+        
+        function togglePainelMenu() { document.getElementById("painelLinks").classList.toggle("active"); }
+        
+        function addEtapa() {
+            // Remove a mensagem de "Sem etapas" se existir
+            const msg = document.querySelector('#lista-etapas p');
+            if(msg) msg.remove();
 
-        btn.classList.add('active');
-        document.getElementById(btn.dataset.tab).classList.add('active');
-    });
-});
+            const div = document.createElement('div');
+            div.className = 'etapa-card';
+            div.innerHTML = `
+                <input type="text" name="cron_dia[]" placeholder="Dia">
+                <input type="text" name="cron_titulo[]" placeholder="Hora/Título">
+                <textarea name="cron_desc[]" rows="1" placeholder="Descrição"></textarea>
+                <button type="button" class="del-btn" onclick="this.parentElement.remove()">Eliminar</button>
+            `;
+            document.getElementById('lista-etapas').appendChild(div);
+        }
 
-// Campos de legenda e links (simples, só texto livre)
-const legendasDiv = document.getElementById('legendas-carrossel');
-if (legendasDiv) {
-    legendasDiv.innerHTML = '<textarea name="carrossel_legenda[]" placeholder="Legenda 1 (opcional)"></textarea>';
-}
-
-const linksDiv = document.getElementById('links-patrocinadores');
-if (linksDiv) {
-    linksDiv.innerHTML = '<input type="text" name="patrocinador_link[]" placeholder="Link 1 (opcional)">';
-}
-</script>
-
+        // Ativa o Drag & Drop para as fotos
+        document.addEventListener('DOMContentLoaded', function() {
+            var listaFotos = document.getElementById('lista-fotos-ordenavel');
+            if(listaFotos && listaFotos.children.length > 0 && !listaFotos.querySelector('p')) {
+                new Sortable(listaFotos, {
+                    animation: 150,
+                    ghostClass: 'bg-blue-100'
+                });
+            }
+        });
+    </script>
 </body>
 </html>

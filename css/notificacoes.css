@@ -208,7 +208,33 @@ body {
 .btn-cancelar:hover {
     background: #2e7d32;
 }
+/* Visto Duplo (Estilo WhatsApp) */
+.visto-duplo {
+    color: #34b7f1; /* Azul clássico de lido */
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+}
 
+/* Agrupamento de botões no header */
+.acoes-notif-header {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-lixo {
+    background: rgba(231, 76, 60, 0.1);
+    color: #e74c3c;
+    border-color: rgba(231, 76, 60, 0.3);
+}
+
+.btn-lixo:hover {
+    background: rgba(231, 76, 60, 0.3);
+    border-color: #e74c3c;
+    color: #fff;
+}
 /* ============================
    RESPONSIVO
 =============================== */

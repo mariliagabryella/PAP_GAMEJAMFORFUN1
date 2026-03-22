@@ -17,9 +17,9 @@ $stmtAdmin->bind_param("i", $idAdmin);
 $stmtAdmin->execute();
 $adminData = $stmtAdmin->get_result()->fetch_assoc();
 
-$nome = $adminData["nome"];
+$nomeAdmin = $adminData["nome"];
 $fotoLogado = $adminData["foto"] ?: "img/default.png";
-$role = $adminData["role_id"];
+$roleAdmin = $adminData["role_id"];
 
 /* Verifica se recebeu ID por GET */
 if (!isset($_GET['id'])) {
@@ -29,8 +29,8 @@ if (!isset($_GET['id'])) {
 
 $idUser = (int) $_GET['id'];
 
-/* Buscar dados do utilizador a editar */
-$stmt = $conn->prepare("SELECT id, nome, email, role_id, foto FROM utilizadores WHERE id = ?");
+/* Buscar dados do utilizador a editar (foto removida da query pois não será editada aqui) */
+$stmt = $conn->prepare("SELECT id, nome, email, role_id FROM utilizadores WHERE id = ?");
 $stmt->bind_param("i", $idUser);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -49,94 +49,91 @@ $conn->close();
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-<meta charset="UTF-8">
-<title>Editar Utilizador</title>
-<link rel="stylesheet" href="css/editar_perfil.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <meta charset="UTF-8">
+    <title>Editar Player | Admin Master</title>
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
 <body>
 
-<!-- ============================
-     MENU DO ADMIN
-=============================== -->
-<div class="painel-menu">
+    <div class="painel-menu">
+        <div class="painel-user">
+            <img src="<?php echo htmlspecialchars($fotoLogado); ?>" class="painel-foto" alt="Foto Admin">
+            <span class="painel-ola">
+                Olá, <span class="destaque-nome"><?php echo htmlspecialchars($nomeAdmin); ?></span>
+           
+                
+            </span>
+        </div>
 
-    <div class="painel-user">
-        <img src="<?php echo htmlspecialchars($fotoLogado); ?>" class="painel-foto" alt="Foto">
-        <span class="painel-ola">Olá, <?php echo htmlspecialchars($nome); ?></span>
+        <div class="painel-toggle" onclick="togglePainelMenu()">
+            <span id="painel-icon"><i class="fa-solid fa-bars"></i></span>
+        </div>
+
+        <div class="painel-links" id="painelLinks">
+            <a href="index.php"><i class="fa-solid fa-house"></i>Site</a>
+            <a href="editar_perfil.php"><i class="fa-solid fa-user-pen"></i>Perfil</a>
+
+            <?php if ($roleAdmin == 1): ?>
+                <a href="admin.php" class="active"><i class="active"></i>Painel</a>
+            <?php endif; ?>
+
+            <a href="logout.php" class="btn-sair"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+        </div>
     </div>
 
-    <div class="painel-toggle" onclick="togglePainelMenu()">
-        <span id="painel-icon">☰</span>
-    </div>
+    <script>
+    function togglePainelMenu() {
+        const menu = document.getElementById("painelLinks");
+        const icon = document.getElementById("painel-icon");
+        menu.classList.toggle("show");
+        
+        if (menu.classList.contains("show")) {
+            icon.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+        } else {
+            icon.innerHTML = '<i class="fa-solid fa-bars"></i>';
+        }
+    }
+    </script>
 
-    <div class="painel-links" id="painelLinks">
-        <a href="index.php">Voltar ao Site</a>
-        <a href="editar_perfil.php">Editar Perfil</a>
+    <div class="admin-content">
+        <div class="cabecalho-dashboard">
+            <h1 class="titulo-painel">Editar <span class="glow-text">Player</span></h1>
+        </div>
 
-        <?php if ($role == 1): ?>
-            <a href="admin_inscricoes.php">Inscrições</a>
-            <a href="notificacoes_admin.php" class="notif-icon">
-                    <i class="fa-solid fa-bell"></i>
-                </a>
-            <a href="criar_admin.php">Criar Admin</a>
-            <a href="criar_viewer.php">Criar Viewer</a>
-        <?php endif; ?>
-
-        <a href="logout.php">Sair</a>
-    </div>
-</div>
-
-<script>
-function togglePainelMenu() {
-    const menu = document.getElementById("painelLinks");
-    const icon = document.getElementById("painel-icon");
-
-    menu.classList.toggle("show");
-    icon.textContent = menu.classList.contains("show") ? "✖" : "☰";
-}
-</script>
-
-<!-- ============================
-     FORMULÁRIO
-=============================== -->
-<div class="perfil-container">
-    <div class="perfil-card">
-
-        <h2>Editar Utilizador</h2>
-
-        <form action="processar_editar_user.php" method="POST" enctype="multipart/form-data">
+        <form action="processar_editar_user.php" method="POST" class="form-card">
 
             <input type="hidden" name="id" value="<?php echo $user['id']; ?>">
 
-            <div class="foto-area">
-                <img src="<?php echo htmlspecialchars($user['foto'] ?: 'img/default.png'); ?>" 
-                     class="foto-preview" alt="Foto">
+            <div class="form-group">
+                <label><i class="fa-solid fa-user"></i> Nome do Jogador:</label>
+                <input type="text" name="nome" value="<?php echo htmlspecialchars($user['nome']); ?>" required>
             </div>
 
-            <label>Alterar foto de perfil:</label>
-            <input type="file" name="foto" class="input-file">
+            <div class="form-group">
+                <label><i class="fa-solid fa-envelope"></i> Email Associado:</label>
+                <input type="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
+            </div>
 
-            <label>Nome:</label>
-            <input type="text" name="nome" value="<?php echo htmlspecialchars($user['nome']); ?>" required>
+            <div class="form-group">
+                <label><i class="fa-solid fa-id-badge"></i> Cargo / Função:</label>
+                <select name="role_id" style="width: 100%; padding: 14px; margin-bottom: 25px; background-color: var(--bg-dark-profile, #0f172a); border: 1px solid #334155; border-radius: 8px; color: #fff; font-family: 'Poppins', sans-serif; font-size: 15px;" required>
+                    <option value="1" <?php if ($user['role_id'] == 1) echo 'selected'; ?>>Admin Master</option>
+                    <option value="2" <?php if ($user['role_id'] == 2) echo 'selected'; ?>>Admin</option>
+                    <option value="3" <?php if ($user['role_id'] == 3) echo 'selected'; ?>>Viewer / Player</option>
+                </select>
+            </div>
 
-            <label>Email:</label>
-            <input type="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
-
-            <label>Função:</label>
-            <select name="role_id" class="input-file" required>
-                <option value="1" <?php if ($user['role_id'] == 1) echo 'selected'; ?>>Admin Master</option>
-                <option value="2" <?php if ($user['role_id'] == 2) echo 'selected'; ?>>Admin</option>
-                <option value="3" <?php if ($user['role_id'] == 3) echo 'selected'; ?>>Viewer</option>
-            </select>
-
-            <button type="submit" class="btn-guardar">Guardar Alterações</button>
-            <a href="admin.php" class="btn-voltar">Voltar</a>
+            <div class="form-actions">
+                <a href="admin.php" class="btn-voltar-outline"><i class="fa-solid fa-arrow-left"></i> Cancelar</a>
+                <button type="submit" class="btn-submit"><i class="fa-solid fa-floppy-disk"></i> Guardar Configurações</button>
+            </div>
 
         </form>
     </div>
-</div>
-<?php include 'eliminar_perfil.php'; ?>
+
+    
+
 </body>
 </html>

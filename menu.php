@@ -184,16 +184,15 @@ if (isset($_SESSION["id_utilizador"])) {
         <!-- ============================================================
              ÁREA DO UTILIZADOR (LOGIN / PERFIL / ADMIN / LOGOUT)
              ============================================================ -->
-        <?php if (!isset($_SESSION["usuarioEmail"])): ?>
+        <?php if (!isset($_SESSION["email"])): ?>
 
-            <a href="login.php">Login</a>
-            <a href="registar.php">Registar</a>
+    <a href="login.php">Login</a>
 
-        <?php else: ?>
+<?php else: ?>
 
-            <div class="dropdown">
-                <a href="#">Olá, <?php echo htmlspecialchars($_SESSION["usuarioNome"]); ?> ▾</a>
-                
+    <div class="dropdown">
+        <a href="#">Olá, <?php echo htmlspecialchars($_SESSION["nome"]); ?> ▾</a>
+
 
                 <div class="dropdown-content">
 

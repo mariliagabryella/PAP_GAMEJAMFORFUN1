@@ -25,42 +25,36 @@ include 'conteudo_index.php';
         <?php include 'script.php'; ?>
     </div>
 
-    <!-- ============================
-         VÍDEO DE FUNDO DINÂMICO
-    ============================= -->
-    <video class="video-bg" autoplay muted loop>
-        <source src="<?php echo index_conteudo('video_url'); ?>" type="video/mp4">
-    </video>
+    <div class="hero-wrapper">
+        <video class="video-bg" autoplay muted loop>
+            <source src="<?php echo index_conteudo('video_url'); ?>" type="video/mp4">
+        </video>
 
-    <div class="video-overlay"></div>
+        <div class="video-overlay"></div>
 
-    <!-- ============================
-         HERO / TÍTULO PRINCIPAL
-    ============================= -->
-    <div class="video-text container">
+        <div class="video-text container">
+            <div class="stack" style="--stacks: 3;">
+                <span style="--index: 0;"><?php echo index_conteudo('titulo'); ?></span>
+                <span style="--index: 1;"><?php echo index_conteudo('titulo'); ?></span>
+                <span style="--index: 2;"><?php echo index_conteudo('titulo'); ?></span>
+            </div>
+            
+            <span class="right">
+                <?php echo index_conteudo('subtitulo'); ?>
+                <p><?php echo index_conteudo('descricao'); ?></p>
+            </span>
 
-        <div class="stack" style="--stacks: 3;">
-            <span style="--index: 0;"><?php echo index_conteudo('titulo'); ?></span>
-            <span style="--index: 1;"><?php echo index_conteudo('titulo'); ?></span>
-            <span style="--index: 2;"><?php echo index_conteudo('titulo'); ?></span>
-        </div>
+            <div class="logo-container">
+                <img src="<?php echo index_conteudo('logo'); ?>" alt="Logo do Evento">
+            </div>
 
-        <span class="right">
-            <?php echo index_conteudo('subtitulo'); ?>
-            <p><?php echo index_conteudo('descricao'); ?></p>
-        </span>
-
-        <div class="logo-container">
-            <img src="<?php echo index_conteudo('logo'); ?>" alt="Logo do Evento">
-        </div>
-
-        <div class="button-container">
-            <a href="inscrição.php" class="button" id="text">Inscrição</a>
-            <a href="docs/Regulamento.pdf" class="button" id="text" target="_blank">Regulamento</a>
-            <a href="docs/Declaração de Consentimento e Aceitação de participacaoGJFF.pdf" class="button" id="text" target="_blank">Consentimento</a>
+            <div class="button-container">
+                <a href="inscrição.php" class="button">Inscrição</a>
+                <a href="docs/Regulamento.pdf" class="button" target="_blank">Regulamento</a>
+                <a href="docs/Declaração de Consentimento e Aceitação de participacaoGJFF.pdf" class="button" target="_blank">Consentimento</a>
+            </div>
         </div>
     </div>
-
     <!-- ============================
          SOBRE NÓS (DINÂMICO)
     ============================= -->
@@ -184,7 +178,7 @@ include 'conteudo_index.php';
                 <a href="https://www.facebook.com/Papaduxo/?locale=pt_BR" target="_blank"><img src="img/p6.png"></a>
                 <a href="https://www.loja-online.intermarche.pt/" target="_blank"><img src="img/p7.png"></a>
                 <a href="https://www.facebook.com/people/Albamercado-suplda/100063969456853/" target="_blank"><img src="img/p9.png"></a>
-                <a href="https://www.cm-albergaria.pt/" target="_blank"><img src="img/p10.png"></a>
+                <a href="https://www.cm-albergaria.pt/" target="_blank"><img src="img/p10.svg"></a>
                 <a href="https://deltacafes.com/" target="_blank"><img src="img/p11.png"></a>
             </div>
 
